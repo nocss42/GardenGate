@@ -1,19 +1,8 @@
 > [!WARNING]
-> This version of KYBER is not up to date. Be on the lookout for the [KYBER V2](https://uplink.kyber.gg/news/features-overview/) update, which has been under private development, with a whole host of new and improved features.
-
-<h1 align="center"><img src="https://kyber.gg/logo2.svg" width="30rem"> Kyber</h1>
-
-<h4 align="center">Kyber is an Open-Source Private Server tool for STAR WARS™ Battlefront™ II (2017).</h4>
-<br>
-<p align="center">
-  <a href="https://twitter.com/BattleDashBR"><img src="https://img.shields.io/badge/Twitter-@BattleDashBR-1da1f2.svg?logo=twitter"></a>
-  <a href="https://discord.gg/kyber">
-      <img src="https://img.shields.io/discord/305338604316655616.svg?label=Discord&logo=discord&color=778cd4">
-  </a>
-  
-</p>
+> This doesn't work yet, very WIP.
 
 ------
+This is simply adding GW1 (potentially GW2) dedicated server support.
 
 A hosted version of Kyber is available at [kyber.gg](https://kyber.gg), where I operate proxies for server data that alleviate the issue of port forwarding and IP security.
 
