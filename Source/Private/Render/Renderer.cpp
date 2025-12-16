@@ -296,11 +296,11 @@ Renderer::Renderer()
 
     KYBER_LOG(LogLevel::Debug, "Attempting to find Garden Warfare window");
 
-    hWnd = FindWindow("Frostbite", "PVZ Garden Warfare");
+    hWnd = FindWindow(NULL, "PVZ Garden Warfare");
 
     if (!hWnd)
     {
-        ErrorUtils::ThrowException("Failed to find Battlefront window.");
+        ErrorUtils::ThrowException("Failed to find GW1 window.");
     }
 
     desc.OutputWindow = hWnd;
