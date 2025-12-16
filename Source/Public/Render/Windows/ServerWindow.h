@@ -16,7 +16,7 @@ public:
     void Draw() override;
     bool IsEnabled() override;
 
-private:
-    std::optional<std::vector<KyberProxy>> m_proxies;
+//private:
+    //std::optional<std::vector<KyberProxy>> m_proxies;
 };
 } // namespace Kyber
