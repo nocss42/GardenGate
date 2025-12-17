@@ -56,10 +56,11 @@ void ServerWindow::Draw()
     GameSettings* gameSettings = Settings<GameSettings>("Game");
     ImGui::Text("GAME MODE:");
     ImGui::SameLine();
-    ImGui::Text(gameSettings->DefaultLayerInclusion);
+    ImGui::Text("%s", gameSettings->DefaultLayerInclusion);
     ImGui::Text("LEVEL:");
     ImGui::SameLine();
-    ImGui::Text(gameSettings->Level);
+    ImGui::Text("%s", gameSettings->Level);
+    //bro don't tell me the whole reason this is crashing is because of improper formatting
     ImGui::Separator();
     if (!g_program->m_server->m_running)
     {
