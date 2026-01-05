@@ -3,7 +3,7 @@
   <h1 style="font-size: 2.5rem; margin-top: 0.5rem;">GardenGate</h1>
 </div>
 
-Experimental private servers for Plants vs. Zombies Garden Warfare 1 & 2
+Experimental multiplayer mod for Plants vs. Zombies Garden Warfare 1 & 2
 
 ------
 ### What's done:
