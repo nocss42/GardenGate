@@ -17,6 +17,8 @@ Experimental private servers for Plants vs. Zombies Garden Warfare 1 & 2
 * Player kicking/moderation
 * Integrate patcher to launcher for gw2
 * Fix return to backyard button
+* Fix Zombopolis last, several doorways in the center area are blocked for clients. Host and bots can pass through, but clients and their objects (e.g. bean bombs) cannot.
+* Fix Zomburbia Zombot fuses on last point unable to be broken
 
 ### [Discord server](https://discord.gg/sEs9NcUrF9)
 
