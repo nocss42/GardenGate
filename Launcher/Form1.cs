@@ -8,6 +8,8 @@ namespace Launcher
         public Form1()
         {
             InitializeComponent();
+            Text = "GardenGate Launcher";
+            Icon = Icon.ExtractAssociatedIcon(Application.ExecutablePath);
             LoadConfig();
             ApplyTheme(IsDarkMode());
         }
