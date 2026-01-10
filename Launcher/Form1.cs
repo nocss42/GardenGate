@@ -93,10 +93,14 @@ namespace Launcher
         private void ModDataComboBox_DrawItem(object sender, DrawItemEventArgs e)
         {
             if (e.Index < 0) return;
-            Color fore = IsDarkMode() ? Color.White : Color.Black;
-            e.Graphics.DrawString(ModDataComboBox.Items[e.Index].ToString(), e.Font, new SolidBrush(fore), e.Bounds);
-        }
 
+            Color fore = IsDarkMode() ? Color.White : Color.Black;
+
+            string text = ModDataComboBox.Items[e.Index]?.ToString() ?? string.Empty;
+            Font font = e.Font ?? this.Font;
+
+            e.Graphics.DrawString(text, font, new SolidBrush(fore), e.Bounds);
+        }
 
         private void SaveConfig()
         {
@@ -121,7 +125,6 @@ namespace Launcher
 
             File.WriteAllLines("config.txt", lines);
         }
-
 
         private void LoadConfig()
         {
@@ -156,7 +159,6 @@ namespace Launcher
                     ModDataComboBox.SelectedItem = savedModPack;
             }
         }
-
 
         private void BrowseGameButton_Click(object sender, EventArgs e)
         {
