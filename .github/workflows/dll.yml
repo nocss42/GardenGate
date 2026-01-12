@@ -18,16 +18,14 @@ jobs:
             --package-parameters "--add Microsoft.VisualStudio.Workload.VCTools --includeRecommended" `
             -y
 
-      - name: Setup MSVC Environment
-        shell: cmd
-        run: |
-          call "%ProgramFiles(x86)%\Microsoft Visual Studio\2022\BuildTools\VC\Auxiliary\Build\vcvars64.bat"
-
       - name: Build Server
         shell: cmd
         run: |
-          call "C:\MyVS\VC\Auxiliary\Build\vcvars64.bat"
-          cmake --build build --config Release
+          call "%ProgramFiles(x86)%\Microsoft Visual Studio\2022\BuildTools\VC\Auxiliary\Build\vcvars64.bat"
+          mkdir build
+          cd build
+          cmake .. -G "Visual Studio 17 2022"
+          cmake --build . --config Release
 
       - name: Upload Dll
         uses: actions/upload-artifact@v4
@@ -35,4 +33,3 @@ jobs:
           name: Binaries
           path: |
             Build
-            build
