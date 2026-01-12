@@ -1,0 +1,55 @@
+name: Build DLL (Linux)
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build:
+    name: Build DLL
+    runs-on: ubuntu-latest
+
+    container:
+      image: archlinux:latest
+
+    steps:
+      - name: Install base dependencies
+        run: |
+          pacman -Syu --noconfirm archlinux-keyring
+          pacman -Syu --noconfirm base-devel git sudo mingw-w64-binutils mingw-w64-crt mingw-w64-gcc mingw-w64-headers mingw-w64-tools mingw-w64-winpthreads cmake extra-cmake-modules
+
+      - name: Create build user
+        run: |
+          useradd -m builder
+          echo "builder ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers
+
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Fix permissions
+        run: chown -R builder:builder .
+
+      - name: Build package (makepkg -si)
+        run: |
+          sudo -u builder bash <<'EOF'
+          set -e
+          git clone https://github.com/TsudaKageyu/minhook
+          sh -c "cmake -S minhook -B build-minhook \
+            -DCMAKE_SYSTEM_NAME=Windows \
+            -DCMAKE_C_COMPILER=x86_64-w64-mingw32-gcc \
+            -DCMAKE_RC_COMPILER=x86_64-w64-mingw32-windres"
+          cmake --build build-minhook
+          mv build-minhook/minhook.a ThirdParty/MinHook/
+          mkdir build-gg
+          cd build-gg
+          sh -c "cmake .. \
+            -DCMAKE_TOOLCHAIN_FILE=../toolchain-mingw64.cmake \
+            -DCMAKE_BUILD_TYPE=Release"
+          cmake --build .
+          EOF
+
+      - name: Upload package artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: arch-package
+          path: |
+            build-gg/libdinput8.dll

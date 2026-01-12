@@ -12,12 +12,12 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@v4
 
-      - name: Install .NET SDK via Chocolatey
+      - name: Install .NET SDK
         shell: pwsh
         run: |
           choco install dotnet-sdk -y
 
-      - name: Restore NuGet Packages
+      - name: Restore
         run: |
           cd Launcher
           dotnet restore Launcher.csproj

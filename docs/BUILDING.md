@@ -8,10 +8,9 @@ Here's instructions to build;
 
 ### Requirements
 
-Visual studio code with 
+Visual studio build tools
+Cmake
 
-```
-```
 ### Building minhook (optional)
 
 ```

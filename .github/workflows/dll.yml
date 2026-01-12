@@ -32,4 +32,4 @@ jobs:
         with:
           name: Binaries
           path: |
-            Build
+            Build/Release
