@@ -3,6 +3,7 @@
 #include <string>
 #include <string_view>
 
+#include <winsock2.h>
 #define _WINSOCKAPI_
 #include <windows.h>
 

@@ -31,10 +31,17 @@ target_compile_options(${PROJECT_NAME} PRIVATE
 )
 
 # ---- Libraries ----
-target_link_libraries(${PROJECT_NAME} PRIVATE
-  "Ws2_32.lib"
-  "${CMAKE_CURRENT_SOURCE_DIR}/ThirdParty/MinHook/libMinHook-x64-v141-mt.lib"
-)
+if (MINGW)
+  target_link_libraries(${PROJECT_NAME} PRIVATE
+    ws2_32
+    "${CMAKE_CURRENT_SOURCE_DIR}/ThirdParty/MinHook/minhook.a"
+  )
+elseif (MSVC)
+  target_link_libraries(${PROJECT_NAME} PRIVATE
+    ws2_32.lib
+    "${CMAKE_CURRENT_SOURCE_DIR}/ThirdParty/MinHook/libMinHook-x64-v141-mt.lib"
+  )
+endif()
 
 # ---- Output ----
 set_target_properties(${PROJECT_NAME} PROPERTIES

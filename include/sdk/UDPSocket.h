@@ -7,8 +7,9 @@
 #include "sdk/IUDPSocket.h"
 #include "base/Log.h"
 
+#include <winsock2.h>
 #define _WINSOCKAPI_
-#include <Windows.h>
+#include <windows.h>
 #include <ws2tcpip.h>
 
 namespace fb
