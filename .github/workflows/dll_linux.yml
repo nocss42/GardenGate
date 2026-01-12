@@ -38,7 +38,7 @@ jobs:
             -DCMAKE_C_COMPILER=x86_64-w64-mingw32-gcc \
             -DCMAKE_RC_COMPILER=x86_64-w64-mingw32-windres"
           cmake --build build-minhook
-          mv build-minhook/minhook.a ThirdParty/MinHook/
+          mv -f build-minhook/minhook.a ThirdParty/MinHook/
           mkdir build-gg
           cd build-gg
           sh -c "cmake .. \
