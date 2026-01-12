@@ -45,5 +45,5 @@ endif()
 
 # ---- Output ----
 set_target_properties(${PROJECT_NAME} PROPERTIES
-  OUTPUT_NAME "gg"
+  OUTPUT_NAME "dinput8"
 )

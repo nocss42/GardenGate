@@ -6,11 +6,33 @@ Here's instructions to build;
 
 # Windows
 
+### Requirements
+
+Visual studio code with 
+
+```
+```
 ### Building minhook (optional)
 
-# Linux (MinGW)
+```
+```
 
-This assumes you have the repository cloned & cd'd into it already.
+# Linux
+
+### Requirements
+Have these packages installed
+
+```
+llvm-mingw
+mingw-w64-binutils
+mingw-w64-crt
+mingw-w64-gcc
+mingw-w64-headers
+mingw-w64-tools
+mingw-w64-winpthreads
+cmake
+extra-cmake-modules
+```
 
 ### Building minhook (optional)
 ```
@@ -23,7 +45,7 @@ cmake -S minhook -B build-minhook \
 cmake --build build-minhook
 ```
 
-### Building DLL (As of right now you )
+### Building DLL
 ```
 rm -r build-gg
 mkdir build-gg
