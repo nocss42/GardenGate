@@ -24,6 +24,7 @@ struct Config {
 
     GameConfig gw1;
     GameConfig gw2;
+    GameConfig bfn;
 
     void set_username(const char* val) {
         username = val;
@@ -31,19 +32,27 @@ struct Config {
     }
 
     GameConfig& get_current_game() {
-        return (game_selected == "GW2") ? gw2 : gw1;
+        if (game_selected == "GW2") return gw2;
+        if (game_selected == "BFN") return bfn;
+        return gw1;
     }
 
     const GameConfig& get_current_game() const {
-        return (game_selected == "GW2") ? gw2 : gw1;
+        if (game_selected == "GW2") return gw2;
+        if (game_selected == "BFN") return bfn;
+        return gw1;
     }
 
     int get_game_selected_int() const {
-        return (game_selected == "GW2") ? 1 : 0;
+        if (game_selected == "GW2") return 1;
+        if (game_selected == "BFN") return 2;
+        return 0;
     }
 
     void set_game_selected_from_int(int val) {
-        game_selected = (val == 1) ? "GW2" : "GW1";
+        if (val == 1) game_selected = "GW2";
+        else if (val == 2) game_selected = "BFN";
+        else game_selected = "GW1";
     }
 };
 

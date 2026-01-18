@@ -42,11 +42,14 @@ Config load_config(const std::string& file) {
 
     if (j.contains("gw1")) cfg.gw1.from_json(j["gw1"]);
     if (j.contains("gw2")) cfg.gw2.from_json(j["gw2"]);
+    if (j.contains("bfn")) cfg.bfn.from_json(j["bfn"]);
 
     if (cfg.gw1.game_path.empty() && j.contains("game_path"))
         cfg.gw1.game_path = j["game_path"].get<std::string>();
     if (cfg.gw2.game_path.empty() && j.contains("game_path"))
         cfg.gw2.game_path = j["game_path"].get<std::string>();
+    if (cfg.bfn.game_path.empty() && j.contains("game_path"))
+        cfg.bfn.game_path = j["game_path"].get<std::string>();
 
     return cfg;
 }
@@ -58,7 +61,8 @@ void save_config(const Config& cfg, const std::string& file) {
         {"password", cfg.password},
         {"game_selected", cfg.game_selected},
         {"gw1", cfg.gw1.to_json()},
-        {"gw2", cfg.gw2.to_json()}
+        {"gw2", cfg.gw2.to_json()},
+        {"bfn", cfg.bfn.to_json()}
     };
 
     std::ofstream(file) << j.dump(4);

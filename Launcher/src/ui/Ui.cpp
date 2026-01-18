@@ -159,6 +159,8 @@ static void drawLauncherTab(HWND hwnd, float dpiScale) {
 	if (ImGui::RadioButton("GW1", &gameSelectedInt, 0)) g_config.set_game_selected_from_int(0);
 	ImGui::SameLine(0.0f, 40 * dpiScale);
 	if (ImGui::RadioButton("GW2", &gameSelectedInt, 1)) g_config.set_game_selected_from_int(1);
+	ImGui::SameLine(0.0f, 40 * dpiScale);
+	if (ImGui::RadioButton("BFN", &gameSelectedInt, 2)) g_config.set_game_selected_from_int(2);
 
 	ImGui::Separator();
 	Utils::UI::CenteredInput("Username:", g_config.username, centerOffset, fieldWidth);
@@ -177,14 +179,17 @@ static void drawLauncherTab(HWND hwnd, float dpiScale) {
 
 	ImGui::SameLine();
 	if (ImGui::Button("AutoDetect", ImVec2(100 * dpiScale, 0))) {
-		std::string detected = Utils::Registry::GetGamePathFromRegistry(gameSelectedInt == 1);
+		std::string detected = Utils::Registry::GetGamePathFromRegistry(gameSelectedInt);
 		if (!detected.empty()) {
 			fs::path exePath = fs::path(detected);
 			if (gameSelectedInt == 0) {
 				exePath /= "PVZ.Main_Win64_Retail.exe";
 			}
-			else {
+			else if (gameSelectedInt == 1) {
 				exePath /= "GW2.Main_Win64_Retail.exe";
+			}
+			else {
+				exePath /= "PVZBattleforNeighborville.exe";
 			}
 			currentGame.game_path = exePath.string();
 			showStatus("Auto detected game path: " + currentGame.game_path);
@@ -195,7 +200,7 @@ static void drawLauncherTab(HWND hwnd, float dpiScale) {
 	}
 	ImGui::SameLine();
 	if (ImGui::Button("Browse", ImVec2(80 * dpiScale, 0))) {
-		std::string chosen = Utils::Dialog::BrowseForExe(hwnd, gameSelectedInt == 1);
+		std::string chosen = Utils::Dialog::BrowseForExe(hwnd, gameSelectedInt);
 		if (!chosen.empty()) {
 			currentGame.game_path = chosen;
 			showStatus("Game path set: " + chosen);
@@ -270,10 +275,10 @@ static void drawLauncherTab(HWND hwnd, float dpiScale) {
 				modDataPath = "ModData/" + currentGame.moddata_selected;
 			}
 
-			bool isGW2 = (g_config.game_selected == "GW2");
-			
-			Utils::Process::PatchEAArgs(args, isGW2);
-			auto lr = Utils::Process::LaunchAndInject(currentGame.game_path, args, "level_loader.dll", modDataPath, isGW2);
+			int gameType = g_config.get_game_selected_int();
+
+			Utils::Process::PatchEAArgs(args, gameType);
+			auto lr = Utils::Process::LaunchAndInject(currentGame.game_path, args, "level_loader.dll", modDataPath, gameType);
 
 			if (!lr.ok) {
 				showStatus("Failed to launch: " + lr.error, true);
@@ -313,7 +318,7 @@ static void drawPatcherTab(HWND hwnd, float dpiScale) {
 
 		ImGui::SameLine();
 		if (ImGui::Button("Auto Detect", ImVec2(100 * dpiScale, 0))) {
-			std::string detected = Utils::Registry::GetGamePathFromRegistry(false);
+			std::string detected = Utils::Registry::GetGamePathFromRegistry(0);
 			if (!detected.empty()) {
 				fs::path exePath = fs::path(detected);
 				exePath /= "PVZ.Main_Win64_Retail.exe";
@@ -327,7 +332,7 @@ static void drawPatcherTab(HWND hwnd, float dpiScale) {
 		}
 		ImGui::SameLine();
 		if (ImGui::Button("Browse", ImVec2(80 * dpiScale, 0))) {
-			std::string chosen = Utils::Dialog::BrowseForExe(hwnd, false);
+			std::string chosen = Utils::Dialog::BrowseForExe(hwnd, 0);
 			if (!chosen.empty()) {
 				gw1Config.game_path = chosen;
 				save_config(g_config, "config.json");
@@ -387,7 +392,7 @@ static void drawPatcherTab(HWND hwnd, float dpiScale) {
 			ImGui::TextColored(ImVec4(1, 0.5f, 0, 1), "Set GW1 path first!");
 		}
 	}
-	else {
+	else if (gameSelectedInt == 1) {
 		auto& gw2Config = g_config.gw2;
 		bool isPatched = !gw2Config.game_path.empty() && Patcher::IsGW2Patched(gw2Config.game_path);
 
@@ -406,7 +411,7 @@ static void drawPatcherTab(HWND hwnd, float dpiScale) {
 
 		ImGui::SameLine();
 		if (ImGui::Button("Auto Detect", ImVec2(100 * dpiScale, 0))) {
-			std::string detected = Utils::Registry::GetGamePathFromRegistry(true);
+			std::string detected = Utils::Registry::GetGamePathFromRegistry(1);
 			if (!detected.empty()) {
 				fs::path exePath = fs::path(detected);
 				exePath /= "GW2.Main_Win64_Retail.exe";
@@ -422,7 +427,7 @@ static void drawPatcherTab(HWND hwnd, float dpiScale) {
 
 		ImGui::SameLine();
 		if (ImGui::Button("Browse", ImVec2(80 * dpiScale, 0))) {
-			std::string chosen = Utils::Dialog::BrowseForExe(hwnd, true);
+			std::string chosen = Utils::Dialog::BrowseForExe(hwnd, 1);
 			if (!chosen.empty()) {
 				gw2Config.game_path = chosen;
 				save_config(g_config, "config.json");
@@ -478,6 +483,106 @@ static void drawPatcherTab(HWND hwnd, float dpiScale) {
 				if (Patcher::AutoPatchGW2(gw2Config.game_path, patchFile, dllFile, err)) {
 					isPatched = true;
 					showStatus("GW2 patched successfully!");
+				}
+				else {
+					showStatus("Error: " + err, true);
+				}
+			}
+			ImGui::EndDisabled();
+		}
+	}
+	else if (gameSelectedInt == 2) {
+		auto& bfnConfig = g_config.bfn;
+		bool isPatched = !bfnConfig.game_path.empty() && Patcher::IsBFNPatched(bfnConfig.game_path);
+
+		ImGui::SetCursorPosX(centerOffset);
+		ImGui::TextUnformatted("BFN Executable:");
+		ImGui::SetCursorPosX(centerOffset);
+		ImGui::SetNextItemWidth(fieldWidth - 180 * dpiScale);
+
+		char buf[512];
+		strncpy_s(buf, bfnConfig.game_path.c_str(), sizeof(buf));
+		if (ImGui::InputText("##BFNExePath", buf, sizeof(buf))) {
+			bfnConfig.game_path = buf;
+			save_config(g_config, "config.json");
+			if (!bfnConfig.game_path.empty()) isPatched = Patcher::IsBFNPatched(bfnConfig.game_path);
+		}
+
+		ImGui::SameLine();
+		if (ImGui::Button("Auto Detect", ImVec2(100 * dpiScale, 0))) {
+			std::string detected = Utils::Registry::GetGamePathFromRegistry(2);
+			if (!detected.empty()) {
+				fs::path exePath = fs::path(detected);
+				exePath /= "PVZBattleforNeighborville.exe";
+				bfnConfig.game_path = exePath.string();
+				save_config(g_config, "config.json");
+				showStatus("Auto detected BFN path: " + exePath.string());
+				isPatched = Patcher::IsBFNPatched(bfnConfig.game_path);
+			}
+			else {
+				showStatus("Could not auto detect BFN installation", true);
+			}
+		}
+
+		ImGui::SameLine();
+		if (ImGui::Button("Browse", ImVec2(80 * dpiScale, 0))) {
+			std::string chosen = Utils::Dialog::BrowseForExe(hwnd, 2);
+			if (!chosen.empty()) {
+				bfnConfig.game_path = chosen;
+				save_config(g_config, "config.json");
+				showStatus("BFN path set: " + chosen);
+				isPatched = Patcher::IsBFNPatched(bfnConfig.game_path);
+			}
+		}
+
+		ImGui::Dummy(ImVec2(0, 20 * dpiScale));
+		fs::path launcherDir = fs::path([] {
+			char path[MAX_PATH];
+			GetModuleFileNameA(NULL, path, MAX_PATH);
+			return std::string(path);
+			}()).parent_path();
+
+		fs::path patchesDir = launcherDir / "patches" / "bfn";
+		std::string dllFile = (launcherDir / "dinput8.dll").string();
+		bool hasPatchFiles = fs::exists(patchesDir / "PVZBattleforNeighborville.exe.xdelta");
+		bool hasDLL = fs::exists(dllFile);
+
+		if (!hasPatchFiles || !hasDLL) {
+			ImGui::SetCursorPosX(centerOffset);
+			ImGui::TextColored(ImVec4(1, 0.5f, 0, 1), "Missing required files:");
+			if (!hasPatchFiles) {
+				ImGui::SetCursorPosX(centerOffset);
+				ImGui::Text("- BFN patch files in patches/bfn/");
+			}
+			if (!hasDLL) {
+				ImGui::SetCursorPosX(centerOffset);
+				ImGui::Text("- dinput8.dll");
+			}
+		}
+
+		if (isPatched) {
+			ImGui::SetCursorPosX(centerOffset);
+			ImGui::TextColored(ImVec4(0, 1, 0, 1), "BFN is already patched");
+			if (Utils::UI::CenteredButton("RESTORE ORIGINAL BFN", 200 * dpiScale, dpiScale)) {
+				std::string err;
+				if (Patcher::RestoreBFN(bfnConfig.game_path, err)) {
+					isPatched = false;
+					showStatus("BFN restored to original");
+				}
+				else {
+					showStatus("Error: " + err, true);
+				}
+			}
+		}
+		else {
+			ImGui::SetCursorPosX(centerOffset);
+			ImGui::Text("One click patch for Battle for Neighborville");
+			ImGui::BeginDisabled(!hasPatchFiles || !hasDLL || bfnConfig.game_path.empty());
+			if (Utils::UI::CenteredButton("AUTO PATCH BFN", 200 * dpiScale, dpiScale)) {
+				std::string err;
+				if (Patcher::AutoPatchBFN(bfnConfig.game_path, patchesDir.string(), dllFile, err)) {
+					isPatched = true;
+					showStatus("BFN patched successfully!");
 				}
 				else {
 					showStatus("Error: " + err, true);

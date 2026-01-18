@@ -9,12 +9,12 @@
 namespace Utils {
 
 	namespace Registry {
-		std::string GetGamePathFromRegistry(bool isGW2);
+		std::string GetGamePathFromRegistry(int gameType);
 		bool IsSteamCopy(const std::string& exePath);
 	}
 
 	namespace Dialog {
-		std::string BrowseForExe(HWND hwnd, bool isGW2);
+		std::string BrowseForExe(HWND hwnd, int gameType);
 	}
 
 	namespace UI {
@@ -30,10 +30,10 @@ namespace Utils {
 		};
 
 		std::string BuildArgs(const Config& cfg);
-		void PatchEAArgs(const std::string& args, bool isGW2);
+		void PatchEAArgs(const std::string& args, int gameType);
 		void RestoreEAArgs();
 
-		LaunchResult LaunchAndInject(const std::string& exePath, const std::string& args, const std::string& dllName = "level_loader.dll", const std::string& modDataPath = "", bool isGW2 = false);
+		LaunchResult LaunchAndInject(const std::string& exePath, const std::string& args, const std::string& dllName = "level_loader.dll", const std::string& modDataPath = "", int gameType = 0);
 		bool InjectDLL(DWORD processId, const std::string& dllPath);
 	}
 
