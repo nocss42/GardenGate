@@ -53,12 +53,15 @@ namespace offsets
 
     namespace gw3 {
         //--- PvZ: BFN
+        DEFINE_INSTANCE(PairingManager, 0x14462ED08);
+        DEFINE_INSTANCE(OptionsVec, 0x14421A390);
         DEFINE_INSTANCE(AppId, 0x14321EB58);
         DEFINE_INSTANCE(SettingsManager, 0x14421BFD0);
         DEFINE_INSTANCE(PVZOnlineSettings, 0x144E101D0);
         DEFINE_INSTANCE(PVZServerSettings, 0x144DD8E30);
         DEFINE_INSTANCE(GameModeSettings, 0x144E101D0);
         DEFINE_INSTANCE(NetObjectSettings, 0x144C80250);
+
 
         DEFINE_FUNCTION(GetOptionParameter, 0x1404681C0);
         DEFINE_FUNCTION(GetSettings, 0x14046F230);
@@ -69,6 +72,12 @@ namespace offsets
         DEFINE_FUNCTION(OnEvent, 0x14155DF60);
         DEFINE_FUNCTION(PeerHasJoined, 0x140F55A00);
         DEFINE_FUNCTION(GetPlayerName, 0x14155DCA0);
+
+        DEFINE_FUNCTION(ApplySettings, 0x140F07F60);
+        DEFINE_FUNCTION(ScriptContext_ExecuteString, 0x140446DC0);
+
+        DEFINE_FUNCTION(GetUsers, 0x142617590);
+        DEFINE_FUNCTION(AddPermaUser, 0x1417A3910);
 
         DEFINE_PATCH(AllowCommandArgumentsAsOptions, 0x142218419, (std::array<std::uint8_t, 1>{ 0xA7 }));
         DEFINE_PATCH(IgnoreEasyAntiCheat, 0x1417fd2d8, (std::array<std::uint8_t, 1>{ 0xEB }));

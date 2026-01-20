@@ -1,5 +1,7 @@
 #pragma once
 
+#include <sstream>
+
 #include "base/Log.h"
 #include "core/HookManager.h"
 #include "core/Game.h"
@@ -9,6 +11,8 @@
 #include "sdk/ServerSpawnOverrides.h"
 #include "sdk/SocketManagerFactory.h"
 #include "sdk/SecureReason.h"
+#include "sdk/ScriptContext.h"
+#include "sdk/vector.h"
 #include "sdk/Settings.h"
 
 static bool splash = false;
@@ -365,6 +369,7 @@ namespace fb
                     gameModeSettings->SocialHUBSkipStationTutorials = true;
                     gameModeSettings->SocialHUBSkipLandingPage = true;
 
+
                     break;
                 }
 
@@ -399,8 +404,67 @@ namespace fb
 
             return name;
         }
+
+
+                void ApplySettings(intptr_t inst, ScriptContext* scriptContext, bool inmediate)
+        {
+            const auto trampoline = GG::HookManager::getManager().Call(&ApplySettings);
+
+            void* poolBase[25];
+
+            using tGetAllUsers = void(*)(void*, void**);
+            auto getAllUsers = reinterpret_cast<tGetAllUsers>(offsets::gw3::fn_GetUsers);
+
+            getAllUsers(*reinterpret_cast<void**>(offsets::gw3::g_PairingManager), poolBase);
+
+            if (*poolBase != poolBase)
+            {
+                void* primaryUser = *reinterpret_cast<void**>(reinterpret_cast<char*>(*poolBase) + 0x10);
+
+                using tAddPermanentUser = void(*)(void*, void**, unsigned int);
+                auto addPermanentUser = reinterpret_cast<tAddPermanentUser>(offsets::gw3::fn_AddPermaUser);
+
+               addPermanentUser(nullptr, &primaryUser, 0);
+            }
+
+            auto* options = reinterpret_cast<eastl::vector<const char*>*>(offsets::gw3::g_OptionsVec);
+
+            if (!options->empty())
+            {
+                std::stringstream ss_applySettings;
+
+                ss_applySettings << "local function applySettings(settings)\n"
+                    "core.parseKeyValueCfgString(settings, _G)\n"
+                      "end\n"
+                    "applySettings [=[\n";
+
+                for (int o = 0; o < options->size(); o++)
+                {
+                    const auto option = options->at(o);
+
+                    if (o + 1 >= options->size()) continue;
+
+                    const auto value = options->at(o + 1);
+
+                    if (*value != '-')
+                        ss_applySettings << option + 1 << " " << value << "\n";
+                }
+
+                ss_applySettings << "]=]";
+
+                scriptContext->executeString(ss_applySettings.str().c_str());
+            }
+
+            trampoline(inst, scriptContext, inmediate);
+        }
+
     }
+
+        
+
 }
+
+
 
 static GG::HookTemplate g_PvZGW1_Hooks[] = {
     {offsets::gw1::fn_ServerStart,              reinterpret_cast<void*>(fb::gw1::ServerStart),              true},
@@ -427,6 +491,7 @@ static GG::HookTemplate g_PvZGW3_Hooks[] = {
     {offsets::gw3::fn_ServerStart,              reinterpret_cast<void*>(fb::gw3::ServerStart),              true},
     {offsets::gw3::fn_ClientInitNetwork,        reinterpret_cast<void*>(fb::gw3::ClientInitNetwork),        true},
     {offsets::gw3::fn_ClientConnectToAddress,   reinterpret_cast<void*>(fb::gw3::ClientConnectToAddress),   true},
+    {offsets::gw3::fn_ApplySettings,            reinterpret_cast<void*>(fb::gw3::ApplySettings),            true},
     {offsets::gw3::fn_NetworkEnginePeerInit,    reinterpret_cast<void*>(fb::gw3::NetworkEnginePeerInit),    true},
     {offsets::gw3::fn_OnEvent,                  reinterpret_cast<void*>(fb::gw3::onEvent),                  true},
     {offsets::gw3::fn_PeerHasJoined,            reinterpret_cast<void*>(fb::gw3::PeerHasJoined),            true},
