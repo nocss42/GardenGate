@@ -2,7 +2,8 @@
 
 #include <string>
 
-class Launcher {
+class Launcher
+{
 
 public:
     static int Run();

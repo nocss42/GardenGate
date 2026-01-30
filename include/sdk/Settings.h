@@ -51,8 +51,8 @@ namespace fb
         typedef struct DeltaCompressionSettings
         {
             uint32_t BaselineReuseCount;
-            bool     IsEnabled;
-            bool     ShareBaselinesAcrossConnections;
+            bool IsEnabled;
+            bool ShareBaselinesAcrossConnections;
         } DeltaCompressionSettings;
 
         typedef struct NetObjectPrioritySettings
@@ -70,9 +70,9 @@ namespace fb
 
         typedef struct NetObjectSystemDebugSettings
         {
-            float   IncomingReplicationStatusReportViewDistance;
-            float   IncomingReplicationStatusReportMaxDelta;
-            char* IncomingReplicationStatusReportFilter;
+            float IncomingReplicationStatusReportViewDistance;
+            float IncomingReplicationStatusReportMaxDelta;
+            char *IncomingReplicationStatusReportFilter;
             uint32_t ReportReplicationWarningsAfterFrames;
             uint32_t InitialGraceTimeInFrames;
 
@@ -93,9 +93,9 @@ namespace fb
         {
             uint8_t _opaque[0x18];
 
-            NetObjectPrioritySettings     PrioritySettings;
-            NetObjectSystemDebugSettings  Debug;
-            DeltaCompressionSettings      DeltaCompressionSettings;
+            NetObjectPrioritySettings PrioritySettings;
+            NetObjectSystemDebugSettings Debug;
+            DeltaCompressionSettings DeltaCompressionSettings;
 
             uint32_t MaxServerConnectionCount;
             uint32_t MaxClientConnectionCount;
@@ -104,7 +104,7 @@ namespace fb
             uint32_t MaxNetObjectCount;
 
             NetObjectPriorityMethod DefaultDynamicPriorityMethod;
-            NetObjectFilterMethod   DefaultFilterMethod;
+            NetObjectFilterMethod DefaultFilterMethod;
 
             bool NetArrayEditorSanityCheck;
             bool InProcReplicationEnabled;
@@ -112,13 +112,13 @@ namespace fb
 
         typedef struct ActivationOverride
         {
-            char* AwardName;
-            bool  Active;
+            char *AwardName;
+            bool Active;
         } ActivationOverride;
 
         typedef struct CompletionOverride
         {
-            char* CriteriaName;
+            char *CriteriaName;
             float CompletionValue;
         } CompletionOverride;
 
@@ -129,8 +129,8 @@ namespace fb
 
         typedef struct AwardSettings
         {
-            ActivationOverride* ActivationOverrides;
-            CompletionOverride* CompletionOverrides;
+            ActivationOverride *ActivationOverrides;
+            CompletionOverride *CompletionOverrides;
         } AwardSettings;
 
         typedef struct CommunityPortalSettings
@@ -155,7 +155,7 @@ namespace fb
             uint32_t UnderworldMegaChestCost;
             int32_t BossHuntLoserEasyBase_Half;
             int32_t RetryTimerOnLoss;
-            char* EventDescription;
+            char *EventDescription;
             int32_t RetryTimerOnWin;
             int32_t BossHuntLoserEasyBase_Full;
             int32_t RushLoserBase_5;
@@ -164,7 +164,7 @@ namespace fb
             int32_t BossHuntLoserHardBase_Quarter;
             int32_t BossHuntLoserrMediumBase_Full;
             int32_t RushWinnerBase_3;
-            char* EventImageUrl;
+            char *EventImageUrl;
             int32_t RushWinnerBase_6;
             int32_t TeamVanquishWinnerBase;
             int32_t SuburbinationWinnerBase;
@@ -179,20 +179,20 @@ namespace fb
             int32_t CrazyOption3;
             int32_t CrazyOption1;
             int32_t StartTime;
-            char* EventTitle;
+            char *EventTitle;
             int32_t RushWinnerBase_5;
             int32_t RushLoserBase_3;
             int32_t RushLoserBase_1;
             int32_t TeamVanquishLoserBase;
             int32_t CvDPointsPerLoserRound;
-            bool    Widget;
+            bool Widget;
         } CommunityPortalSettings;
 
         typedef struct PVZServerGameSettings : SettingsBase
         {
             CommunityPortalSettings CommunityPortal;
             AwardSettings AwardSettings;
-            Array<char*> DisabledKillSwitches;
+            Array<char *> DisabledKillSwitches;
             ConsumableLimitSettings ConsumableLimits;
             bool TrackWeeklyChallenges;
         } PVZServerGameSettings;
@@ -222,37 +222,37 @@ namespace fb
 
         typedef struct GameModeSizeInfo
         {
-            GameModeTeamSize* Teams;
+            GameModeTeamSize *Teams;
             uint32_t TeamImbalanceLimit;
         } GameModeSizeInfo;
 
         typedef struct GameModeConfiguration
         {
-            char* FrontEndGameModeOption;
-            char** PlantCoOpGameModes;
-            char** ZombieCoOpGameModes;
-            void* GameModes;
-            char** MPGameModes;
-            GameModeSizeInfo** GameModeSizes;
-            GameModeSizeInfo* FallbackSizeInfo;
-            void* HostedModeBackends;
-            char* SplashGameModeOption;
-            char* HostedModeCriterionName;
-            char* SocialGameModeOption;
-            char* PeerHostedModeOption;
-            char* LocalHostedModeOption;
-            char* GameModeCriterionName;
-            char* SoloPlayCriterionName;
-            char* ServerHostedModeOption;
-            char* SoloPlayMode;
+            char *FrontEndGameModeOption;
+            char **PlantCoOpGameModes;
+            char **ZombieCoOpGameModes;
+            void *GameModes;
+            char **MPGameModes;
+            GameModeSizeInfo **GameModeSizes;
+            GameModeSizeInfo *FallbackSizeInfo;
+            void *HostedModeBackends;
+            char *SplashGameModeOption;
+            char *HostedModeCriterionName;
+            char *SocialGameModeOption;
+            char *PeerHostedModeOption;
+            char *LocalHostedModeOption;
+            char *GameModeCriterionName;
+            char *SoloPlayCriterionName;
+            char *ServerHostedModeOption;
+            char *SoloPlayMode;
         } GameModeConfiguration;
 
         typedef struct GameModeSettings : SettingsBase
         {
             int32_t ShouldLoadAutoTestSubLevels;
-            TeamColor* TeamHighlightColors;
-            GameModeConfiguration* GameModeConfiguration;
-            int32_t* ForceSpawnClassIndices;
+            TeamColor *TeamHighlightColors;
+            GameModeConfiguration *GameModeConfiguration;
+            int32_t *ForceSpawnClassIndices;
             int32_t AutoplayersTestCaseOverride;
             uint32_t MaxSquadSize;
             int32_t SeasonalQuestCooldownTime;
@@ -265,9 +265,9 @@ namespace fb
             int32_t ForceLevelVariation;
             uint32_t LocalPlaySelectedAICharacterSetZombiesUnlockId;
             float SkipSpawnRandomCostumes_UnrevivableAliveTimeThreshold;
-            char* SplashToLevelDSub;
+            char *SplashToLevelDSub;
             int32_t LocalPlayBotsPerTeamOverride;
-            char* CrazyOptionsDataPath;
+            char *CrazyOptionsDataPath;
             float CrazyOption_TimeBomb_ShortTimer;
             int32_t SandboxFreeRoamSpawnPositionIndex;
             int32_t AttackingTeamId;
@@ -275,8 +275,8 @@ namespace fb
             int32_t ModeTeamId;
             float CrazyOptionsGlobalScoreModifier;
             int32_t SkipSpawnScreenClassIndex;
-            char* SplashToLevelInclusion;
-            char* AvailableCostumes;
+            char *SplashToLevelInclusion;
+            char *AvailableCostumes;
             uint32_t LocalPlayZombieBotsPerTeam;
             float CrazyOption_TimeBomb_BumpTime;
             int32_t OverrideRoundStartPlayerCount;
@@ -291,10 +291,10 @@ namespace fb
             uint32_t LocalPlaySelectedAICharacterSetPlantsUnlockId;
             float PauseRespawnWaitTime;
             uint32_t LocalPlayPlantBotsPerTeam;
-            char* SplashToLevelStartPoint;
+            char *SplashToLevelStartPoint;
             int32_t AutoTestAutoplayerBehavior;
             uint32_t CapturePointShowDebugInfo;
-            char* SplashToLevel;
+            char *SplashToLevel;
 
             bool IsCoolLasers;
             bool LocalPlayAIWaitForFirstPlayerToSpawn;
@@ -395,7 +395,7 @@ namespace fb
 
         typedef struct GameSettings : SettingsBase
         {
-            char* InstallationLevel;
+            char *InstallationLevel;
             intptr_t Player;
             intptr_t Version;
             intptr_t GameModeViewDefinitions;
@@ -406,15 +406,15 @@ namespace fb
             uint32_t MaxCorrectionUpdateCount;
             uint32_t MoveManagerOutgoingFrequencyDivider;
 
-            char* DefaultLayerInclusion;
-            char* InitialDSubLevel;
-            char* ActiveGameModeViewDefinition;
-            char* InstallationStartPoint;
+            char *DefaultLayerInclusion;
+            char *InitialDSubLevel;
+            char *ActiveGameModeViewDefinition;
+            char *InstallationStartPoint;
 
             float MaxAllowedLatency;
 
-            char* Level;
-            char* StartPoint;
+            char *Level;
+            char *StartPoint;
 
             int LogFileCollisionMode;
 
@@ -433,55 +433,55 @@ namespace fb
         } GameSettings;
 
         typedef struct OnlineSettings : SettingsBase
-        {         
+        {
             uint32_t BlazeCachedUserRefreshInterval;
-            void* RichPresenceData;
-            void* Platforms;
-            void* Provider;
+            void *RichPresenceData;
+            void *Platforms;
+            void *Provider;
 
-            int32_t  BlazeServerConnectionTimeout;
+            int32_t BlazeServerConnectionTimeout;
             uint32_t BlazeClientTunnelSocketRecvBufSize;
             uint32_t BlazeOutgoingBufferSize;
             uint32_t BlazeServerTunnelSocketRecvBufSize;
-            int32_t  BlazeClientConnectionTimeout;
+            int32_t BlazeClientConnectionTimeout;
 
-            char* ServerLoginEmail;
+            char *ServerLoginEmail;
             uint32_t MaxLocalUserCount;
-            char* TrustedLoginKeyFilename;
+            char *TrustedLoginKeyFilename;
             uint32_t BlazeServerTunnelSocketSendBufSize;
-            char* ServerLoginProjectTag;
+            char *ServerLoginProjectTag;
 
             uint32_t LogLevel;
             uint32_t MinPlayerCapacity;
 
-            char* Country;
-            char* ServiceNameOverride;
-            char* Region;
-            char* TrustedLoginPath;
+            char *Country;
+            char *ServiceNameOverride;
+            char *Region;
+            char *TrustedLoginPath;
 
-            int32_t  DirtySockLogLevel;
-            char* TrustedLoginCertFilename;
-            int32_t  BlazeLogLevel;
+            int32_t DirtySockLogLevel;
+            char *TrustedLoginCertFilename;
+            int32_t BlazeLogLevel;
 
-            char* ServerLoginPassword;
-            char* MatchmakingToken;
-            char* DebugMessageCallstackTypeList;
+            char *ServerLoginPassword;
+            char *MatchmakingToken;
+            char *DebugMessageCallstackTypeList;
 
             uint32_t NegativeUserCacheRefreshPeriod;
             uint32_t BlazeClientTunnelSocketSendBufSize;
 
-            char* ServerLoginPersonaName;
-            int32_t  DirtySockServerPacketQueueCapacity;
+            char *ServerLoginPersonaName;
+            int32_t DirtySockServerPacketQueueCapacity;
 
             uint32_t ServerBackend;
-            int32_t  BlazeClientTimeout;
+            int32_t BlazeClientTimeout;
             uint32_t Environment;
 
-            char* PingSite;
+            char *PingSite;
 
-            int32_t  DirtySockServerNetGameLinkQueueLength;
-            int32_t  BlazeServerTimeout;
-            int32_t  PeerPort;
+            int32_t DirtySockServerNetGameLinkQueueLength;
+            int32_t BlazeServerTimeout;
+            int32_t PeerPort;
             uint32_t DirtySockMaxConnectionCount;
 
             bool WaitForQoS;
@@ -503,13 +503,13 @@ namespace fb
 
         typedef struct PingSiteNamePair
         {
-            char* PingSiteName;
-            char* PingSiteHalId;
+            char *PingSiteName;
+            char *PingSiteHalId;
         } PingSiteNamePair;
 
         typedef struct PingSiteSettings
         {
-            PingSiteNamePair* PingSiteNamePairs;
+            PingSiteNamePair *PingSiteNamePairs;
             int32_t GoodPingThreshold;
             int32_t OkayPingThreshold;
         } PingSiteSettings;
@@ -518,45 +518,45 @@ namespace fb
         {
             float MinimumInterval;
             float RefreshInterval;
-            char* GameGroupConfig;
-            char* AnyGameConfig;
-            char* GameSessionConfig;
-            char* GameGroupListConfig;
-            bool  RefreshEnabled;
+            char *GameGroupConfig;
+            char *AnyGameConfig;
+            char *GameSessionConfig;
+            char *GameGroupListConfig;
+            bool RefreshEnabled;
         } GameBrowserConfig;
 
         typedef struct TelemetryOnlineSettingsPair
         {
-            char* Item;
-            char* ItemLicenseOverride;
+            char *Item;
+            char *ItemLicenseOverride;
         } TelemetryOnlineSettingsPair;
 
         typedef struct OnlineSettingsTelemetryEvent
         {
-            char** Realms;
-            char** Scopes;
-            char* Module;
-            char* Group;
-            char* String;
-            bool   Enabled;
+            char **Realms;
+            char **Scopes;
+            char *Module;
+            char *Group;
+            char *String;
+            bool Enabled;
         } OnlineSettingsTelemetryEvent;
 
         typedef struct MetricsTelemetryOnlineSettings
         {
-            char** EnabledRealms;
-            OnlineSettingsTelemetryEvent* EnabledDisabledEvents;
+            char **EnabledRealms;
+            OnlineSettingsTelemetryEvent *EnabledDisabledEvents;
             bool EnableTelemetry;
         } MetricsTelemetryOnlineSettings;
 
         typedef struct ServerTransactionTelemetryOnlineSettings
         {
-            TelemetryOnlineSettingsPair* EnabledCategories;
-            TelemetryOnlineSettingsPair* DisabledEvents;
+            TelemetryOnlineSettingsPair *EnabledCategories;
+            TelemetryOnlineSettingsPair *DisabledEvents;
 
-            char* EnableTelemetryLicenseOverride;
-            char* EnableNonPlayerEventsLicenseOverride;
-            char* EnablePlayerStatesLicenseOverride;
-            char* EnablePlayerEventsLicenseOverride;
+            char *EnableTelemetryLicenseOverride;
+            char *EnableNonPlayerEventsLicenseOverride;
+            char *EnablePlayerStatesLicenseOverride;
+            char *EnablePlayerEventsLicenseOverride;
 
             bool EnableNonPlayerEvents;
             bool EnablePlayerStates;
@@ -568,11 +568,11 @@ namespace fb
         {
             ServerTransactionTelemetryOnlineSettings PeerHostedServerTransactionSettings;
             ServerTransactionTelemetryOnlineSettings DedicatedServerTransactionSettings;
-            MetricsTelemetryOnlineSettings           MetricsSettings;
+            MetricsTelemetryOnlineSettings MetricsSettings;
 
-            char* DownloadSettingsLicenseOverride;
-            char* EnableTelemetryLicenseOverride;
-            char* TransactionLogSettingsPrefix;
+            char *DownloadSettingsLicenseOverride;
+            char *EnableTelemetryLicenseOverride;
+            char *TransactionLogSettingsPrefix;
 
             int32_t NumSecondsBetweenMemoryMetricUpdates;
             int32_t TelemetryContextRefreshPeriodSeconds;
@@ -584,26 +584,26 @@ namespace fb
 
         typedef struct TelemetryPinSettingsPair
         {
-            char* Name;
+            char *Name;
             uint32_t StreamId;
-            bool     Enabled;
+            bool Enabled;
         } TelemetryPinSettingsPair;
 
         typedef struct TelemetryPinSettings
         {
-            TelemetryPinSettingsPair* EnableEventType;
-            char* TitleIdType;
-            float  FpsThreshold;
-            char* Environment;
-            char* ReleaseType;
-            char* TitleId;
-            float  FpsCoolDownInterval;
+            TelemetryPinSettingsPair *EnableEventType;
+            char *TitleIdType;
+            float FpsThreshold;
+            char *Environment;
+            char *ReleaseType;
+            char *TitleId;
+            float FpsCoolDownInterval;
             int32_t ServerPort;
-            float  PlayerHealthAbsoluteThreshold;
-            char* ServerAddress;
-            float  PlayerTickInterval;
+            float PlayerHealthAbsoluteThreshold;
+            char *ServerAddress;
+            float PlayerTickInterval;
             uint32_t UIInteractMinModeDurSec;
-            float  FpsSplitScreenThreshold;
+            float FpsSplitScreenThreshold;
             int32_t TimerEventInterval;
             bool EnableTelemetry;
             bool EnableKillSwitchforPlayerStatTelemetry;
@@ -611,9 +611,9 @@ namespace fb
 
         typedef struct BugSentryOnlineSettings
         {
-            char* EnableKillswitchForCrashDumpsLicenseName;
-            char* CrashTimerLicenseName;
-            char* ForceProdModeLicenseName;
+            char *EnableKillswitchForCrashDumpsLicenseName;
+            char *CrashTimerLicenseName;
+            char *ForceProdModeLicenseName;
             int32_t CrashTimerInSeconds;
             bool EnableCrashDumps;
             bool EnableKillswitchForCrashDumps;
@@ -640,31 +640,31 @@ namespace fb
         typedef struct BattleArenaSeasonInfo
         {
             int32_t SeasonNumber;
-            char* SeasonName;
-            char* SeasonStatKey;
+            char *SeasonName;
+            char *SeasonStatKey;
             int32_t CalibrationGames;
-            char* ActivationTimestamp;
+            char *ActivationTimestamp;
         } BattleArenaSeasonInfo;
 
         typedef struct EntitlementData
         {
-            char* EntitlementTag;
-            char* License;
-            char* GroupName;
-            char* ProjectId;
-            char* ProductId;
+            char *EntitlementTag;
+            char *License;
+            char *GroupName;
+            char *ProjectId;
+            char *ProductId;
             EntitlementType UsageType;
             bool VerifyOwnership;
         } EntitlementData;
 
         typedef struct EntitlementQuery
         {
-            char* EntitlementTag;
-            EntitlementData* EntitlementsData;
-            char** GroupNames;
+            char *EntitlementTag;
+            EntitlementData *EntitlementsData;
+            char **GroupNames;
             GamePlatform Platform;
-            char* ProductId;
-            char* ProjectId;
+            char *ProductId;
+            char *ProjectId;
         } EntitlementQuery;
 
         typedef struct PVZOnlineSettings : OnlineSettings
@@ -674,66 +674,66 @@ namespace fb
             PingSiteSettings PingSiteSettings;
 
             uint64_t StreamingDataCacheSizePerWrite;
-            BattleArenaSeasonInfo* BattleArenaSeasonInfos;
+            BattleArenaSeasonInfo *BattleArenaSeasonInfos;
 
             uint64_t StreamingDataCacheMaxAgeSeconds;
-            EntitlementQuery** EntitlementQueries;
+            EntitlementQuery **EntitlementQueries;
 
             GameBrowserConfig GameBrowser;
             BugSentryOnlineSettings BugSentrySettings;
             BlazeClientNotificationManagerSettings BlazeClientNotificationManager;
             MandatedVersionSettings MandatedVersion;
 
-            float  BattleArenaMaxPenalty;
-            char* SocialSpaceDSubName;
+            float BattleArenaMaxPenalty;
+            char *SocialSpaceDSubName;
             uint32_t StreamingDataCacheMaxSizeMb;
-            char* TrialModeExpiredLicenseString;
-            char* MatchmakingTokenPatchSuffix;
-            char* SocialSpaceStartPoint;
-            char* BattleArenaPenaltyExpiryStatId;
-            char* PurchaseCoinsButtonLicenseOverride;
-            float  TrialTimeDataStartTime;
+            char *TrialModeExpiredLicenseString;
+            char *MatchmakingTokenPatchSuffix;
+            char *SocialSpaceStartPoint;
+            char *BattleArenaPenaltyExpiryStatId;
+            char *PurchaseCoinsButtonLicenseOverride;
+            float TrialTimeDataStartTime;
             int32_t GameReportInterval;
-            char* GameConfigurationUrl;
-            char* ConnectionLevel;
+            char *GameConfigurationUrl;
+            char *ConnectionLevel;
             int32_t StoreRefreshRetryMaxDelay;
-            char* CreditsPath;
-            char* EditorialRootUrl;
+            char *CreditsPath;
+            char *EditorialRootUrl;
             int32_t StoreRefreshRetryDelay;
-            float  MaxTrialTime;
-            char* TrialModePurchaseId;
+            float MaxTrialTime;
+            char *TrialModePurchaseId;
             int32_t RpcRetryMaxDelay;
             int32_t StoreInterruptedPurchaseRetries;
             uint32_t PingPeriod;
             int32_t QueueCapacityOverride;
-            float  TrialTimeDataPollTime;
+            float TrialTimeDataPollTime;
             int32_t BattleArenaPointsBetweenRanks;
-            float  OnlinePeerGameReserveTimeOut;
-            float  ClientStartedAndWaitingFailSafeTimer;
+            float OnlinePeerGameReserveTimeOut;
+            float ClientStartedAndWaitingFailSafeTimer;
             int32_t GroupReserveWaitForJoiningSessionTimeout;
-            float  TrialModeTimeModifier;
-            float  UpdatePermissionsTimeOut;
-            char* PodiumDSubName;
-            float  RespawnDelayTimeoutSeconds;
+            float TrialModeTimeModifier;
+            float UpdatePermissionsTimeOut;
+            char *PodiumDSubName;
+            float RespawnDelayTimeoutSeconds;
             int32_t ClientStoreEntityRefreshDelaySeconds;
             int32_t OriginProfileRefreshPeriodSeconds;
             int32_t StoreRefreshPeriodSeconds;
             int32_t RpcRetryDelay;
             int32_t BlazeClientSettingsRetryTime;
             int32_t StoreInterruptedPurchaseBusySeconds;
-            char* SocialSpaceGameModeInclusion;
+            char *SocialSpaceGameModeInclusion;
             int32_t RpcRandomOffsetMaxDelay;
-            float  DisconnectFailSafeTimer;
-            char* ClientGameConfigurationOverride;
-            float  PrivilegeCacheTimeOut;
-            char* ContentBaseUrl;
-            char* LevelRootName;
+            float DisconnectFailSafeTimer;
+            char *ClientGameConfigurationOverride;
+            float PrivilegeCacheTimeOut;
+            char *ContentBaseUrl;
+            char *LevelRootName;
             int32_t ClientStoreEntityTimerExpiredRefreshDelaySeconds;
-            char* MatchmakingTokenSuffix;
-            char* StreamingDataCacheSubDir;
-            float  GroupSwitchTimeOut;
+            char *MatchmakingTokenSuffix;
+            char *StreamingDataCacheSubDir;
+            float GroupSwitchTimeOut;
             int32_t GroupReservationRenewPeriodWhileQueued;
-            char* ConnectionLevelLayerInclusion;
+            char *ConnectionLevelLayerInclusion;
 
             bool ClientStoreEntityRefreshEnabled;
             bool AllowMissionActiveJoin;

@@ -15,7 +15,7 @@ namespace GG
     struct HookTemplate
     {
         std::uintptr_t target;
-        void* detour;
+        void *detour;
         bool enable = true;
     };
 
@@ -24,15 +24,16 @@ namespace GG
     public:
         HookManager() = default;
 
-        HookManager(const HookManager&) = delete;
-        HookManager& operator=(const HookManager&) = delete;
+        HookManager(const HookManager &) = delete;
+        HookManager &operator=(const HookManager &) = delete;
 
         ~HookManager() noexcept
         {
-            if (m_initialized) uninitialize();
+            if (m_initialized)
+                uninitialize();
         }
 
-        static HookManager& getManager() noexcept
+        static HookManager &getManager() noexcept
         {
             static HookManager s;
             return s;
@@ -40,17 +41,20 @@ namespace GG
 
         void initialize() noexcept
         {
-            if (m_initialized) return;
+            if (m_initialized)
+                return;
 
             const auto st = ::MH_Initialize();
-            if (st != MH_OK) GG_FATAL("MH_Initialize failed (%d).", (int)st);
+            if (st != MH_OK)
+                GG_FATAL("MH_Initialize failed (%d).", (int)st);
 
             m_initialized = true;
         }
 
         void uninitialize() noexcept
         {
-            if (!m_initialized) return;
+            if (!m_initialized)
+                return;
 
             disableAll();
             uninstallAll();
@@ -58,30 +62,35 @@ namespace GG
             m_detourToOriginal.clear();
 
             const auto st = ::MH_Uninitialize();
-            if (st != MH_OK) GG_FATAL("MH_Uninitialize failed (%d).", (int)st);
+            if (st != MH_OK)
+                GG_FATAL("MH_Uninitialize failed (%d).", (int)st);
 
             m_initialized = false;
         }
 
         void registerHooks(std::span<const HookTemplate> templates) noexcept
         {
-            if (!m_initialized) initialize();
+            if (!m_initialized)
+                initialize();
 
-            for (const auto& s : templates)
+            for (const auto &s : templates)
                 registerHook(s.target, s.detour, s.enable);
         }
 
-        void registerHook(std::uintptr_t target, void* detour, bool enable_now = true) noexcept
+        void registerHook(std::uintptr_t target, void *detour, bool enable_now = true) noexcept
         {
-            if (!m_initialized) initialize();
-            if (!detour || !target) GG_FATAL("registerHook called with null target/detour.");
+            if (!m_initialized)
+                initialize();
+            if (!detour || !target)
+                GG_FATAL("registerHook called with null target/detour.");
 
             auto e = std::make_unique<Entry>();
             e->detour = detour;
 
-            e->hook = Hook{ target, detour, reinterpret_cast<void**>(&e->original) };
+            e->hook = Hook{target, detour, reinterpret_cast<void **>(&e->original)};
             e->hook.install();
-            if (enable_now) e->hook.enable();
+            if (enable_now)
+                e->hook.enable();
 
             m_detourToOriginal.emplace(detour, &e->original);
             m_entries.emplace_back(std::move(e));
@@ -89,7 +98,8 @@ namespace GG
 
         void enableAll() noexcept
         {
-            for (auto& e : m_entries) e->hook.enable();
+            for (auto &e : m_entries)
+                e->hook.enable();
         }
 
         void disableAll() noexcept
@@ -107,7 +117,7 @@ namespace GG
         template <typename Fn>
         [[nodiscard]] Fn Call(Fn detour_fn) const noexcept
         {
-            const auto it = m_detourToOriginal.find(reinterpret_cast<void*>(detour_fn));
+            const auto it = m_detourToOriginal.find(reinterpret_cast<void *>(detour_fn));
             if (it == m_detourToOriginal.end() || !it->second || !*it->second)
                 GG_FATAL("HookManager::Call failed (detour not registered or original missing).");
             return reinterpret_cast<Fn>(*it->second);
@@ -117,12 +127,12 @@ namespace GG
         struct Entry
         {
             Hook hook{};
-            void* detour = nullptr;
-            void* original = nullptr;
+            void *detour = nullptr;
+            void *original = nullptr;
         };
 
         std::vector<std::unique_ptr<Entry>> m_entries;
-        std::unordered_map<void*, void**> m_detourToOriginal;
+        std::unordered_map<void *, void **> m_detourToOriginal;
         bool m_initialized = false;
     };
 }

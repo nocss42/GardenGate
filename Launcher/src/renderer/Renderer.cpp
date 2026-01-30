@@ -4,10 +4,10 @@
 #include "Utils.hpp"
 #include <windowsx.h>
 
-ID3D11Device* Renderer::pd3dDevice = nullptr;
-ID3D11DeviceContext* Renderer::pd3dDeviceContext = nullptr;
-IDXGISwapChain* Renderer::pSwapChain = nullptr;
-ID3D11RenderTargetView* Renderer::pMainRenderTargetView = nullptr;
+ID3D11Device *Renderer::pd3dDevice = nullptr;
+ID3D11DeviceContext *Renderer::pd3dDeviceContext = nullptr;
+IDXGISwapChain *Renderer::pSwapChain = nullptr;
+ID3D11RenderTargetView *Renderer::pMainRenderTargetView = nullptr;
 HMODULE Renderer::hCurrentModule = nullptr;
 
 bool Renderer::CreateDeviceD3D(HWND hWnd)
@@ -29,10 +29,10 @@ bool Renderer::CreateDeviceD3D(HWND hWnd)
     sd.SwapEffect = DXGI_SWAP_EFFECT_DISCARD;
 
     D3D_FEATURE_LEVEL featureLevel;
-    const D3D_FEATURE_LEVEL featureLevelArray[2] = { D3D_FEATURE_LEVEL_11_0, D3D_FEATURE_LEVEL_10_0 };
+    const D3D_FEATURE_LEVEL featureLevelArray[2] = {D3D_FEATURE_LEVEL_11_0, D3D_FEATURE_LEVEL_10_0};
     if (D3D11CreateDeviceAndSwapChain(nullptr, D3D_DRIVER_TYPE_HARDWARE, nullptr, 0,
-        featureLevelArray, 2, D3D11_SDK_VERSION, &sd, &pSwapChain,
-        &pd3dDevice, &featureLevel, &pd3dDeviceContext) != S_OK)
+                                      featureLevelArray, 2, D3D11_SDK_VERSION, &sd, &pSwapChain,
+                                      &pd3dDevice, &featureLevel, &pd3dDeviceContext) != S_OK)
         return false;
 
     CreateRenderTarget();
@@ -41,7 +41,7 @@ bool Renderer::CreateDeviceD3D(HWND hWnd)
 
 void Renderer::CreateRenderTarget()
 {
-    ID3D11Texture2D* pBackBuffer;
+    ID3D11Texture2D *pBackBuffer;
     pSwapChain->GetBuffer(0, IID_PPV_ARGS(&pBackBuffer));
     if (pBackBuffer)
     {
@@ -52,15 +52,31 @@ void Renderer::CreateRenderTarget()
 
 void Renderer::CleanupRenderTarget()
 {
-    if (pMainRenderTargetView) { pMainRenderTargetView->Release(); pMainRenderTargetView = nullptr; }
+    if (pMainRenderTargetView)
+    {
+        pMainRenderTargetView->Release();
+        pMainRenderTargetView = nullptr;
+    }
 }
 
 void Renderer::CleanupDeviceD3D()
 {
     CleanupRenderTarget();
-    if (pSwapChain) { pSwapChain->Release(); pSwapChain = nullptr; }
-    if (pd3dDeviceContext) { pd3dDeviceContext->Release(); pd3dDeviceContext = nullptr; }
-    if (pd3dDevice) { pd3dDevice->Release(); pd3dDevice = nullptr; }
+    if (pSwapChain)
+    {
+        pSwapChain->Release();
+        pSwapChain = nullptr;
+    }
+    if (pd3dDeviceContext)
+    {
+        pd3dDeviceContext->Release();
+        pd3dDeviceContext = nullptr;
+    }
+    if (pd3dDevice)
+    {
+        pd3dDevice->Release();
+        pd3dDevice = nullptr;
+    }
 }
 
 LRESULT WINAPI Renderer::WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
@@ -75,7 +91,7 @@ LRESULT WINAPI Renderer::WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lPar
         {
             CleanupRenderTarget();
             pSwapChain->ResizeBuffers(0, (UINT)LOWORD(lParam), (UINT)HIWORD(lParam),
-                DXGI_FORMAT_UNKNOWN, 0);
+                                      DXGI_FORMAT_UNKNOWN, 0);
             CreateRenderTarget();
         }
         return 0;
@@ -83,7 +99,7 @@ LRESULT WINAPI Renderer::WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lPar
         // shitty solution, will work on a better implementation.
     case WM_NCHITTEST:
     {
-        POINT pt = { GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam) };
+        POINT pt = {GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam)};
 
         RECT rcWindow;
         ::GetWindowRect(hWnd, &rcWindow);
@@ -96,24 +112,34 @@ LRESULT WINAPI Renderer::WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lPar
         bool onTop = pt.y >= rcWindow.top && pt.y < rcWindow.top + borderY;
         bool onBottom = pt.y < rcWindow.bottom && pt.y >= rcWindow.bottom - borderY;
 
-        if (onTop && onLeft) return HTTOPLEFT;
-        if (onTop && onRight) return HTTOPRIGHT;
-        if (onBottom && onLeft) return HTBOTTOMLEFT;
-        if (onBottom && onRight) return HTBOTTOMRIGHT;
-        if (onTop) return HTTOP;
-        if (onBottom) return HTBOTTOM;
-        if (onLeft) return HTLEFT;
-        if (onRight) return HTRIGHT;
+        if (onTop && onLeft)
+            return HTTOPLEFT;
+        if (onTop && onRight)
+            return HTTOPRIGHT;
+        if (onBottom && onLeft)
+            return HTBOTTOMLEFT;
+        if (onBottom && onRight)
+            return HTBOTTOMRIGHT;
+        if (onTop)
+            return HTTOP;
+        if (onBottom)
+            return HTBOTTOM;
+        if (onLeft)
+            return HTLEFT;
+        if (onRight)
+            return HTRIGHT;
 
         break;
     }
 
     case WM_NCCALCSIZE:
-        if (wParam == TRUE) return 0;
+        if (wParam == TRUE)
+            return 0;
         break;
 
     case WM_SYSCOMMAND:
-        if ((wParam & 0xfff0) == SC_KEYMENU) return 0;
+        if ((wParam & 0xfff0) == SC_KEYMENU)
+            return 0;
         break;
 
     case WM_DESTROY:
@@ -136,9 +162,9 @@ void Renderer::Run()
     int yPos = (screenHeight - windowHeight) / 2;
 
     ImGui_ImplWin32_EnableDpiAwareness();
-    WNDCLASSEX wc = { sizeof(WNDCLASSEX), CS_CLASSDC, WndProc, 0L, 0L,
-        GetModuleHandle(nullptr), nullptr, nullptr, nullptr, nullptr,
-        "GardenGateClass", nullptr };
+    WNDCLASSEX wc = {sizeof(WNDCLASSEX), CS_CLASSDC, WndProc, 0L, 0L,
+                     GetModuleHandle(nullptr), nullptr, nullptr, nullptr, nullptr,
+                     "GardenGateClass", nullptr};
     ::RegisterClassEx(&wc);
 
     HWND hwnd = CreateWindow(
@@ -158,12 +184,12 @@ void Renderer::Run()
     ::ShowWindow(hwnd, SW_SHOWDEFAULT);
     ::UpdateWindow(hwnd);
 
-    ::SetWindowPos(hwnd, nullptr, 0, 0, 0, 0, 
-        SWP_NOMOVE | SWP_NOSIZE | SWP_NOZORDER | SWP_FRAMECHANGED);
+    ::SetWindowPos(hwnd, nullptr, 0, 0, 0, 0,
+                   SWP_NOMOVE | SWP_NOSIZE | SWP_NOZORDER | SWP_FRAMECHANGED);
 
     IMGUI_CHECKVERSION();
     ImGui::CreateContext();
-    ImGuiIO& io = ImGui::GetIO();
+    ImGuiIO &io = ImGui::GetIO();
     io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;
     io.ConfigFlags |= ImGuiConfigFlags_DpiEnableScaleFonts;
     io.ConfigFlags |= ImGuiConfigFlags_DpiEnableScaleViewports;
@@ -176,12 +202,14 @@ void Renderer::Run()
 
     io.Fonts->Clear();
     float fontSize = 16.0f * dpiScale;
-    ImFont* font = io.Fonts->AddFontFromFileTTF("C:\\Windows\\Fonts\\segoeui.ttf", fontSize);
-    if (!font) io.Fonts->AddFontDefault();
+    ImFont *font = io.Fonts->AddFontFromFileTTF("C:\\Windows\\Fonts\\segoeui.ttf", fontSize);
+    if (!font)
+        io.Fonts->AddFontDefault();
     ImGui_ImplDX11_CreateDeviceObjects();
 
     ImGui::StyleColorsDark();
-    if (dpiScale > 1.0f) ImGui::GetStyle().ScaleAllSizes(dpiScale);
+    if (dpiScale > 1.0f)
+        ImGui::GetStyle().ScaleAllSizes(dpiScale);
 
     bool bDone = false;
     while (!bDone)
@@ -191,9 +219,11 @@ void Renderer::Run()
         {
             ::TranslateMessage(&msg);
             ::DispatchMessage(&msg);
-            if (msg.message == WM_QUIT) bDone = true;
+            if (msg.message == WM_QUIT)
+                bDone = true;
         }
-        if (bDone) break;
+        if (bDone)
+            break;
 
         ImGui_ImplDX11_NewFrame();
         ImGui_ImplWin32_NewFrame();
@@ -202,7 +232,7 @@ void Renderer::Run()
         UI::DrawUI(hwnd, dpiScale);
 
         ImGui::Render();
-        const float clear_color_with_alpha[4] = { 0.10f, 0.10f, 0.10f, 1.0f };
+        const float clear_color_with_alpha[4] = {0.10f, 0.10f, 0.10f, 1.0f};
         pd3dDeviceContext->OMSetRenderTargets(1, &pMainRenderTargetView, nullptr);
         pd3dDeviceContext->ClearRenderTargetView(pMainRenderTargetView, clear_color_with_alpha);
 

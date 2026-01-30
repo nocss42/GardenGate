@@ -4,7 +4,8 @@
 #include "imgui.h"
 #include "imgui_internal.h"
 
-class UI {
+class UI
+{
 public:
     static void DrawUI(HWND hwnd, float dpiScale);
 };

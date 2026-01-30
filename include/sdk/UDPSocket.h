@@ -15,11 +15,14 @@
 namespace fb
 {
     class SocketManager;
-    namespace gw3 { class SocketManager; }
+    namespace gw3
+    {
+        class SocketManager;
+    }
 
     namespace detail
     {
-        template<typename InterfaceT, typename ManagerT>
+        template <typename InterfaceT, typename ManagerT>
         class UDPSocketImpl : public InterfaceT
         {
         protected:

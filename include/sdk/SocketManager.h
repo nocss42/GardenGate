@@ -16,17 +16,21 @@ namespace fb
     {
         inline bool parse_ipv4_and_port(const char *in, std::string_view &out_ip, std::uint16_t &out_port) noexcept
         {
-            if (!in) return false;
+            if (!in)
+                return false;
 
             std::string_view s(in);
             const auto colon = s.find(':');
 
             out_ip = (colon == std::string_view::npos) ? s : s.substr(0, colon);
-            if (out_ip.empty()) out_ip = "0.0.0.0";
-            if (colon == std::string_view::npos) return false;
+            if (out_ip.empty())
+                out_ip = "0.0.0.0";
+            if (colon == std::string_view::npos)
+                return false;
 
             const auto port_sv = s.substr(colon + 1);
-            if (port_sv.empty()) return false;
+            if (port_sv.empty())
+                return false;
 
             unsigned port_u = 0;
             auto [ptr, ec] = std::from_chars(port_sv.data(), port_sv.data() + port_sv.size(), port_u, 10);
@@ -37,11 +41,11 @@ namespace fb
             return true;
         }
 
-        template<typename SocketT, typename CreatorInterfaceT, typename ManagerT>
+        template <typename SocketT, typename CreatorInterfaceT, typename ManagerT>
         class SocketManagerImpl : public ISocketManager, public CreatorInterfaceT
         {
         protected:
-            std::list<SocketT*> m_sockets;
+            std::list<SocketT *> m_sockets;
 
         public:
             SocketManagerImpl()
@@ -55,7 +59,8 @@ namespace fb
             {
                 GG_LOG(GG::LogLevel::Debug, "Destroyed SocketManager");
                 for (auto *s : m_sockets)
-                    if (s) s->Close();
+                    if (s)
+                        s->Close();
                 delete this;
             }
 
@@ -64,12 +69,12 @@ namespace fb
                 m_sockets.remove(socket);
             }
 
-            ISocket* Connect(const char*, bool = false) override
+            ISocket *Connect(const char *, bool = false) override
             {
                 return nullptr;
             }
 
-            ISocket* Listen(const char *name, bool blocking = false) override
+            ISocket *Listen(const char *name, bool blocking = false) override
             {
                 std::string_view ip{};
                 std::uint16_t port = 0;
@@ -80,7 +85,7 @@ namespace fb
                     return nullptr;
                 }
 
-                auto *socket = new SocketT(static_cast<ManagerT*>(this));
+                auto *socket = new SocketT(static_cast<ManagerT *>(this));
                 const ISocketAddress bind_addr{ip, port};
 
                 if (!socket->Listen(bind_addr, blocking))
@@ -92,10 +97,10 @@ namespace fb
 
                 GG_LOG(GG::LogLevel::Info, "SocketManager listening on %.*s:%u", (int)ip.size(), ip.data(), (unsigned)port);
                 m_sockets.push_back(socket);
-                return reinterpret_cast<ISocket*>(socket);
+                return reinterpret_cast<ISocket *>(socket);
             }
 
-            ISocket* CreateSocket() override
+            ISocket *CreateSocket() override
             {
                 return nullptr;
             }

@@ -188,5 +188,5 @@ namespace fb
             MB_ICONWARNING | MB_SYSTEMMODAL | MB_RETRYCANCEL | MB_SETFOREGROUND);
 
         return r == IDRETRY;
-    }    
+    }
 }

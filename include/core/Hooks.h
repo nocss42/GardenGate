@@ -20,17 +20,17 @@ namespace fb
     // ============================================================================
     namespace gw1
     {
-        using tGetOptionParameter = char* (*)(const char*, const char*, int*);
+        using tGetOptionParameter = char *(*)(const char *, const char *, int *);
         inline tGetOptionParameter GetOptionParameter =
             reinterpret_cast<tGetOptionParameter>(offsets::gw1::fn_GetOptionParameter);
 
-        __int64 ServerStart(intptr_t inst, ServerSpawnInfo& info, ServerSpawnOverrides* spawnOverrides)
+        __int64 ServerStart(intptr_t inst, ServerSpawnInfo &info, ServerSpawnOverrides *spawnOverrides)
         {
             const auto trampoline = GG::HookManager::getManager().Call(&ServerStart);
 
             g_game->logServerSpawnInfo(info);
             g_game->prepareServerSpawn(inst, info, spawnOverrides);
-            
+
             info.isCoop = false;
 
             return trampoline(inst, info, spawnOverrides);
@@ -45,7 +45,7 @@ namespace fb
             if (hosted || !singleplayer)
             {
                 g_game->injectSocketManagerFactory(inst, 0xA8);
-                
+
                 singleplayer = false;
                 localhost = false;
                 coop = false;
@@ -55,7 +55,7 @@ namespace fb
             return trampoline(inst, singleplayer, localhost, coop, hosted);
         }
 
-        void ClientConnectToAddress(intptr_t inst, const char* ipAddress, const char* serverPassword)
+        void ClientConnectToAddress(intptr_t inst, const char *ipAddress, const char *serverPassword)
         {
             const auto trampoline = GG::HookManager::getManager().Call(&ClientConnectToAddress);
 
@@ -66,12 +66,12 @@ namespace fb
             return trampoline(inst, ipAddress, serverPassword);
         }
 
-        char NetworkEnginePeerInit(intptr_t inst, __int64 crypto, intptr_t socketManager, 
-            const char* address, int titleId, int versionId, bool debug, bool voice, bool live)
+        char NetworkEnginePeerInit(intptr_t inst, __int64 crypto, intptr_t socketManager,
+                                   const char *address, int titleId, int versionId, bool debug, bool voice, bool live)
         {
             const auto trampoline = GG::HookManager::getManager().Call(&NetworkEnginePeerInit);
 
-            std::string_view addressView{ address };
+            std::string_view addressView{address};
             if (const auto colon = addressView.find(':'); colon != std::string_view::npos)
             {
                 const auto port = addressView.substr(colon + 1);
@@ -81,7 +81,7 @@ namespace fb
             return trampoline(inst, crypto, socketManager, address, titleId, versionId, debug, voice, live);
         }
 
-        void PeerHasJoined(intptr_t inst, intptr_t playerInstance, const char* player)
+        void PeerHasJoined(intptr_t inst, intptr_t playerInstance, const char *player)
         {
             const auto trampoline = GG::HookManager::getManager().Call(&PeerHasJoined);
 
@@ -95,7 +95,7 @@ namespace fb
         {
             const auto trampoline = GG::HookManager::getManager().Call(&ClientDisconnect);
 
-            SecureReason reason = *reinterpret_cast<const SecureReason*>(inst + 0x670);
+            SecureReason reason = *reinterpret_cast<const SecureReason *>(inst + 0x670);
             g_game->handleDisconnection(reason);
 
             trampoline(inst);
@@ -106,7 +106,7 @@ namespace fb
             return;
         }
 
-        char* GetPlayerName()
+        char *GetPlayerName()
         {
             return GetOptionParameter("name", "Player", 0);
         }
@@ -117,11 +117,11 @@ namespace fb
     // ============================================================================
     namespace gw2
     {
-        using tGetOptionParameter = char* (*)(const char*, const char*, int*);
-        inline tGetOptionParameter GetOptionParameter = 
+        using tGetOptionParameter = char *(*)(const char *, const char *, int *);
+        inline tGetOptionParameter GetOptionParameter =
             reinterpret_cast<tGetOptionParameter>(offsets::gw2::fn_GetOptionParameter);
 
-        __int64 ServerStart(intptr_t inst, ServerSpawnInfo& info, ServerSpawnOverrides* spawnOverrides)
+        __int64 ServerStart(intptr_t inst, ServerSpawnInfo &info, ServerSpawnOverrides *spawnOverrides)
         {
             const auto trampoline = GG::HookManager::getManager().Call(&ServerStart);
 
@@ -137,14 +137,14 @@ namespace fb
         {
             const auto trampoline = GG::HookManager::getManager().Call(&ClientInitNetwork);
 
-            GG_LOG(GG::LogLevel::Info, 
-                "fb::client::InitNetwork(idk: %d, singleplayer: %d, localhost: %d, coop: %d, hosted: %d)",
-                (char)idk, (char)singleplayer, (char)localhost, (char)coop, (char)hosted);
+            GG_LOG(GG::LogLevel::Info,
+                   "fb::client::InitNetwork(idk: %d, singleplayer: %d, localhost: %d, coop: %d, hosted: %d)",
+                   (char)idk, (char)singleplayer, (char)localhost, (char)coop, (char)hosted);
 
             if (!localhost)
             {
                 g_game->injectSocketManagerFactory(inst, 0xB8);
-                
+
                 singleplayer = false;
                 coop = false;
                 hosted = true;
@@ -153,7 +153,7 @@ namespace fb
             return trampoline(inst, idk, localhost, coop, hosted, singleplayer);
         }
 
-        void ClientConnectToAddress(intptr_t inst, const char* ipAddress, const char* serverPassword)
+        void ClientConnectToAddress(intptr_t inst, const char *ipAddress, const char *serverPassword)
         {
             const auto trampoline = GG::HookManager::getManager().Call(&ClientConnectToAddress);
 
@@ -164,12 +164,12 @@ namespace fb
             return trampoline(inst, ipAddress, serverPassword);
         }
 
-        char NetworkEnginePeerInit(intptr_t inst, __int64 crypto, intptr_t socketManager, 
-            const char* address, int titleId, int versionId)
+        char NetworkEnginePeerInit(intptr_t inst, __int64 crypto, intptr_t socketManager,
+                                   const char *address, int titleId, int versionId)
         {
             const auto trampoline = GG::HookManager::getManager().Call(&NetworkEnginePeerInit);
 
-            std::string_view addressView{ address };
+            std::string_view addressView{address};
             if (const auto colon = addressView.find(':'); colon != std::string_view::npos)
             {
                 const auto port = addressView.substr(colon + 1);
@@ -179,7 +179,7 @@ namespace fb
             return trampoline(inst, crypto, socketManager, address, titleId, versionId);
         }
 
-        __int64 ClientDisconnected(intptr_t inst, SecureReason reason, char* reasonText)
+        __int64 ClientDisconnected(intptr_t inst, SecureReason reason, char *reasonText)
         {
             const auto trampoline = GG::HookManager::getManager().Call(&ClientDisconnected);
 
@@ -188,7 +188,7 @@ namespace fb
             return trampoline(inst, reason, reasonText);
         }
 
-        void PeerHasJoined(intptr_t inst, intptr_t playerInstance, const char* player)
+        void PeerHasJoined(intptr_t inst, intptr_t playerInstance, const char *player)
         {
             const auto trampoline = GG::HookManager::getManager().Call(&PeerHasJoined);
 
@@ -198,7 +198,7 @@ namespace fb
             trampoline(inst, playerInstance, player);
         }
 
-        char* GetPlayerName()
+        char *GetPlayerName()
         {
             return GetOptionParameter("name", "Player", 0);
         }
@@ -207,49 +207,50 @@ namespace fb
     // ============================================================================
     // PvZ:Battle for Neighborville
     // ============================================================================
-    namespace gw3 {
-        using tGetOptionParameter = char* (*)(const char*, const char*, int*);
+    namespace gw3
+    {
+        using tGetOptionParameter = char *(*)(const char *, const char *, int *);
         inline tGetOptionParameter GetOptionParameter =
             reinterpret_cast<tGetOptionParameter>(offsets::gw3::fn_GetOptionParameter);
 
-        using tGetSettings = intptr_t(*)(intptr_t, intptr_t);
+        using tGetSettings = intptr_t (*)(intptr_t, intptr_t);
         template <typename T>
-        inline T* GetSettings(intptr_t settingsManager, intptr_t settingsInstance)
+        inline T *GetSettings(intptr_t settingsManager, intptr_t settingsInstance)
         {
             auto fn = reinterpret_cast<tGetSettings>(offsets::gw3::fn_GetSettings);
 
-            intptr_t mgr = *reinterpret_cast<intptr_t*>(settingsManager);
+            intptr_t mgr = *reinterpret_cast<intptr_t *>(settingsManager);
             intptr_t ret = fn(mgr, settingsInstance);
-            return reinterpret_cast<T*>(ret);
+            return reinterpret_cast<T *>(ret);
         }
 
-        using tfbString = void(*)(intptr_t, const char*, unsigned int);
+        using tfbString = void (*)(intptr_t, const char *, unsigned int);
         inline tfbString fbString = reinterpret_cast<tfbString>(offsets::gw3::fn_fbString);
 
-        using tUserAdded = void(*)(void*, void**, unsigned int);
+        using tUserAdded = void (*)(void *, void **, unsigned int);
         inline tUserAdded UserAdded = reinterpret_cast<tUserAdded>(offsets::gw3::fn_UserAdded);
 
-        intptr_t ServerStart(intptr_t inst, ServerSpawnInfo& info, ServerSpawnOverrides* spawnOverrides, fb::ISocketManager* socketManager) {
+        intptr_t ServerStart(intptr_t inst, ServerSpawnInfo &info, ServerSpawnOverrides *spawnOverrides, fb::ISocketManager *socketManager)
+        {
             const auto trampoline = GG::HookManager::getManager().Call(&ServerStart);
 
             GG_LOG(
                 GG::LogLevel::Debug,
                 "ServerStart - inst:%p, info:%p, spawnOverrides:%p, socketManager:%p",
-                (intptr_t*)inst,
-                (intptr_t*)&info,
-                (intptr_t*)spawnOverrides,
-                (intptr_t*)socketManager
-            );
+                (intptr_t *)inst,
+                (intptr_t *)&info,
+                (intptr_t *)spawnOverrides,
+                (intptr_t *)socketManager);
 
-            fb::gw3::LevelSetup* levelSetup = reinterpret_cast<fb::gw3::LevelSetup*>(&info.levelSetup);
+            fb::gw3::LevelSetup *levelSetup = reinterpret_cast<fb::gw3::LevelSetup *>(&info.levelSetup);
 
             GG_LOG(GG::LogLevel::Debug, "info->levelSetup->m_name = %s", levelSetup->Name);
 
             for (int i = 0; i < (int)levelSetup->InclusionOptions.size(); ++i)
             {
-                const auto& opt = levelSetup->InclusionOptions[i];
-                const char* key = opt.m_criterion ? opt.m_criterion : "<null>";
-                const char* value = opt.m_value ? opt.m_value : "<null>";
+                const auto &opt = levelSetup->InclusionOptions[i];
+                const char *key = opt.m_criterion ? opt.m_criterion : "<null>";
+                const char *value = opt.m_value ? opt.m_value : "<null>";
 
                 GG_LOG(GG::LogLevel::Debug, "info->levelSetup->m_inclusionOptions[k:v] = %s:%s", key, value);
             }
@@ -267,7 +268,8 @@ namespace fb
 
             g_game->prepareServerSpawn(inst, info, spawnOverrides);
 
-            if (!levelName.starts_with("Levels/Level_Picnic_Splash/Level_Picnic_Splash")) {
+            if (!levelName.starts_with("Levels/Level_Picnic_Splash/Level_Picnic_Splash"))
+            {
                 GG_LOG(GG::LogLevel::Debug, "Forcing non-localhost");
                 g_game->setHosting(true);
 
@@ -275,10 +277,10 @@ namespace fb
 
                 spawnOverrides->socketManager = g_game->getSocketManager();
             }
-            else {
+            else
+            {
                 ::splash = true;
             }
-
 
             return trampoline(inst, info, spawnOverrides, socketManager);
         }
@@ -299,14 +301,15 @@ namespace fb
             return trampoline(inst, singleplayer, localhost, coop, hosted);
         }
 
-        void ClientConnectToAddress(intptr_t inst, const char* ipAddress, const char* serverPassword)
+        void ClientConnectToAddress(intptr_t inst, const char *ipAddress, const char *serverPassword)
         {
             const auto trampoline = GG::HookManager::getManager().Call(&ClientConnectToAddress);
 
             ipAddress = g_game->redirectHostingAddress(ipAddress);
             serverPassword = GetOptionParameter("Server.ServerPassword", "", 0);
 
-            if (g_game->isJoining()) {
+            if (g_game->isJoining())
+            {
                 ipAddress = GetOptionParameter("Client.ServerIp", "", 0);
             }
 
@@ -316,21 +319,20 @@ namespace fb
         }
 
         char NetworkEnginePeerInit(intptr_t inst, intptr_t socketManager,
-            const char* address, int titleId, int versionId)
+                                   const char *address, int titleId, int versionId)
         {
             const auto trampoline = GG::HookManager::getManager().Call(&NetworkEnginePeerInit);
 
             GG_LOG(
                 GG::LogLevel::Debug,
                 "NetworkEnginePeerInit - inst:%p, socketManager:%p, address: %s, titleId: %p, versionId: %p",
-                (intptr_t*)inst,
-                (intptr_t*)socketManager,
+                (intptr_t *)inst,
+                (intptr_t *)socketManager,
                 address,
                 titleId,
-                versionId
-            );
+                versionId);
 
-            std::string_view addressView{ address };
+            std::string_view addressView{address};
             if (const auto colon = addressView.find(':'); colon != std::string_view::npos)
             {
                 const auto port = addressView.substr(colon + 1);
@@ -345,68 +347,75 @@ namespace fb
         intptr_t onEvent(intptr_t m_client, intptr_t event)
         {
             const auto trampoline = GG::HookManager::getManager().Call(&onEvent);
-            auto* e = reinterpret_cast<std::uint32_t*>(event + 12);
+            auto *e = reinterpret_cast<std::uint32_t *>(event + 12);
 
-            switch (*e) {
-                case 0xBF585A6D: {
-                    if (GetOptionParameter("Client.ServerIp", "", 0)[0] != '\0') {
-                        *e = 0x4551EDBA;
-                        g_game->setJoining(true);
-                    }
-
-                    auto netObjectSettings = GetSettings<NetObjectSystemSettings>(offsets::gw3::g_SettingsManager, offsets::gw3::g_NetObjectSettings);
-                    netObjectSettings->MaxServerConnectionCount = 64;
-
-                    auto serverSettings = GetSettings<PVZServerSettings>(offsets::gw3::g_SettingsManager, offsets::gw3::g_PVZServerSettings);
-                    serverSettings->KickIdlePlayers = false;
-
-                    auto pvzOnlineSettings = GetSettings<PVZOnlineSettings>(offsets::gw3::g_SettingsManager, offsets::gw3::g_PVZOnlineSettings);
-                    pvzOnlineSettings->ServerAllowAnyReputation = true;
-
-                    auto gameModeSettings = GetSettings<GameModeSettings>(offsets::gw3::g_SettingsManager, offsets::gw3::g_GameModeSettings);
-                    gameModeSettings->ShouldSkipHUBTutorial = true;
-                    gameModeSettings->SocialHUBSkipStationTutorials = true;
-                    gameModeSettings->SocialHUBSkipLandingPage = true;
-
-                    void* user = reinterpret_cast<void*>(g_game->getPrimaryUser());
-                    UserAdded(nullptr, &user, 0);
-
-                    break;
+            switch (*e)
+            {
+            case 0xBF585A6D:
+            {
+                if (GetOptionParameter("Client.ServerIp", "", 0)[0] != '\0')
+                {
+                    *e = 0x4551EDBA;
+                    g_game->setJoining(true);
                 }
 
-                case 0x1e86c1d6: {
-                    if (!::splash) {
-                        auto gameSettings = GetSettings<GameSettings>(offsets::gw3::g_SettingsManager, offsets::gw3::g_GameSettings);
-                        auto level = "Levels/Level_Picnic_Root/Level_Picnic_Root";
-                        auto dsub = "Levels/DSub_SocialSpace/DSub_SocialSpace";
-                        auto start = "StartPoint_SocialSpace";
-                        auto inclusion = "GameMode=Mode_SocialSpace;HostedMode=PeerHosted";
-                        
-                        fbString(reinterpret_cast<intptr_t>(&gameSettings->Level), level, (int)strlen(level));
-                        fbString(reinterpret_cast<intptr_t>(&gameSettings->InitialDSubLevel), dsub, (int)strlen(dsub));
-                        fbString(reinterpret_cast<intptr_t>(&gameSettings->StartPoint), start, (int)strlen(start));
-                        fbString(reinterpret_cast<intptr_t>(&gameSettings->DefaultLayerInclusion), inclusion, (int)strlen(inclusion));                        
-                    }
+                auto netObjectSettings = GetSettings<NetObjectSystemSettings>(offsets::gw3::g_SettingsManager, offsets::gw3::g_NetObjectSettings);
+                netObjectSettings->MaxServerConnectionCount = 64;
 
-                    break;
+                auto serverSettings = GetSettings<PVZServerSettings>(offsets::gw3::g_SettingsManager, offsets::gw3::g_PVZServerSettings);
+                serverSettings->KickIdlePlayers = false;
+
+                auto pvzOnlineSettings = GetSettings<PVZOnlineSettings>(offsets::gw3::g_SettingsManager, offsets::gw3::g_PVZOnlineSettings);
+                pvzOnlineSettings->ServerAllowAnyReputation = true;
+
+                auto gameModeSettings = GetSettings<GameModeSettings>(offsets::gw3::g_SettingsManager, offsets::gw3::g_GameModeSettings);
+                gameModeSettings->ShouldSkipHUBTutorial = true;
+                gameModeSettings->SocialHUBSkipStationTutorials = true;
+                gameModeSettings->SocialHUBSkipLandingPage = true;
+
+                void *user = reinterpret_cast<void *>(g_game->getPrimaryUser());
+                UserAdded(nullptr, &user, 0);
+
+                break;
+            }
+
+            case 0x1e86c1d6:
+            {
+                if (!::splash)
+                {
+                    auto gameSettings = GetSettings<GameSettings>(offsets::gw3::g_SettingsManager, offsets::gw3::g_GameSettings);
+                    auto level = "Levels/Level_Picnic_Root/Level_Picnic_Root";
+                    auto dsub = "Levels/DSub_SocialSpace/DSub_SocialSpace";
+                    auto start = "StartPoint_SocialSpace";
+                    auto inclusion = "GameMode=Mode_SocialSpace;HostedMode=PeerHosted";
+
+                    fbString(reinterpret_cast<intptr_t>(&gameSettings->Level), level, (int)strlen(level));
+                    fbString(reinterpret_cast<intptr_t>(&gameSettings->InitialDSubLevel), dsub, (int)strlen(dsub));
+                    fbString(reinterpret_cast<intptr_t>(&gameSettings->StartPoint), start, (int)strlen(start));
+                    fbString(reinterpret_cast<intptr_t>(&gameSettings->DefaultLayerInclusion), inclusion, (int)strlen(inclusion));
                 }
 
-                case 0x2ED8C3: {
-                    if (g_game->isJoining()) {
-                        g_game->handleDisconnection(SecureReason_NoReply);
-                    }
+                break;
+            }
 
-                    break;
+            case 0x2ED8C3:
+            {
+                if (g_game->isJoining())
+                {
+                    g_game->handleDisconnection(SecureReason_NoReply);
                 }
 
-                default:
-                    break;
+                break;
+            }
+
+            default:
+                break;
             }
 
             return trampoline(m_client, event);
         }
 
-        void PeerHasJoined(intptr_t inst, intptr_t playerInstance, const char* player)
+        void PeerHasJoined(intptr_t inst, intptr_t playerInstance, const char *player)
         {
             const auto trampoline = GG::HookManager::getManager().Call(&PeerHasJoined);
 
@@ -418,7 +427,7 @@ namespace fb
 
         intptr_t GetPlayerName(intptr_t name)
         {
-            *reinterpret_cast<char**>(name) = GetOptionParameter("name", "Player", 0);
+            *reinterpret_cast<char **>(name) = GetOptionParameter("name", "Player", 0);
 
             return name;
         }
@@ -429,40 +438,40 @@ namespace fb
             auto ret = trampoline(inst, type, handle, alloc);
 
             g_game->setPrimaryUser(ret);
-            
+
             return ret;
         }
     }
 }
 
 static GG::HookTemplate g_PvZGW1_Hooks[] = {
-    {offsets::gw1::fn_ServerStart,              reinterpret_cast<void*>(fb::gw1::ServerStart),              true},
-    {offsets::gw1::fn_ClientInitNetwork,        reinterpret_cast<void*>(fb::gw1::ClientInitNetwork),        true},
-    {offsets::gw1::fn_ClientConnectToAddress,   reinterpret_cast<void*>(fb::gw1::ClientConnectToAddress),   true},
-    {offsets::gw1::fn_NetworkEnginePeerInit,    reinterpret_cast<void*>(fb::gw1::NetworkEnginePeerInit),    true},
-    {offsets::gw1::fn_PeerHasJoined,            reinterpret_cast<void*>(fb::gw1::PeerHasJoined),            true},
-    {offsets::gw1::fn_ClientDisconnect,         reinterpret_cast<void*>(fb::gw1::ClientDisconnect),         true},
-    {offsets::gw1::fn_ClientInactivityTimer,    reinterpret_cast<void*>(fb::gw1::ClientInactivityTimer),    true},
-    {offsets::gw1::fn_GetPlayerName,            reinterpret_cast<void*>(fb::gw1::GetPlayerName),            true},
+    {offsets::gw1::fn_ServerStart, reinterpret_cast<void *>(fb::gw1::ServerStart), true},
+    {offsets::gw1::fn_ClientInitNetwork, reinterpret_cast<void *>(fb::gw1::ClientInitNetwork), true},
+    {offsets::gw1::fn_ClientConnectToAddress, reinterpret_cast<void *>(fb::gw1::ClientConnectToAddress), true},
+    {offsets::gw1::fn_NetworkEnginePeerInit, reinterpret_cast<void *>(fb::gw1::NetworkEnginePeerInit), true},
+    {offsets::gw1::fn_PeerHasJoined, reinterpret_cast<void *>(fb::gw1::PeerHasJoined), true},
+    {offsets::gw1::fn_ClientDisconnect, reinterpret_cast<void *>(fb::gw1::ClientDisconnect), true},
+    {offsets::gw1::fn_ClientInactivityTimer, reinterpret_cast<void *>(fb::gw1::ClientInactivityTimer), true},
+    {offsets::gw1::fn_GetPlayerName, reinterpret_cast<void *>(fb::gw1::GetPlayerName), true},
 };
 
 static GG::HookTemplate g_PvZGW2_Hooks[] = {
-    {offsets::gw2::fn_ServerStart,              reinterpret_cast<void*>(fb::gw2::ServerStart),              true},
-    {offsets::gw2::fn_ClientInitNetwork,        reinterpret_cast<void*>(fb::gw2::ClientInitNetwork),        true},
-    {offsets::gw2::fn_ClientConnectToAddress,   reinterpret_cast<void*>(fb::gw2::ClientConnectToAddress),   true},
-    {offsets::gw2::fn_NetworkEnginePeerInit,    reinterpret_cast<void*>(fb::gw2::NetworkEnginePeerInit),    true},
-    {offsets::gw2::fn_ClientDisconnected,       reinterpret_cast<void*>(fb::gw2::ClientDisconnected),       true},
-    {offsets::gw2::fn_PeerHasJoined,            reinterpret_cast<void*>(fb::gw2::PeerHasJoined),            true},
-    {offsets::gw2::fn_GetPlayerName,            reinterpret_cast<void*>(fb::gw2::GetPlayerName),            true},
+    {offsets::gw2::fn_ServerStart, reinterpret_cast<void *>(fb::gw2::ServerStart), true},
+    {offsets::gw2::fn_ClientInitNetwork, reinterpret_cast<void *>(fb::gw2::ClientInitNetwork), true},
+    {offsets::gw2::fn_ClientConnectToAddress, reinterpret_cast<void *>(fb::gw2::ClientConnectToAddress), true},
+    {offsets::gw2::fn_NetworkEnginePeerInit, reinterpret_cast<void *>(fb::gw2::NetworkEnginePeerInit), true},
+    {offsets::gw2::fn_ClientDisconnected, reinterpret_cast<void *>(fb::gw2::ClientDisconnected), true},
+    {offsets::gw2::fn_PeerHasJoined, reinterpret_cast<void *>(fb::gw2::PeerHasJoined), true},
+    {offsets::gw2::fn_GetPlayerName, reinterpret_cast<void *>(fb::gw2::GetPlayerName), true},
 };
 
 static GG::HookTemplate g_PvZGW3_Hooks[] = {
-    {offsets::gw3::fn_ServerStart,              reinterpret_cast<void*>(fb::gw3::ServerStart),              true},
-    {offsets::gw3::fn_ClientInitNetwork,        reinterpret_cast<void*>(fb::gw3::ClientInitNetwork),        true},
-    {offsets::gw3::fn_ClientConnectToAddress,   reinterpret_cast<void*>(fb::gw3::ClientConnectToAddress),   true},
-    {offsets::gw3::fn_NetworkEnginePeerInit,    reinterpret_cast<void*>(fb::gw3::NetworkEnginePeerInit),    true},
-    {offsets::gw3::fn_OnEvent,                  reinterpret_cast<void*>(fb::gw3::onEvent),                  true},
-    {offsets::gw3::fn_PeerHasJoined,            reinterpret_cast<void*>(fb::gw3::PeerHasJoined),            true},
-    {offsets::gw3::fn_GetPlayerName,            reinterpret_cast<void*>(fb::gw3::GetPlayerName),            true},
-    {offsets::gw3::fn_CreateUser,               reinterpret_cast<void*>(fb::gw3::CreateUser),               true},
+    {offsets::gw3::fn_ServerStart, reinterpret_cast<void *>(fb::gw3::ServerStart), true},
+    {offsets::gw3::fn_ClientInitNetwork, reinterpret_cast<void *>(fb::gw3::ClientInitNetwork), true},
+    {offsets::gw3::fn_ClientConnectToAddress, reinterpret_cast<void *>(fb::gw3::ClientConnectToAddress), true},
+    {offsets::gw3::fn_NetworkEnginePeerInit, reinterpret_cast<void *>(fb::gw3::NetworkEnginePeerInit), true},
+    {offsets::gw3::fn_OnEvent, reinterpret_cast<void *>(fb::gw3::onEvent), true},
+    {offsets::gw3::fn_PeerHasJoined, reinterpret_cast<void *>(fb::gw3::PeerHasJoined), true},
+    {offsets::gw3::fn_GetPlayerName, reinterpret_cast<void *>(fb::gw3::GetPlayerName), true},
+    {offsets::gw3::fn_CreateUser, reinterpret_cast<void *>(fb::gw3::CreateUser), true},
 };

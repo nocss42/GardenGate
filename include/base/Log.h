@@ -45,13 +45,20 @@ namespace GG
         {
             switch (lvl)
             {
-            case LogLevel::DebugPlusPlus: return "Debug++";
-            case LogLevel::Debug:        return "Debug";
-            case LogLevel::Info:         return "Info";
-            case LogLevel::Warning:      return "Warning";
-            case LogLevel::Error:        return "Error";
-            case LogLevel::Fatal:        return "Fatal";
-            default:                     return "Unknown";
+            case LogLevel::DebugPlusPlus:
+                return "Debug++";
+            case LogLevel::Debug:
+                return "Debug";
+            case LogLevel::Info:
+                return "Info";
+            case LogLevel::Warning:
+                return "Warning";
+            case LogLevel::Error:
+                return "Error";
+            case LogLevel::Fatal:
+                return "Fatal";
+            default:
+                return "Unknown";
             }
         }
 
@@ -85,13 +92,13 @@ namespace GG
             return (slash == std::string_view::npos) ? path : path.substr(slash + 1);
         }
 
-        inline void print_header(LogLevel lvl, const std::source_location& loc) noexcept
+        inline void print_header(LogLevel lvl, const std::source_location &loc) noexcept
         {
             std::printf("%.*s[%.*s:%.*s] [%.*s]",
-                (int)LOG_LEVEL_COLOR(lvl).size(), LOG_LEVEL_COLOR(lvl).data(),
-                (int)GG::Version::AppName.size(), GG::Version::AppName.data(),
-                (int)GG::Version::BuildName.size(), GG::Version::BuildName.data(),
-                (int)LOG_LEVEL_TO_STRING(lvl).size(), LOG_LEVEL_TO_STRING(lvl).data());
+                        (int)LOG_LEVEL_COLOR(lvl).size(), LOG_LEVEL_COLOR(lvl).data(),
+                        (int)GG::Version::AppName.size(), GG::Version::AppName.data(),
+                        (int)GG::Version::BuildName.size(), GG::Version::BuildName.data(),
+                        (int)LOG_LEVEL_TO_STRING(lvl).size(), LOG_LEVEL_TO_STRING(lvl).data());
 
             if constexpr (IsDebugBuild)
             {
@@ -107,9 +114,9 @@ namespace GG
 
         template <class... Args>
         inline void vlogf(LogLevel lvl,
-            const std::source_location& loc,
-            const char* fmt,
-            Args &&...args) noexcept
+                          const std::source_location &loc,
+                          const char *fmt,
+                          Args &&...args) noexcept
         {
             if (!should_log(lvl))
                 return;
@@ -120,7 +127,7 @@ namespace GG
             std::fflush(stdout);
         }
 
-        inline void platform_fatal_dialog(const char* message) noexcept
+        inline void platform_fatal_dialog(const char *message) noexcept
         {
             ::MessageBoxA(nullptr, message, "Fatal Error", MB_OK | MB_ICONERROR | MB_SYSTEMMODAL);
         }
@@ -137,17 +144,17 @@ namespace GG
 
     template <class... Args>
     inline void logf(LogLevel lvl,
-        const std::source_location& loc,
-        const char* fmt,
-        Args &&...args) noexcept
+                     const std::source_location &loc,
+                     const char *fmt,
+                     Args &&...args) noexcept
     {
         detail::vlogf(lvl, loc, fmt, std::forward<Args>(args)...);
     }
 
     template <class... Args>
-    [[noreturn]] inline void fatalf(const std::source_location& loc,
-        const char* fmt,
-        Args &&...args) noexcept
+    [[noreturn]] inline void fatalf(const std::source_location &loc,
+                                    const char *fmt,
+                                    Args &&...args) noexcept
     {
         char buf[2048]{};
         std::snprintf(buf, sizeof(buf), fmt, std::forward<Args>(args)...);

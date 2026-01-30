@@ -13,6 +13,9 @@ jobs:
       image: archlinux:latest
 
     steps:
+      - name: Checkout repository
+        uses: actions/checkout@v6
+
       - name: Install base dependencies
         run: |
           pacman -Syu --noconfirm archlinux-keyring
@@ -22,9 +25,6 @@ jobs:
         run: |
           useradd -m builder
           echo "builder ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers
-
-      - name: Checkout repository
-        uses: actions/checkout@v4
 
       - name: Fix permissions
         run: chown -R builder:builder .
@@ -43,8 +43,8 @@ jobs:
           make
           EOF
 
-      - name: Upload artifact/s
-        uses: actions/upload-artifact@v4
+      - name: Upload artifact
+        uses: actions/upload-artifact@v6
         with:
           name: DLL
           path: |

@@ -6,12 +6,14 @@
 #include "base/Log.h"
 #include "base/Platform.h"
 
-class Program {
+class Program
+{
 public:
-    void initialize() {
+    void initialize()
+    {
         AllocConsole();
         SetConsoleTitleA(GG_CONSOLE_TITLE);
-        freopen_s((FILE**)stdout, "CONOUT$", "w", stdout);
+        freopen_s((FILE **)stdout, "CONOUT$", "w", stdout);
 
         HANDLE hOut = GetStdHandle(STD_OUTPUT_HANDLE);
         DWORD mode = 0;
@@ -23,14 +25,18 @@ public:
         GG_LOG(GG::LogLevel::Info, GG_CONSOLE_TITLE);
     }
 
-    void uninitialize() {
-        fclose((FILE*)stdout);
+    void uninitialize()
+    {
+        fclose((FILE *)stdout);
         FreeConsole();
     }
 
-    void run() {
-        while (m_running.load()) {
-            if (GetAsyncKeyState(VK_F12) & 1) {
+    void run()
+    {
+        while (m_running.load())
+        {
+            if (GetAsyncKeyState(VK_F12) & 1)
+            {
                 GG_LOG(GG::LogLevel::Info, "F12 pressed, stopping program");
                 m_running.store(false);
             }
@@ -39,11 +45,12 @@ public:
         }
     }
 
-    void stop() {
+    void stop()
+    {
         m_running.store(false);
     }
 
-private:    
+private:
     std::atomic<bool> m_running{true};
 };
 

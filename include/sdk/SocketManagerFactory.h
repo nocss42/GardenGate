@@ -7,7 +7,7 @@ namespace fb
     class SocketManagerFactory
     {
     public:
-        virtual SocketManager* createSocketManager()
+        virtual SocketManager *createSocketManager()
         {
             return new SocketManager();
         }
@@ -18,7 +18,7 @@ namespace fb
         class SocketManagerFactory
         {
         public:
-            virtual SocketManager* createSocketManager()
+            virtual SocketManager *createSocketManager()
             {
                 return new SocketManager();
             }

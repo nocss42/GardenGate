@@ -2,8 +2,10 @@
 
 #include "Types.h"
 
-namespace fb {
-	struct LevelSetupOption {
+namespace fb
+{
+	struct LevelSetupOption
+	{
 		LevelSetupOption() {};
 
 		String m_criterion;

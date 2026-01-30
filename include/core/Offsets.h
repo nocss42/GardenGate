@@ -6,13 +6,15 @@
 
 #include "core/Util.h"
 
-#define DEFINE_INSTANCE(name, addr) inline constexpr std::uintptr_t g_##name  = (addr)
+#define DEFINE_INSTANCE(name, addr) inline constexpr std::uintptr_t g_##name = (addr)
 #define DEFINE_FUNCTION(name, addr) inline constexpr std::uintptr_t fn_##name = (addr)
-#define DEFINE_PATCH(name, addr, data) inline constexpr auto patch_##name = Patch<std::tuple_size_v<decltype(data)>>{ (addr), (data) }
+#define DEFINE_PATCH(name, addr, data) \
+    inline constexpr auto patch_##name = Patch<std::tuple_size_v<decltype(data)>> { (addr), (data) }
 
 namespace offsets
 {
-    namespace gw1 {
+    namespace gw1
+    {
         //--- PvZ: GW1
         DEFINE_INSTANCE(AppId, 0x141578300);
 
@@ -26,13 +28,14 @@ namespace offsets
         DEFINE_FUNCTION(ClientInactivityTimer, 0x140C00470);
         DEFINE_FUNCTION(GetPlayerName, 0x1403A9170);
 
-        DEFINE_PATCH(AllowCommandArgumentsAsOptions, 0x14000D3FA, (std::array<std::uint8_t, 1>{ 0xDE }));
-        DEFINE_PATCH(FixLevelReportInstanceIndex, 0x140AE8B99, (std::array<std::uint8_t, 3>{ 0x6A, 0x03, 0x5B }));
-        DEFINE_PATCH(FixAvailableConsumables, 0x140B3F69D, (std::array<std::uint8_t, 1>{ 0xC9 }));
-        DEFINE_PATCH(FixHolidayConsumables, 0x140B3F615, (std::array<std::uint8_t, 6>{ 0x90, 0x90, 0x90, 0x90, 0x90, 0x90}));
+        DEFINE_PATCH(AllowCommandArgumentsAsOptions, 0x14000D3FA, (std::array<std::uint8_t, 1>{0xDE}));
+        DEFINE_PATCH(FixLevelReportInstanceIndex, 0x140AE8B99, (std::array<std::uint8_t, 3>{0x6A, 0x03, 0x5B}));
+        DEFINE_PATCH(FixAvailableConsumables, 0x140B3F69D, (std::array<std::uint8_t, 1>{0xC9}));
+        DEFINE_PATCH(FixHolidayConsumables, 0x140B3F615, (std::array<std::uint8_t, 6>{0x90, 0x90, 0x90, 0x90, 0x90, 0x90}));
     }
 
-    namespace gw2 {
+    namespace gw2
+    {
         //--- PvZ: GW2
         DEFINE_INSTANCE(AppId, 0x1421A0A28);
 
@@ -45,13 +48,14 @@ namespace offsets
         DEFINE_FUNCTION(PeerHasJoined, 0x140616DC0);
         DEFINE_FUNCTION(GetPlayerName, 0x1401F7C00);
 
-        DEFINE_PATCH(AllowCommandArgumentsAsOptions, 0x1401328DA, (std::array<std::uint8_t, 1>{ 0xE6 }));
-        DEFINE_PATCH(PlayerNameFormatting, 0x1422DC782, (std::array<std::uint8_t, 3>{ 0x00, 0x00, 0x00}));
-        DEFINE_PATCH(OnlineKillSwitch, 0x140B8F86F, (std::array<std::uint8_t, 2>{ 0x90, 0x90 }));
-        DEFINE_PATCH(FixAvailableConsumables, 0x140E0A8F0, (std::array<std::uint8_t, 3>{ 0xB0, 0x01, 0xC3 }));
+        DEFINE_PATCH(AllowCommandArgumentsAsOptions, 0x1401328DA, (std::array<std::uint8_t, 1>{0xE6}));
+        DEFINE_PATCH(PlayerNameFormatting, 0x1422DC782, (std::array<std::uint8_t, 3>{0x00, 0x00, 0x00}));
+        DEFINE_PATCH(OnlineKillSwitch, 0x140B8F86F, (std::array<std::uint8_t, 2>{0x90, 0x90}));
+        DEFINE_PATCH(FixAvailableConsumables, 0x140E0A8F0, (std::array<std::uint8_t, 3>{0xB0, 0x01, 0xC3}));
     }
 
-    namespace gw3 {
+    namespace gw3
+    {
         //--- PvZ: BFN
         DEFINE_INSTANCE(AppId, 0x14321EB58);
         DEFINE_INSTANCE(SettingsManager, 0x14421BFD0);
@@ -74,16 +78,16 @@ namespace offsets
         DEFINE_FUNCTION(GetPlayerName, 0x14155DCA0);
         DEFINE_FUNCTION(CreateUser, 0x1426171F0);
 
-        DEFINE_PATCH(AllowCommandArgumentsAsOptions, 0x142218419, (std::array<std::uint8_t, 1>{ 0xA7 }));
-        DEFINE_PATCH(IgnoreEasyAntiCheat, 0x1417fd2d8, (std::array<std::uint8_t, 1>{ 0xEB }));
-        DEFINE_PATCH(OfflineFix, 0x1415704D0, (std::array<std::uint8_t, 3>{ 0xB0, 0x01, 0xC3 }));
-        DEFINE_PATCH(Killswitches, 0x1417288A9, (std::array<std::uint8_t, 3>{ 0xE9, 0xBA, 0x00 }));
-        DEFINE_PATCH(UnlockAwards, 0x141E9BD70, (std::array<std::uint8_t, 4>{ 0x48, 0x31, 0xC0, 0xC3 }));
+        DEFINE_PATCH(AllowCommandArgumentsAsOptions, 0x142218419, (std::array<std::uint8_t, 1>{0xA7}));
+        DEFINE_PATCH(IgnoreEasyAntiCheat, 0x1417fd2d8, (std::array<std::uint8_t, 1>{0xEB}));
+        DEFINE_PATCH(OfflineFix, 0x1415704D0, (std::array<std::uint8_t, 3>{0xB0, 0x01, 0xC3}));
+        DEFINE_PATCH(Killswitches, 0x1417288A9, (std::array<std::uint8_t, 3>{0xE9, 0xBA, 0x00}));
+        DEFINE_PATCH(UnlockAwards, 0x141E9BD70, (std::array<std::uint8_t, 4>{0x48, 0x31, 0xC0, 0xC3}));
     }
 
     template <class T>
     [[nodiscard]] inline T ptr(std::uintptr_t a) noexcept { return reinterpret_cast<T>(a); }
 
     template <class T>
-    [[nodiscard]] inline T ptr(void* p) noexcept { return reinterpret_cast<T>(p); }
+    [[nodiscard]] inline T ptr(void *p) noexcept { return reinterpret_cast<T>(p); }
 }

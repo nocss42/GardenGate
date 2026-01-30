@@ -14,35 +14,38 @@
 #include "core/Util.h"
 #include "core/Offsets.h"
 
-using DirectInput8Create_t = HRESULT(WINAPI*)(HINSTANCE, DWORD, REFIID, LPVOID*, LPUNKNOWN);
+using DirectInput8Create_t = HRESULT(WINAPI *)(HINSTANCE, DWORD, REFIID, LPVOID *, LPUNKNOWN);
 DirectInput8Create_t g_originalDirectInput8Create = nullptr;
 
-extern "C" __declspec(dllexport) HRESULT WINAPI DirectInput8Create(HINSTANCE hinst, DWORD dwVersion, REFIID riidltf, LPVOID* ppvOut, LPUNKNOWN punkOuter)
+extern "C" __declspec(dllexport) HRESULT WINAPI DirectInput8Create(HINSTANCE hinst, DWORD dwVersion, REFIID riidltf, LPVOID *ppvOut, LPUNKNOWN punkOuter)
 {
-    if (g_originalDirectInput8Create) {
+    if (g_originalDirectInput8Create)
+    {
         return g_originalDirectInput8Create(hinst, dwVersion, riidltf, ppvOut, punkOuter);
     }
 
     return HRESULT_FROM_WIN32(ERROR_PROC_NOT_FOUND);
 }
 
-inline bool CheckGameId(uintptr_t appIdPtr, std::string_view prefix) {
-    return appIdPtr && std::string_view(reinterpret_cast<const char*>(appIdPtr)).starts_with(prefix);
+inline bool CheckGameId(uintptr_t appIdPtr, std::string_view prefix)
+{
+    return appIdPtr && std::string_view(reinterpret_cast<const char *>(appIdPtr)).starts_with(prefix);
 }
 
-void Initialize() {
+void Initialize()
+{
     g_game = std::make_unique<GG::Game>();
     g_program = std::make_unique<Program>();
     g_program->initialize();
 
-    auto& hm = GG::HookManager::getManager();
+    auto &hm = GG::HookManager::getManager();
 
     hm.initialize();
 
     if (CheckGameId(offsets::gw1::g_AppId, "PvZ Garden Warfare"))
     {
         GG_LOG(GG::LogLevel::Info, "Identified: PvZ Garden Warfare");
-       
+
         g_game->initialize(GG::GameVersion::GW1);
         hm.registerHooks(g_PvZGW1_Hooks);
 
@@ -61,7 +64,8 @@ void Initialize() {
         ApplyPatch(offsets::gw2::patch_AllowCommandArgumentsAsOptions);
         ApplyPatch(offsets::gw2::patch_PlayerNameFormatting);
     }
-    else if (CheckGameId(offsets::gw3::g_AppId, "PvZGW3")) {
+    else if (CheckGameId(offsets::gw3::g_AppId, "PvZGW3"))
+    {
         GG_LOG(GG::LogLevel::Info, "Identified: PvZ Garden Warfare 3");
         GG_LOG(GG::LogLevel::Info, "Identified: ....lol...just kidding...");
         GG_LOG(GG::LogLevel::Info, "Identified: PvZ Battle for Neighborville");
@@ -75,12 +79,14 @@ void Initialize() {
         ApplyPatch(offsets::gw3::patch_OfflineFix);
         ApplyPatch(offsets::gw3::patch_UnlockAwards);
     }
-    else {
+    else
+    {
         GG_FATAL("Could not identify game!");
     }
 }
 
-DWORD WINAPI ggThread(LPVOID hInstance) {
+DWORD WINAPI ggThread(LPVOID hInstance)
+{
     g_program->run();
     g_program->uninitialize();
 
@@ -90,27 +96,31 @@ DWORD WINAPI ggThread(LPVOID hInstance) {
     FreeLibraryAndExitThread(reinterpret_cast<HINSTANCE>(hInstance), 0);
 }
 
-bool hookDinput8() {
+bool hookDinput8()
+{
     std::wstring systemPath(MAX_PATH, L'\0');
     UINT pathLen = GetSystemDirectoryW(systemPath.data(), MAX_PATH);
     systemPath.resize(pathLen);
     systemPath += L"\\dinput8.dll";
 
     HMODULE original = LoadLibraryW(systemPath.c_str());
-    if (!original) return false;
+    if (!original)
+        return false;
 
     FARPROC proc = GetProcAddress(original, "DirectInput8Create");
-    if (!proc) return false;
+    if (!proc)
+        return false;
 
     g_originalDirectInput8Create = reinterpret_cast<DirectInput8Create_t>(proc);
     return g_originalDirectInput8Create != nullptr;
 }
 
-BOOL WINAPI DllMain(HINSTANCE hinstDLL, DWORD fdwReason, LPVOID lpvReserved [[maybe_unused]] )
+BOOL WINAPI DllMain(HINSTANCE hinstDLL, DWORD fdwReason, LPVOID lpvReserved [[maybe_unused]])
 {
     switch (fdwReason)
     {
-    case DLL_PROCESS_ATTACH: {
+    case DLL_PROCESS_ATTACH:
+    {
         DisableThreadLibraryCalls(hinstDLL);
 
         if (!hookDinput8())
@@ -119,12 +129,14 @@ BOOL WINAPI DllMain(HINSTANCE hinstDLL, DWORD fdwReason, LPVOID lpvReserved [[ma
         Initialize();
 
         HANDLE threadHandle = CreateThread(nullptr, 0, ggThread, hinstDLL, 0, nullptr);
-        if (threadHandle) CloseHandle(threadHandle);
+        if (threadHandle)
+            CloseHandle(threadHandle);
         break;
     }
 
     case DLL_PROCESS_DETACH:
-        if (g_program) {
+        if (g_program)
+        {
             g_program->stop();
         }
         break;

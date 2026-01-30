@@ -1,17 +1,21 @@
 #pragma once
 
-namespace fb {
+namespace fb
+{
     class UDPSocket;
-    class IUDPSocketCreator {
+    class IUDPSocketCreator
+    {
     public:
-        virtual void Close(UDPSocket* socket) = 0;
+        virtual void Close(UDPSocket *socket) = 0;
     };
 
-    namespace gw3 {
+    namespace gw3
+    {
         class UDPSocket;
-        class IUDPSocketCreator {
+        class IUDPSocketCreator
+        {
         public:
-            virtual void Close(UDPSocket* socket) = 0;
+            virtual void Close(UDPSocket *socket) = 0;
         };
     }
 }

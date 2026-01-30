@@ -6,13 +6,16 @@
 Experimental private servers for Plants vs. Zombies Garden Warfare 1,2 & Battle for Neighborville
 
 ------
-### What's done:
+
+### What's done
+
 * Offsets
 * Hosting servers
 * Joining
 * Unlockers that unlock everything
 
-### What's not done (TODO):
+### What's not done (TODO)
+
 * Player kicking/moderation
 * Bot support for gw1
 * Make it so that only host can load into levels
@@ -24,24 +27,25 @@ Experimental private servers for Plants vs. Zombies Garden Warfare 1,2 & Battle 
 
 ## Credits
 
-- RaT
+* RaT
 
-- nocss
+* nocss
 
-- twig
+* twig
 
-- blueballoon
+* blueballoon
 
-- eshaydev
+* eshaydev
 
-- gargos69junior
+* gargos69junior
 
-- werzdragon
+* werzdragon
 
-- puro420
+* puro420
 
 ### Third-Party
+
 Following open-source projects were used:
 
-- [MinHook](https://github.com/TsudaKageyu/minhook)
-- [Kyber](https://github.com/ArmchairDevelopers/Kyber)
+* [MinHook](https://github.com/TsudaKageyu/minhook)
+* [Kyber](https://github.com/ArmchairDevelopers/Kyber)
