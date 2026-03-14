@@ -9,7 +9,7 @@ jobs:
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       - name: Install Podman
         run: |
@@ -23,7 +23,7 @@ jobs:
           podman save -o podman-image.tar gardengate:latest
 
       - name: Upload image artifact
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         with:
           name: podman-image
           path: Container/podman-image.tar
