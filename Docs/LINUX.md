@@ -52,7 +52,7 @@ winmm
 ### 5. Launch the game
 - Launch via the launcher if you own the game on EA App. If you own the game on steam just pass in the launch args yourself;
 
-### Arguements
+### Arguments
 `-name`
 
 `-dataPath`
