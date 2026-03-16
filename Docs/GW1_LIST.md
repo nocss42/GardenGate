@@ -159,3 +159,13 @@
 # Time of Day (TOD)
 - Day
 - Night
+
+# Difficulties (SyncedGame.DifficultyIndex)
+| Difficulty             | Value                 |
+|------------------------|-----------------------|
+| Multiplayer            | 0                     |
+| Easy                   | 1                     |
+| Normal                 | 2                     |
+| Hard                   | 3                     |
+| CRRRRRAAAZY!!          | 4                     |
+
