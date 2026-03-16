@@ -14,7 +14,7 @@ jobs:
       - name: Install Visual Studio Build Tools
         shell: pwsh
         run: |
-          choco install visualstudio2022buildtools `
+          choco install visualstudio2026buildtools `
             --package-parameters "--add Microsoft.VisualStudio.Workload.VCTools --includeRecommended" `
             -y
           choco install cmake -y
@@ -22,11 +22,11 @@ jobs:
       - name: Build
         shell: cmd
         run: |
-          call "%ProgramFiles(x86)%\Microsoft Visual Studio\2022\BuildTools\VC\Auxiliary\Build\vcvars64.bat"
+          call "%ProgramFiles(x86)%\Microsoft Visual Studio\2026\BuildTools\VC\Auxiliary\Build\vcvars64.bat"
           cd DLL
           mkdir build
           cd build
-          cmake .. -G "Visual Studio 17 2022"
+          cmake .. -G "Visual Studio 17 2026"
           cmake --build . --config Release
 
       - name: Upload artifact/s
