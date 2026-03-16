@@ -34,7 +34,6 @@ Please keep in mind some args here are tied to the `dinput8.dll`
 -PVZServer.InActivityTimeOut 180
 -GameMode.SkipIntroHubNIS true
 -Online.OnlineGameInteractionMasterKillSwitch true
--SyncedBFSettings.AllUnlocksUnlocked false
 ```
 
 ### BFN
