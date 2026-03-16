@@ -39,7 +39,7 @@ jobs:
           ./msvc-wine/vsdownload.py --accept-license --dest $(pwd)/my_msvc
           ./msvc-wine/install.sh $(pwd)/my_msvc
           export PATH=$(pwd)/my_msvc/bin/x64:$PATH
-          cmake . -B . -DCMAKE_BUILD_TYPE=Release -DWINDOWS_SDK_PATH=$(pwd)/my_msvc -DCMAKE_TOOLCHAIN_FILE=../cmake/LinuxCrosscompile.cmake
+          cmake . -B . -DCMAKE_BUILD_TYPE=Release -DWINDOWS_SDK_PATH=$(pwd)/my_msvc -DCMAKE_TOOLCHAIN_FILE=./toolchain-linux-winsdk.cmake
           make -j$(nproc)
           EOF
 
