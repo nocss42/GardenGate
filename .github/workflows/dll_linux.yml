@@ -14,7 +14,7 @@ jobs:
       - name: Install base dependencies
         run: |
           pacman -Syu --noconfirm archlinux-keyring
-          pacman -Syu --noconfirm base-devel sudo git clang lld ninja cmake extra-cmake-modules python wine msitools ca-certificates libwbclient
+          pacman -Syu --noconfirm base-devel sudo git clang lld make cmake extra-cmake-modules python wine msitools ca-certificates libwbclient
 
       - name: Create build user
         run: |
@@ -39,8 +39,8 @@ jobs:
           ./msvc-wine/vsdownload.py --accept-license --dest $(pwd)/my_msvc
           ./msvc-wine/install.sh $(pwd)/my_msvc
           export PATH=$(pwd)/my_msvc/bin/x64:$PATH
-          cmake . -GNinja -DCMAKE_BUILD_TYPE=Release -DCMAKE_TOOLCHAIN_FILE=./toolchain-linux-winsdk.cmake
-          ninja
+          cmake . -B . -DCMAKE_BUILD_TYPE=Release -DWINDOWS_SDK_PATH=$(pwd)/my_msvc -DCMAKE_TOOLCHAIN_FILE=../cmake/LinuxCrosscompile.cmake
+          make -j$(nproc)
           EOF
 
       - name: Upload artifact/s
