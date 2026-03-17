@@ -363,7 +363,7 @@ char initDedicatedServer(fb::Main* inst, intptr_t platformHook)
     setup.LoadScreen_LevelAsset = reinterpret_cast<char*>(offsets::gw2::g_EmptyStr);
     setup.LoadScreen_LevelName = reinterpret_cast<char*>(offsets::gw2::g_EmptyStr);
 
-    setInclusionOptions(&setup, GetOptionParameter("Game.DefaultLayerInclusion", "GameMode=Free_Roam;TOD=Day", 0));
+    setInclusionOptions(&setup, GetOptionParameter("Game.DefaultLayerInclusion", "GameMode=FreeRoam;TOD=Day", 0));
 
     ServerSpawnInfo spawnInfo(setup);
     spawnInfo.tickFrequency = 30;
