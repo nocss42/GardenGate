@@ -17,14 +17,15 @@ Experimental private servers for Plants vs. Zombies Garden Warfare 1, 2 & Battle
 ## Roadmap
 ### What's done:
 * Offsets
+* Joining
 * Hosting servers (through client)
 * Dedicated server support
-* Joining
-* Unlockers that unlock everything
+* RCON
+* Playlists
+* Unlockers that unlock every item
 
 ### What's not done (TODO):
-* Player kicking/moderation
-* Make it so that only host can load into levels
+* Fix enchanted gardens/graveyards to be planted (these spawn entirely randomly) (e.g. boney island)
 * [Closing a client](./Assets/client.webp) through the console instead of the game tricks the server into believing you are still connected, so attempting to load into another level causes the entire server to softlock
 * Fix Zombopolis last, several doorways in the center area are blocked for clients. Host and bots can pass through, but clients and their objects (e.g. bean bombs) cannot.
 * Fix Zomburbia Zombot fuses on last point unable to be broken
