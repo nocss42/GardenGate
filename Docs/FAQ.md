@@ -33,6 +33,9 @@ Yes. For linux [see this](./LINUX_DEDICATED.md) . If you'd like to run a server 
 ### Who made the DLL for this?
 @sonicrat did the whole thing.
 
+### Why is there an AppImage for this?
+The launcher uses tauri which uses webview2 which runs very poorly with wine. The appimage is for rcon only as there isn't an [umu](https://github.com/Open-Wine-Components/umu-launcher) implementation as of right now.
+
 ### How do I contribute?
 1. Fork the repository.
 2. Commit your changes.
