@@ -62,6 +62,8 @@ Experimental private servers for Plants vs. Zombies Garden Warfare 1, 2 & Battle
 
 - megadwarf47
 
+- hdified
+
 - puro420
 
 ### Third-Party
