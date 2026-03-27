@@ -86,11 +86,6 @@ RUN mkdir -pm755 /etc/apt/keyrings && \
     apt-get update && \
     apt-get install -y --install-recommends winehq-devel
 
-RUN curl https://sh.rustup.rs -sSf | sh -s -- -y --default-toolchain nightly
-
-RUN export PATH="/root/.cargo/bin:$PATH" \
- && rustup target add x86_64-unknown-linux-musl
-
 # umu
 RUN set -eux; \
     ver="$( \
@@ -103,6 +98,11 @@ RUN set -eux; \
       "https://github.com/Open-Wine-Components/umu-launcher/releases/download/${ver}/python3-umu-launcher_${ver}-1_amd64_ubuntu-noble.deb"; \
     apt-get install -y /tmp/umu-launcher.deb; \
     rm -f /tmp/umu-launcher.deb;
+
+RUN curl https://sh.rustup.rs -sSf | sh -s -- -y --default-toolchain nightly
+
+RUN export PATH="/root/.cargo/bin:$PATH" \
+ && rustup target add x86_64-unknown-linux-musl
 
 # Build maxima (gotta keep doing so till their first release)
 WORKDIR /build

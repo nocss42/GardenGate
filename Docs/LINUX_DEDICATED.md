@@ -31,7 +31,7 @@ On the machine that will host the dedicated server, execute the following comman
 
 ```sh
 mkdir -p $HOME/Games
-mkdir -p $HOME/.local/share/umu/wine/proton
+mkdir -p $HOME/.local/share/maxima/wine/proton
 git clone https://github.com/nocss42/GardenGate
 cd GardenGate/Container
 vim auth.toml   # Paste the contents from your main machine
@@ -96,7 +96,7 @@ umu-run $HOME/.local/share/maxima/wine/prefix/drive_c/windows/syswow64/regedit.e
 $HOME/gw2.reg
 ```
 
-### Patch the game
+### Patch the game (required for gw2 & bfn)
 
 Patch the game by running;
 
@@ -176,6 +176,10 @@ sudo dpkg -i $HOME/umu.deb
 sudo chmod -R 777 $HOME/Games
 umu-run $HOME/Games/GW2_FrostyModManager/FrostyModManager.exe
 ```
+
+Don't forget to load the mods in this order;
+
+<img src="./Assets/load_order.webp" />
 
 To start modded server, inside the container run;
 ```sh
