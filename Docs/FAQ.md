@@ -24,8 +24,8 @@ No it doesn't. There aren't plans on fixing that as of writing this.
 ### I'm having issue X is this known?
 Check if it's been added to the what's not done part of [README](../README.md)
 
-### Do I need every mod the server I'm joining has?
-For small client sided mods like FOV changer not really, but big mods like project visionary will make it crash if you don't have them installed.
+### Do I need to install the recommended mods for gw2? Do I need every mod the server I'm joining has?
+For gw2 (only one that needs mods) just the host needs to install the mods. For small client sided mods like FOV changer not really, but big mods like project visionary will make it crash if you don't have them installed.
 
 ### Is there a way to host this as a dedicated server on linux/windows?
 Yes. For linux [see this](./LINUX_DEDICATED.md) . If you'd like to run a server on windows just use wsl to run podman or just setup the game how you would normally (installing ea app/maxima & frosty) and use -server launch arguement. 
