@@ -59,7 +59,7 @@ Experimental private servers for Plants vs. Zombies Garden Warfare 1, 2 & Battle
 - hdified, gabrielofltm (Level Control Menu)
 - brekko, mr. jt, dark damona (Original Offline Mode)
 - dark damona, brekko (Private Play)
-- dark damona, brekko (Private Play CvD Extension)
+- brekko, electrobro (Private Play CvD Extension)
 - nam (AIHax)
 - virjoinga (Anti-AFK Kick)
 - thetortoiseman (Return to backyard fix)
