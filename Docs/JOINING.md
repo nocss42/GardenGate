@@ -5,16 +5,3 @@
 2. Open up the launcher go to patcher and press auto detect > patch 
 
 3. Enter the ip/port, press launch
-
-### Mod Credits
-Private Play (Dark Damona,brekko)
-
-Private Play Extension (Dark Damona,brekko)
-
-Offline mode + Fixes (brekko, modified)
-
-AIHax (Nam)
-
-Anti-AFK Kick (Virjoinga)
-
-Return to backyard fix (Gigus Chadus)
