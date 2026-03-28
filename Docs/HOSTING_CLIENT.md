@@ -44,14 +44,17 @@ Put the one of your choice to game's directory and name it as `level_loader.dll`
 ### Use [ZeroTier](https://www.zerotier.com/download) , [RadminVPN](https://vpn.net) or [playit.gg](https://playit.gg) Add your friends to the network and join by the IP it provides.
 
 ### Mod Credits
-Private Play (Dark Damona,brekko)
 
-Private Play Extension (Dark Damona,brekko)
+Hdified (Level Control Menu)
 
-Offline mode + Fixes (brekko, modified)
+brekko (Original Offline Mode)
 
-AIHax (Nam)
+Dark Damona,brekko (Private Play)
 
-Anti-AFK Kick (Virjoinga)
+Dark Damona,brekko (Private Play Extension)
 
-Return to backyard fix (Gigus Chadus)
+Nam (AIHax)
+
+Virjoinga (Anti-AFK Kick)
+
+Gigus Chadus (Return to backyard fix)
