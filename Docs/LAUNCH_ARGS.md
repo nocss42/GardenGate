@@ -1,6 +1,6 @@
 # Launch args
 
-Here you can find launch arguements with their examples/defaults.
+Here you can find launch arguments with their examples/defaults.
 
 Please keep in mind some args here are tied to the `dinput8.dll`
 
