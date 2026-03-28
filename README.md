@@ -52,17 +52,19 @@ Experimental private servers for Plants vs. Zombies Garden Warfare 1, 2 & Battle
 - gargos69junior
 - werzdragon
 - megadwarf47
+- thetortoiseman
 - hdified
+- gabrielofltm
 - puro420
 
 ### Mods
-- hdified, gabrielofltm (Level Control Menu)
+- hdified (Level Control Menu)
 - brekko, mr. jt, dark damona (Original Offline Mode)
 - dark damona, brekko (Private Play)
 - brekko, electrobro (Private Play CvD Extension)
 - nam (AIHax)
-- virjoinga (Anti-AFK Kick)
 - thetortoiseman (Return to backyard fix)
+- virjoinga (Anti-AFK Kick)
 
 ### Third-Party
 Following open-source projects were used:
