@@ -32,7 +32,8 @@ jobs:
           sudo -u builder sh <<'EOF'
           set -e
           cd DLL
-          export WINDOWS_SDK_PATH="~/my_msvc/"
+          export WINDOWS_SDK_PATH="$HOME/my_msvc/"
+          mkdir -p $WINDOWS_SDK_PATH
           export WINE=$(command -v wine64 || command -v wine || false)
           $WINE wineboot
           git clone https://github.com/mstorsjo/msvc-wine
