@@ -4,7 +4,7 @@
 </div>
 
 <p align="center">
-Experimental private servers for Plants vs. Zombies Garden Warfare 1, 2 & Battle for Neighborville
+Private servers for Plants vs. Zombies Garden Warfare 1, 2 & Battle for Neighborville
 </p>
 
 <p align="center">
