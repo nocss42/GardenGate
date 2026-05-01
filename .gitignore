@@ -303,6 +303,7 @@ __pycache__/
 *.dll
 *.exp
 *.cmakecache
+__cmake_systeminformation
 
 .ninja_deps
 .ninja_lock

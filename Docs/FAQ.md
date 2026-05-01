@@ -6,6 +6,9 @@ No, this is a private server project created for educational and experimental pu
 ### Does this make gw2/bfn work with wine again?
 Yes it should. Please [see this](./LINUX.md)
 
+### Am I able to join to cypress servers with this?
+No due to their AC it's not possible and you'll get kicked from the server.
+
 ### Does this have some sort of anti-cheat of its own?
 No and there aren't plans on implementing one anytime soon.
 
