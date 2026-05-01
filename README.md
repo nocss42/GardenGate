@@ -76,7 +76,6 @@ Following open-source projects were used:
 - [Spdlog](https://github.com/gabime/spdlog)
 - [Tauri](https://github.com/tauri-apps/tauri)
 - [Sharun](https://github.com/VHSgunzo/sharun)
-- [Json](https://github.com/nlohmann/json)
 - [XDelta](https://en.wikipedia.org/wiki/Xdelta)
 - [Json](https://www.json.org/json-en.html)
 - [LLVM](https://github.com/llvm/llvm-project)
