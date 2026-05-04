@@ -51,22 +51,14 @@ Private servers for Plants vs. Zombies Garden Warfare 1, 2 & Battle for Neighbor
 - objectiveswift
 - blueballoon
 - eshaydev
-- gargos69junior
-- werzdragon
 - megadwarf47
 - thetortoiseman
 - hdified
-- gabrielofltm
 - puro420
 
 ### Mods
 - hdified (Level Control Menu)
-- brekko, mr. jt, dark damona (Original Offline Mode)
-- dark damona, brekko (Private Play)
-- brekko, electrobro (Private Play CvD Extension)
-- nam (AIHax)
 - thetortoiseman (Return to backyard fix)
-- virjoinga (Anti-AFK Kick)
 
 ### Third-Party
 Following open-source projects were used:
