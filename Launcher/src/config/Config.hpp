@@ -22,6 +22,7 @@ struct Config {
     std::string password;
 
     std::string game_selected = "gw1";
+    std::string patch_selected = "gw1";
     bool launch_directly = false;
 
     ImVec4 baseColor = ImVec4(0.25f, 0.47f, 0.32f, 1.0f);
@@ -59,6 +60,18 @@ struct Config {
         if (val == 1) game_selected = "gw2";
         else if (val == 2) game_selected = "bfn";
         else game_selected = "gw1";
+    }
+
+    int get_patch_selected_int() const {
+        if (patch_selected == "gw2") return 1;
+        if (patch_selected == "bfn") return 2;
+        return 0;
+    }
+
+    void set_patch_selected_from_int(int val) {
+        if (val == 1) patch_selected = "gw2";
+        else if (val == 2) patch_selected = "bfn";
+        else patch_selected = "gw1";
     }
 };
 

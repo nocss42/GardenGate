@@ -280,7 +280,14 @@ static void drawPatcherTab(HWND hwnd, float dpiScale) {
 	float fieldWidth = safeWidth * 0.85f;
 	float centerOffset = (safeWidth - fieldWidth) / 2.0f;
 
-	int gameSelectedInt = g_config.get_game_selected_int();
+	int gameSelectedInt = g_config.get_patch_selected_int();
+
+	ImGui::SetCursorPosX(centerOffset);
+	if (ImGui::RadioButton("GW1", &gameSelectedInt, GAME_GW1)) g_config.set_patch_selected_from_int(GAME_GW1);
+	ImGui::SameLine(0.0f, 40 * dpiScale);
+	if (ImGui::RadioButton("GW2", &gameSelectedInt, GAME_GW2)) g_config.set_patch_selected_from_int(GAME_GW2);
+	ImGui::SameLine(0.0f, 40 * dpiScale);
+	if (ImGui::RadioButton("BFN", &gameSelectedInt, GAME_BFN)) g_config.set_patch_selected_from_int(GAME_BFN);
 
 	fs::path launcherDir = fs::path([] {
 		char path[MAX_PATH];
