@@ -3,7 +3,9 @@
   <h1 style="font-size: 2.5rem; margin-top: 0.5rem;">GardenGate</h1>
 </div>
 
-Experimental private servers for Plants vs. Zombies Garden Warfare 1,2 & Battle for Neighborville
+<p align="center">
+Private servers for Plants vs. Zombies Garden Warfare 1, 2 & Battle for Neighborville
+</p>
 
 <p align="center">
   <a href="https://discord.gg/sEs9NcUrF9">
@@ -17,14 +19,16 @@ Experimental private servers for Plants vs. Zombies Garden Warfare 1,2 & Battle 
 ## Roadmap
 ### What's done:
 * Offsets
-* Hosting servers
 * Joining
-* Unlockers that unlock everything
+* Hosting servers (through client)
+* Dedicated server support
+* Playlists
+* Unlockers that unlock every item
 
 ### What's not done (TODO):
-* Player kicking/moderation
-* Bot support for gw1
-* Make it so that only host can load into levels
+* Same issues as [this](https://github.com/BreakfastBrainz2/PvZCypress/issues/1)
+* Ability to change Loadscreen_GamemodeName / Loadscreen_LevelName / Loadscreen_LevelDescription / Loadscreen_UIAssetPath
+* Fix enchanted gardens/graveyards to be planted (these spawn entirely randomly) (e.g. boney island)
 * [Closing a client](./Assets/client.webp) through the console instead of the game tricks the server into believing you are still connected, so attempting to load into another level causes the entire server to softlock
 * Fix Zombopolis last, several doorways in the center area are blocked for clients. Host and bots can pass through, but clients and their objects (e.g. bean bombs) cannot.
 * Fix Zomburbia Zombot fuses on last point unable to be broken
@@ -40,30 +44,29 @@ Experimental private servers for Plants vs. Zombies Garden Warfare 1,2 & Battle 
 | `Mods` | QoL mods                       |
 
 ## Credits
-
-- RaT
-
+- sonicrat
 - nocss
-
 - twig
-
 - objectiveswift
-
 - blueballoon
-
 - eshaydev
-
-- gargos69junior
-
-- werzdragon
-
 - megadwarf47
-
+- thetortoiseman
+- hdified
 - puro420
+
+### Mods
+- hdified (Level Control Menu)
+- thetortoiseman (Return to backyard fix)
 
 ### Third-Party
 Following open-source projects were used:
 
 - [MinHook](https://github.com/TsudaKageyu/minhook)
 - [Kyber](https://github.com/ArmchairDevelopers/Kyber)
+- [Spdlog](https://github.com/gabime/spdlog)
 - [ImGui](https://github.com/ocornut/imgui)
+- [XDelta](https://en.wikipedia.org/wiki/Xdelta)
+- [Json](https://www.json.org/json-en.html)
+- [LLVM](https://github.com/llvm/llvm-project)
+- [Msvc-wine](https://github.com/mstorsjo/msvc-wine)

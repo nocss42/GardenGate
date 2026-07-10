@@ -1,7 +1,12 @@
 ﻿cmake_minimum_required(VERSION 3.24)
 project(GardenGateLauncher VERSION 0.1.0 LANGUAGES C CXX)
 
-# ---- Get Git commit info ----
+include(FetchContent)
+
+# ============================================================
+# Get Git commit info
+# ============================================================
+
 execute_process(
     COMMAND git rev-parse --short HEAD
     OUTPUT_VARIABLE GIT_HASH
@@ -24,43 +29,78 @@ if(NOT GIT_DATE)
     set(GIT_DATE "unknown")
 endif()
 
-# ---- Target ----
+# ============================================================
+# Dependencies
+# ============================================================
+
+# ImGui
+FetchContent_Declare(
+    imgui
+    GIT_REPOSITORY https://github.com/ocornut/imgui.git
+    GIT_TAG 934c6a5f5ef2355d6df25395d555cb71f790c4e9
+)
+FetchContent_MakeAvailable(imgui)
+
+add_library(imgui STATIC
+    ${imgui_SOURCE_DIR}/imgui.cpp
+    ${imgui_SOURCE_DIR}/imgui_draw.cpp
+    ${imgui_SOURCE_DIR}/imgui_tables.cpp
+    ${imgui_SOURCE_DIR}/imgui_widgets.cpp
+    ${imgui_SOURCE_DIR}/backends/imgui_impl_win32.cpp
+    ${imgui_SOURCE_DIR}/backends/imgui_impl_dx11.cpp
+)
+
+target_include_directories(imgui PUBLIC
+    ${imgui_SOURCE_DIR}
+    ${imgui_SOURCE_DIR}/backends
+)
+
+# json
+FetchContent_Declare(
+    nlohmann_json
+    GIT_REPOSITORY https://github.com/nlohmann/json.git
+    GIT_TAG 8167d2f64122c3ef7e5a0d9cab239fdba37aa54c
+)
+FetchContent_MakeAvailable(nlohmann_json)
+
+# xdelta3
+FetchContent_Declare(
+    xdelta3_src
+    GIT_REPOSITORY https://github.com/marco-calautti/xdelta.git
+    GIT_TAG ab959ecd9a471a0dec5babc3de9d1e27ca25ffa8
+)
+FetchContent_MakeAvailable(xdelta3_src)
+
+# ============================================================
+# Target
+# ============================================================
+
 add_executable(${PROJECT_NAME} WIN32)
 
 if (MSVC)
-    target_link_options(${PROJECT_NAME} PRIVATE
-        /MANIFEST:NO
-    )
+    target_link_options(${PROJECT_NAME} PRIVATE /MANIFEST:NO)
 endif()
 
-# ---- Language / standard ----
 target_compile_features(${PROJECT_NAME} PRIVATE cxx_std_20)
 
-# ---- Sources ----
+# ============================================================
+# Sources
+# ============================================================
+
 file(GLOB_RECURSE PROJECT_SOURCES CONFIGURE_DEPENDS
     "${CMAKE_CURRENT_SOURCE_DIR}/src/*.cpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/src/*.hpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/assets/*.rc"
 )
 
-file(GLOB IMGUI_SOURCES CONFIGURE_DEPENDS
-    "${CMAKE_CURRENT_SOURCE_DIR}/thirdparty/imgui/*.cpp"
-    "${CMAKE_CURRENT_SOURCE_DIR}/thirdparty/imgui/backends/imgui_impl_win32.cpp"
-    "${CMAKE_CURRENT_SOURCE_DIR}/thirdparty/imgui/backends/imgui_impl_dx11.cpp"
-)
-
-set(XDELTA_SOURCES
-    "${CMAKE_CURRENT_SOURCE_DIR}/thirdparty/xdelta/xdelta3/xdelta3.c"
-    "${CMAKE_CURRENT_SOURCE_DIR}/thirdparty/xdelta/xdelta3_wrapper.cpp"
-)
-
 target_sources(${PROJECT_NAME} PRIVATE
     ${PROJECT_SOURCES}
-    ${IMGUI_SOURCES}
-    ${XDELTA_SOURCES}
 )
 
-# ---- Includes ----
+# ============================================================
+# Includes
+# ============================================================
+
 target_include_directories(${PROJECT_NAME} PRIVATE
     "${CMAKE_CURRENT_SOURCE_DIR}/src"
     "${CMAKE_CURRENT_SOURCE_DIR}/src/renderer"
@@ -68,78 +108,56 @@ target_include_directories(${PROJECT_NAME} PRIVATE
     "${CMAKE_CURRENT_SOURCE_DIR}/src/patcher"
     "${CMAKE_CURRENT_SOURCE_DIR}/src/ui"
     "${CMAKE_CURRENT_SOURCE_DIR}/src/utils"
-    "${CMAKE_CURRENT_SOURCE_DIR}/thirdparty"
-    "${CMAKE_CURRENT_SOURCE_DIR}/thirdparty/imgui"
-    "${CMAKE_CURRENT_SOURCE_DIR}/thirdparty/imgui/backends"
-    "${CMAKE_CURRENT_SOURCE_DIR}/thirdparty/xdelta"
-    "${CMAKE_CURRENT_SOURCE_DIR}/thirdparty/xdelta/xdelta3"
-    "${CMAKE_CURRENT_SOURCE_DIR}/thirdparty/nlohmann"
 )
 
-# ---- Definitions ----
+# ============================================================
+# Definitions
+# ============================================================
+
 target_compile_definitions(${PROJECT_NAME} PRIVATE
     WIN32
     _WINDOWS
     _CRT_SECURE_NO_WARNINGS
-    XD3_WIN32=1
-    XD3_POSIX=0
-    NOT_MAIN=1
-    EXTERNAL_COMPRESSION=0
-    SECONDARY_DJW=1
-    SECONDARY_FGK=1
-    SIZEOF_SIZE_T=8
-    SIZEOF_UNSIGNED_LONG_LONG=8
     GIT_HASH="${GIT_HASH}"
     GIT_DATE="${GIT_DATE}"
 )
 
-# ---- Source Specific Fixes ----
-set_source_files_properties("${CMAKE_CURRENT_SOURCE_DIR}/thirdparty/xdelta/xdelta3/xdelta3.c"
-    PROPERTIES COMPILE_DEFINITIONS "XD3_WIN32=1;XD3_POSIX=0;WIN32=1"
-)
-set_source_files_properties("${CMAKE_CURRENT_SOURCE_DIR}/thirdparty/xdelta/xdelta3/xdelta3.c" 
-    PROPERTIES LANGUAGE C
-)
+# ============================================================
+# Warnings
+# ============================================================
 
-# ---- Warnings / Compiler Options ----
 target_compile_options(${PROJECT_NAME} PRIVATE
     $<$<CXX_COMPILER_ID:MSVC>:/W3 /Zc:preprocessor>
     $<$<CXX_COMPILER_ID:Clang>:-Wall -Wextra>
     $<$<CXX_COMPILER_ID:GNU>:-Wall -Wextra>
 )
 
-# ---- Libraries ----
-if (MSVC)
-    target_link_libraries(${PROJECT_NAME} PRIVATE
-        d3d11
-        dxgi
-        d3dcompiler
-        user32
-        gdi32
-        shell32
-        shlwapi
-        ole32
-        advapi32
-        comctl32
-        dwmapi
-    )
-elseif (MINGW)
-    target_link_libraries(${PROJECT_NAME} PRIVATE
-        d3d11
-        dxgi
-        d3dcompiler
-        user32
-        gdi32
-        shell32
-        shlwapi
-        ole32
-        advapi32
-        comctl32
-        dwmapi
-    )
-endif()
+# ============================================================
+# Link libraries
+# ============================================================
 
-# ---- Output ----
+target_link_libraries(${PROJECT_NAME} PRIVATE
+    imgui
+    xdelta3
+    nlohmann_json::nlohmann_json
+
+    d3d11
+    dxgi
+    d3dcompiler
+    user32
+    gdi32
+    shell32
+    shlwapi
+    ole32
+    advapi32
+    comctl32
+    dwmapi
+)
+
+# ============================================================
+# Output
+# ============================================================
+
 set_target_properties(${PROJECT_NAME} PROPERTIES
     OUTPUT_NAME "GardenGate_Launcher"
 )

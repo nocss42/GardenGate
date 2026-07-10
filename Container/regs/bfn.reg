@@ -1,19 +1,25 @@
 Windows Registry Editor Version 5.00
 
+[HKEY_LOCAL_MACHINE\SOFTWARE\PopCap\PVZ Battle for Neighborville]
+"DisplayName"="Plants vs. Zombies: Battle for Neighborville™"
+"Locale"="en_US"
+"Product GUID"="{2071E3B5-A619-4F7E-B560-1769ABD91DCD}"
+"Install Dir"="Z:\\opt\\games\\bfn\\"
+
 [HKEY_LOCAL_MACHINE\Software\EA]
 
 [HKEY_LOCAL_MACHINE\Software\EA\AC]
 
 [HKEY_LOCAL_MACHINE\Software\EA\AC\Installs]
-"bf1"=dword:00000001
+"pvzgw3"=dword:00000001
 
 [HKEY_LOCAL_MACHINE\Software\EA Games]
 
-[HKEY_LOCAL_MACHINE\Software\EA Games\Battlefield 1]
-"DisplayName"="Battlefield™ 1"
-"Install Dir"="Z:\\opt\\games\\bf1\\"
+[HKEY_LOCAL_MACHINE\Software\EA Games\PVZ Battle for Neighborville]
+"DisplayName"="Plants vs. Zombies: Battle for Neighborville™"
+"Install Dir"="Z:\\opt\\games\\bfn\\"
 "Locale"="en_US"
-"Product GUID"="{335B50BC-6130-4BAF-9A6A-F1561270587B}"
+"Product GUID"="{2071E3B5-A619-4F7E-B560-1769ABD91DCD}"
 
 [HKEY_LOCAL_MACHINE\Software\Electronic Arts]
 
@@ -26,18 +32,18 @@ Windows Registry Editor Version 5.00
 
 [HKEY_LOCAL_MACHINE\Software\Wow6432Node\EA Games]
 
-[HKEY_LOCAL_MACHINE\Software\Wow6432Node\EA Games\Battlefield 1]
-"DisplayName"="Battlefield™ 1"
-"Install Dir"="Z:\\opt\\games\\bf1\\"
+[HKEY_LOCAL_MACHINE\Software\Wow6432Node\EA Games\PVZ Battle for Neighborville]
+"DisplayName"="Plants vs. Zombies: Battle for Neighborville™"
+"Install Dir"="Z:\\opt\\games\\bfn\\"
 "Locale"="en_US"
-"Product GUID"="{335B50BC-6130-4BAF-9A6A-F1561270587B}"
+"Product GUID"="{2071E3B5-A619-4F7E-B560-1769ABD91DCD}"
 
-[HKEY_LOCAL_MACHINE\Software\Wow6432Node\EA Games\Battlefield 1\InstallOptSelect]
+[HKEY_LOCAL_MACHINE\Software\Wow6432Node\EA Games\PVZ Battle for Neighborville\InstallOptSelect]
 @="1"
 
-[HKEY_LOCAL_MACHINE\SOFTWARE\WOW6432Node\Origin Games\1026023]
+[HKEY_LOCAL_MACHINE\SOFTWARE\WOW6432Node\Origin Games\194814]
+"DisplayName"="Plants vs. Zombies: Battle for Neighborville™"
 "locale"="en_US"
-"DisplayName"="Battlefield™ 1"
 
 [HKEY_LOCAL_MACHINE\Software\Wow6432Node\Electronic Arts]
 
@@ -48,13 +54,13 @@ Windows Registry Editor Version 5.00
 "ClientPath"="C:/Windows/System32/conhost.exe"
 "InstallSuccessful"="true"
 
-[HKEY_LOCAL_MACHINE\Software\Wow6432Node\Microsoft\Windows\CurrentVersion\Uninstall\{335B50BC-6130-4BAF-9A6A-F1561270587B}]
-"DisplayIcon"="\"Z:\\opt\\games\\bf1\\bf1.exe\""
-"DisplayName"="Battlefield™ 1"
-"DisplayVersion"="1.0.78.30969"
+[HKEY_LOCAL_MACHINE\Software\Wow6432Node\Microsoft\Windows\CurrentVersion\Uninstall\{C4F00C98-13B4-4313-8152-50EE0B04ABE2}]
+"DisplayIcon"="\"Z:\\opt\\games\\bfn\\PVZBattleforNeighborville.exe\""
+"DisplayName"="Plants vs. Zombies: Battle for Neighborville™"
+"DisplayVersion"="1.0.55.50001"
 "EstimatedSize"=dword:000ed365
-"HelpLink"="Z:\\opt\\games\\bf1\\Support\\EA Help\\Technical Support.en_US.rtf"
-"InstallLocation"="Z:\\opt\\games\\bf1\\"
+"HelpLink"="Z:\\opt\\games\\bfn\\Support\\EA Help\\Technical Support.en_US.rtf"
+"InstallLocation"="Z:\\opt\\games\\bfn\\"
 "Publisher"="Electronic Arts"
-"UninstallString"="\"C:\\Program Files\\Common FilesEAInstaller\\Battlefield 1\\Cleanup.exe\" uninstall_game -autologging"
+"UninstallString"="\"C:\\Program Files\\Common FilesEAInstaller\\PVZ Battle for Neighborville\\Cleanup.exe\" uninstall_game -autologging"
 "URLInfoAbout"="http://www.ea.com"

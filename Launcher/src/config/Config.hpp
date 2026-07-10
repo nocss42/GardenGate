@@ -3,9 +3,10 @@
 #include <vector>
 #include <imgui.h>
 
-#include "json.hpp"
+#include <nlohmann/json.hpp>
 
-struct GameConfig {
+struct GameConfig
+{
     std::string game_path;
     std::string custom_args;
     bool moddata_enabled = true;
@@ -16,7 +17,8 @@ struct GameConfig {
     nlohmann::json to_json() const;
 };
 
-struct Config {
+struct Config
+{
     std::string username;
     std::string server_ip;
     std::string password;
@@ -32,33 +34,48 @@ struct Config {
     GameConfig gw2;
     GameConfig bfn;
 
-    void set_username(const char* val) {
+    void set_username(const char* val)
+    {
         username = val;
-        if (username.length() > 15) username.resize(15);
+        if (username.length() > 15)
+            username.resize(15);
     }
 
-    GameConfig& get_current_game() {
-        if (game_selected == "gw2") return gw2;
-        if (game_selected == "bfn") return bfn;
+    GameConfig& get_current_game()
+    {
+        if (game_selected == "gw2")
+            return gw2;
+        if (game_selected == "bfn")
+            return bfn;
         return gw1;
     }
 
-    const GameConfig& get_current_game() const {
-        if (game_selected == "gw2") return gw2;
-        if (game_selected == "bfn") return bfn;
+    const GameConfig& get_current_game() const
+    {
+        if (game_selected == "gw2")
+            return gw2;
+        if (game_selected == "bfn")
+            return bfn;
         return gw1;
     }
 
-    int get_game_selected_int() const {
-        if (game_selected == "gw2") return 1;
-        if (game_selected == "bfn") return 2;
+    int get_game_selected_int() const
+    {
+        if (game_selected == "gw2")
+            return 1;
+        if (game_selected == "bfn")
+            return 2;
         return 0;
     }
 
-    void set_game_selected_from_int(int val) {
-        if (val == 1) game_selected = "gw2";
-        else if (val == 2) game_selected = "bfn";
-        else game_selected = "gw1";
+    void set_game_selected_from_int(int val)
+    {
+        if (val == 1)
+            game_selected = "gw2";
+        else if (val == 2)
+            game_selected = "bfn";
+        else
+            game_selected = "gw1";
     }
 };
 

@@ -22,7 +22,7 @@ jobs:
           echo "builder ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers
 
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       - name: Fix permissions
         run: chown -R builder:builder .
@@ -42,7 +42,7 @@ jobs:
           EOF
 
       - name: Upload artifact/s
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         with:
           name: Launcher
           path: |

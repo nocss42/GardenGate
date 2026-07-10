@@ -6,53 +6,68 @@
 
 namespace fb
 {
-	struct LevelSetup
-	{
-		LevelSetup()
-		{
-			m_difficultyIndex = 0;
-			m_isSaveGame = false;
-			m_forceReloadResources = false;
-		};
+namespace gw1
+{
+struct LevelSetup
+{
+    String Name;
+    Array<LevelSetupOption> InclusionOptions;
+    int32_t DifficultyIndex;
+    Array<String> SubLevelNames;
+    String StartPoint;
+    Array<int32_t> SubLevelStates;
+    bool IsSaveGame;
+    bool ForceReloadResources;
+};
+} // namespace gw1
 
-		String m_name;
-		Array<LevelSetupOption> m_inclusionOptions;
-		u32 m_difficultyIndex;
-		Array<String> m_subLevelNames;
-		String m_startPoint;
-		Array<s32> m_subLevelStates;
-		bool m_isSaveGame;
-		bool m_forceReloadResources;
-	};
+namespace gw2
+{
+struct LevelSetup
+{
+    String Name;
+    Array<LevelSetupOption> InclusionOptions;
+    int32_t DifficultyIndex;
+    String StartPoint;
+    String Playlist;
+    String LoadScreen_GameMode;
+    String LoadScreen_LevelName;
+    String LoadScreen_LevelDescription;
+    String LoadScreen_LevelAsset;
+    bool IsSaveGame;
+    bool HasPersistentSave;
+    bool ForceReloadResources;
+};
+} // namespace gw2
 
-	namespace gw3
-	{
-		enum LoadScreenLevelCategory
-		{
-			LoadScreenLevelCategory_None = 0,
-			LoadScreenLevelCategory_Social = 1,
-			LoadScreenLevelCategory_Sandbox = 2,
-			LoadScreenLevelCategory_PvP = 3,
-			LoadScreenLevelCategory_Ops = 4
-		};
+namespace gw3
+{
+enum LoadScreenLevelCategory
+{
+    LoadScreenLevelCategory_None = 0,
+    LoadScreenLevelCategory_Social = 1,
+    LoadScreenLevelCategory_Sandbox = 2,
+    LoadScreenLevelCategory_PvP = 3,
+    LoadScreenLevelCategory_Ops = 4
+};
 
-		struct LevelSetup
-		{
-			Array<LevelSetupOption> InclusionOptions;
-			u32 DifficultyIndex;
-			String LoadScreen_GameMode;
-			String StartPoint;
-			String LevelManagerInitialLevel;
-			String LoadScreen_LevelName;
-			String Name;
-			String LevelManagerStartPoint;
-			String LoadScreen_LevelAsset;
-			String Playlist;
-			String LoadScreen_LevelDescription;
-			LoadScreenLevelCategory LoadScreen_LevelCategory;
-			bool HasPersistentSave;
-			bool ForceReloadResources;
-			bool IsSaveGame;
-		};
-	}
-}
+struct LevelSetup
+{
+    Array<LevelSetupOption> InclusionOptions;
+    u32 DifficultyIndex;
+    String LoadScreen_GameMode;
+    String StartPoint;
+    String LevelManagerInitialLevel;
+    String LoadScreen_LevelName;
+    String Name;
+    String LevelManagerStartPoint;
+    String LoadScreen_LevelAsset;
+    String Playlist;
+    String LoadScreen_LevelDescription;
+    LoadScreenLevelCategory LoadScreen_LevelCategory;
+    bool HasPersistentSave;
+    bool ForceReloadResources;
+    bool IsSaveGame;
+};
+} // namespace gw3
+} // namespace fb

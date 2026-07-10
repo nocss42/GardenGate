@@ -1,7 +1,5 @@
 ### Running GardenGate on Linux
 
-### Keep in mind that this is currently experimental.
-
 # Garden warfare 1
 ### 1. Install the game
 * Install the game from ea app, launch it once
@@ -9,24 +7,17 @@
 ### 2. Download the latest release
 Download the archive from [the releases](https://github.com/nocss42/GardenGate/releases) tab, launch the .exe in the same prefix > go to patcher and press apply patch
 
-### 3. Install the mods
-Use [this gw1 compatible frosty mod manager](https://github.com/Twig6943/FrostyToolsuiteGW1Linux/releases) instead of the stock one as the stock one doesn't work with wine nor gw1. Get the mods from [here](../Mods/gw1)
-
-### 4. Configure data dir env var & dlloverrides
-Use `GAME_DATA_DIR` environment variable as ea app won't allow special characters like `/` as launch args
-
+### 3. Configure dlloverrides
 ```
-GAME_DATA_DIR="path/to/ModData/Default" WINEDLLOVERRIDES="dinput8=n,b;winmm=n,b" %command%
+WINEDLLOVERRIDES="dinput8=n,b" %command%
 ```
 
 Open up winetricks > select gw1's pfx > select winecfg > go to libraries > add the following
 
 ```
 dinput8
-winmm
 ```
 
-* Apply 
 - Launch via the launcher
 
 # Garden warfare 2/Battle for Neighborville
@@ -51,19 +42,17 @@ Add the following launch option in Steam:
 WINEDLLOVERRIDES="dinput8=n,b;winmm=n,b" %command% -dataPath ModData/Default
 ```
 
-Open up protontricks > select gw2 > select winecfg > go to libraries > add the following
+Open up protontricks > select gw2/bfn > select winecfg > go to libraries > add the following
 
 ```
 dinput8
 winmm
 ```
 
-(They should be set to native,builtin)
-
 ### 5. Launch the game
 - Launch via the launcher if you own the game on EA App. If you own the game on steam just pass in the launch args yourself;
 
-### Arguements
+### Arguments
 `-name`
 
 `-dataPath`
@@ -74,9 +63,12 @@ winmm
 
 ### Disclaimer about machines with low ram
 
-If your frosty crashes due to oom when using large mods run this;
+If your frosty crashes due to oom when installing large mods run this;
 ```
 systemctl disable --now systemd-oomd
 systemctl stop --now systemd-oomd
 systemctl mask systemd-oomd
 ```
+
+# Hosting as dedicated server
+See [this](./LINUX_DEDICATED.md)

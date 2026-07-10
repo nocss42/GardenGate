@@ -4,24 +4,24 @@
 
 namespace fb
 {
-    class SocketManagerFactory
+class SocketManagerFactory
+{
+public:
+    virtual SocketManager* createSocketManager()
     {
-    public:
-        virtual SocketManager* createSocketManager()
-        {
-            return new SocketManager();
-        }
-    };
-
-    namespace gw3
-    {
-        class SocketManagerFactory
-        {
-        public:
-            virtual SocketManager* createSocketManager()
-            {
-                return new SocketManager();
-            }
-        };
+        return new SocketManager();
     }
-}
+};
+
+namespace gw3
+{
+class SocketManagerFactory
+{
+public:
+    virtual SocketManager* createSocketManager()
+    {
+        return new SocketManager();
+    }
+};
+} // namespace gw3
+} // namespace fb

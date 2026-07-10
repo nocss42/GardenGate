@@ -299,16 +299,26 @@ __pycache__/
 *.kate-swp
 
 # Build stuff
+*.lib
 *.dll
 *.exp
 *.cmakecache
+__cmake_systeminformation
+
+.ninja_deps
+.ninja_lock
+.ninja_log
+build.ninja
 CMakeCache.txt
 Makefile
 CMakeFiles/
 my_msvc/
+msvc-wine/
+_deps/
+cmake_install.cmake
 
 DLL/minhook/
 DLL/build/
 DLL/build-minhook/
 DLL/build-gg/
-DLL/build-launcher/
+Launcher/build-launcher/

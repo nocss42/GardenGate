@@ -1,7 +1,5 @@
 name: Build DLL (Linux)
 
-# This workflow is WIP. The dll generated from it will result in a crash when loading into a level regardless of the game.
-
 on:
   workflow_dispatch:
 
@@ -16,7 +14,7 @@ jobs:
       - name: Install base dependencies
         run: |
           pacman -Syu --noconfirm archlinux-keyring
-          pacman -Syu --noconfirm base-devel sudo git cmake extra-cmake-modules mingw-w64-binutils mingw-w64-crt mingw-w64-gcc mingw-w64-headers mingw-w64-winpthreads
+          pacman -Syu --noconfirm base-devel sudo git clang lld make cmake extra-cmake-modules python wine msitools ca-certificates libwbclient
 
       - name: Create build user
         run: |
@@ -24,7 +22,7 @@ jobs:
           echo "builder ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers
 
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       - name: Fix permissions
         run: chown -R builder:builder .
@@ -34,25 +32,21 @@ jobs:
           sudo -u builder sh <<'EOF'
           set -e
           cd DLL
-          git clone https://github.com/TsudaKageyu/minhook
-          sh -c "
-            cmake -S minhook -B build-minhook \
-            -DCMAKE_TOOLCHAIN_FILE=../toolchain-mingw64.cmake
-          "
-          cmake --build build-minhook
-          mv -f build-minhook/minhook.x64.a thirdparty/MinHook
-          mkdir build-gg
-          cd build-gg
-          sh -c "
-          cmake .. \
-            -DCMAKE_TOOLCHAIN_FILE=../toolchain-mingw64.cmake
-          "
-          cmake --build .
+          export WINDOWS_SDK_PATH="$HOME/my_msvc/opt/msvc"
+          mkdir -p $WINDOWS_SDK_PATH
+          export WINE=$(command -v wine64 || command -v wine || false)
+          $WINE wineboot
+          git clone https://github.com/mstorsjo/msvc-wine
+          ./msvc-wine/vsdownload.py --accept-license --dest $WINDOWS_SDK_PATH
+          ./msvc-wine/install.sh $WINDOWS_SDK_PATH
+          export PATH=$WINDOWS_SDK_PATH/bin/x64:$PATH
+          cmake -S . -B build -DCMAKE_BUILD_TYPE=Release -DWINDOWS_SDK_PATH=$WINDOWS_SDK_PATH -DCMAKE_TOOLCHAIN_FILE=./toolchain-linux-winsdk.cmake
+          make -C build -j$(nproc)
           EOF
 
       - name: Upload artifact/s
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         with:
           name: DLL
           path: |
-            DLL/build-gg/dinput8.dll
+            DLL/build/dinput8.dll

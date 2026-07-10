@@ -5,11 +5,11 @@
 
 namespace fb
 {
-    struct ServerSpawnOverrides
-    {
-        LevelSetup *levelSetup;
-        ISocketManager *socketManager;
-        intptr_t connectionCreator;
-        intptr_t peerCreator;
-    };
-}
+struct ServerSpawnOverrides
+{
+    void* levelSetup;
+    ISocketManager* socketManager;
+    intptr_t connectionCreator;
+    intptr_t peerCreator;
+};
+} // namespace fb

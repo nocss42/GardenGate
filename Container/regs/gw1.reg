@@ -1,0 +1,65 @@
+Windows Registry Editor Version 5.00
+
+[HKEY_LOCAL_MACHINE\Software\EA]
+
+[HKEY_LOCAL_MACHINE\Software\EA Games]
+
+[HKEY_LOCAL_MACHINE\Software\EA Games\Plants vs Zombies Garden Warfare]
+"DisplayName"="Plants vs. Zombies™ Garden Warfare Digital Deluxe"
+"Install Dir"="Z:\\opt\\games\\gw1\\"
+"Locale"="en_US"
+"Product GUID"="{A5AC7D7B-C1D5-4AF9-8829-993DA335BE1B}"
+
+[HKEY_LOCAL_MACHINE\Software\Electronic Arts]
+
+[HKEY_LOCAL_MACHINE\Software\Electronic Arts\EA Desktop]
+"InstallSuccessful"="true"
+
+[HKEY_LOCAL_MACHINE\Software\Electronic Arts\Origin]
+"ClientPath"="C:/Windows/System32/conhost.exe"
+"InstallSuccessful"="true"
+
+[HKEY_LOCAL_MACHINE\Software\Wow6432Node\EA Games]
+
+[HKEY_LOCAL_MACHINE\Software\Wow6432Node\EA Games\Plants vs Zombies Garden Warfare]
+"DisplayName"="Plants vs. Zombies™ Garden Warfare Digital Deluxe"
+"Install Dir"="Z:\\opt\\games\\gw1\\"
+"Locale"="en_US"
+"Product GUID"="{A5AC7D7B-C1D5-4AF9-8829-993DA335BE1B}"
+
+[HKEY_LOCAL_MACHINE\Software\Wow6432Node\EA Games\Plants vs Zombies Garden Warfare\InstallOptSelect]
+@="1"
+
+[HKEY_LOCAL_MACHINE\SOFTWARE\WOW6432Node\Origin]
+"ClientPath"="C:\\Program Files\\Electronic Arts\\EA Desktop\\EA Desktop\\EADesktop.exe"
+
+[HKEY_LOCAL_MACHINE\SOFTWARE\WOW6432Node\Origin Games\1014748]
+"DisplayName"="Plants vs. Zombies™ Garden Warfare Digital Deluxe"
+"Locale"="en_US"
+
+[HKEY_LOCAL_MACHINE\Software\Wow6432Node\Electronic Arts]
+
+[HKEY_LOCAL_MACHINE\Software\Wow6432Node\Electronic Arts\EA Desktop]
+"InstallSuccessful"="true"
+
+[HKEY_LOCAL_MACHINE\Software\Wow6432Node\Electronic Arts\Origin]
+"ClientPath"="C:/Windows/System32/conhost.exe"
+"InstallSuccessful"="true"
+
+[HKEY_LOCAL_MACHINE\Software\Wow6432Node\Microsoft\Windows\CurrentVersion\Uninstall\{335B50BC-6130-4BAF-9A6A-F1561270587B}]
+"DisplayIcon"="\"Z:\\opt\\games\\gw1\\PVZ.Main_Win64_Retail.exe\""
+"DisplayName"="Plants vs. Zombies™ Garden Warfare Digital Deluxe"
+"DisplayVersion"="1.0.3.0"
+"EstimatedSize"=dword:000ed365
+"HelpLink"="Z:\\opt\\games\\gw1\\Support\\EA Help\\Technical Support.en_US.rtf"
+"InstallLocation"="Z:\\opt\\games\\gw1\\"
+"Publisher"="Electronic Arts"
+"UninstallString"="\"C:\\Program Files\\Common FilesEAInstaller\\Plants vs Zombies Garden Warfare\\Cleanup.exe\" uninstall_game -autologging"
+"URLInfoAbout"="http://www.ea.com"
+
+[HKEY_LOCAL_MACHINE\SOFTWARE\WOW6432Node\PopCap\Plants vs Zombies Garden Warfare]
+"GDFBinary"="Z:\\opt\\games\\gw1\\GDFBinary_en_US.dll"
+"DisplayName"="PVZ Garden Warfare"
+"Locale"="en_US"
+"Product GUID"="{A5AC7D7B-C1D5-4AF9-8829-993DA335BE1B}"
+"Install Dir"="Z:\\opt\\games\\gw1\\"
