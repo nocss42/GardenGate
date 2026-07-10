@@ -22,7 +22,6 @@ Private servers for Plants vs. Zombies Garden Warfare 1, 2 & Battle for Neighbor
 * Joining
 * Hosting servers (through client)
 * Dedicated server support
-* RCON
 * Playlists
 * Unlockers that unlock every item
 
