@@ -49,4 +49,4 @@ jobs:
         with:
           name: DLL
           path: |
-            DLL/dinput8.dll
+            DLL/build/dinput8.dll

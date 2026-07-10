@@ -129,9 +129,9 @@ inline bool g_console_enabled = false;
     logger->flush_on(spdlog::level::trace);
 
     if constexpr (IsDebugBuild)
-        logger->set_pattern("%^[%n] [%l]%$ [%s:%#] %v");
+        logger->set_pattern("%^[%d-%m-%Y %H:%M:%S] [%n] [%l]%$ [%s:%#] %v");
     else
-        logger->set_pattern("%^[%n] [%l]%$ %v");
+        logger->set_pattern("%^[%d-%m-%Y %H:%M:%S] [%n] [%l]%$ %v");
 
     return logger;
 }
@@ -170,6 +170,9 @@ inline void init()
         SetConsoleMode(hOut, mode | ENABLE_VIRTUAL_TERMINAL_PROCESSING);
         SetConsoleOutputCP(CP_UTF8);
     }
+
+    // Always create the console sink (on Wine/Linux stdout goes to terminal anyway)
+    detail::g_console_enabled = true;
 
     char log_name[256]{};
     DWORD log_len = GetEnvironmentVariableA("GG_LOG", log_name, sizeof(log_name));
