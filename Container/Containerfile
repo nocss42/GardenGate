@@ -1,4 +1,4 @@
-FROM ubuntu:24.04
+FROM ubuntu:26.04
 
 # Main port
 EXPOSE 25200/tcp
@@ -81,8 +81,8 @@ RUN sudo locale-gen en_US.UTF-8 \
 RUN mkdir -pm755 /etc/apt/keyrings && \
     curl -fsSL https://dl.winehq.org/wine-builds/winehq.key \
         -o /etc/apt/keyrings/winehq-archive.key && \
-    curl -fsSL https://dl.winehq.org/wine-builds/ubuntu/dists/noble/winehq-noble.sources \
-        -o /etc/apt/sources.list.d/winehq-noble.sources && \
+    curl -fsSL https://dl.winehq.org/wine-builds/ubuntu/dists/resolute/winehq-resolute.sources \
+        -o /etc/apt/sources.list.d/winehq-resolute.sources && \
     apt-get update && \
     apt-get install -y --install-recommends winehq-devel
 
@@ -95,7 +95,7 @@ RUN set -eux; \
       | tr -d '\r' \
     )"; \
     curl -Lo /tmp/umu-launcher.deb \
-      "https://github.com/Open-Wine-Components/umu-launcher/releases/download/${ver}/python3-umu-launcher_${ver}-1_amd64_ubuntu-noble.deb"; \
+      "https://github.com/Open-Wine-Components/umu-launcher/releases/download/${ver}/python3-umu-launcher_${ver}-1_amd64_ubuntu-resolute.deb"; \
     apt-get install -y /tmp/umu-launcher.deb; \
     rm -f /tmp/umu-launcher.deb;
 
@@ -106,9 +106,9 @@ RUN export PATH="/root/.cargo/bin:$PATH" \
 
 # Build maxima (gotta keep doing so till their first release)
 WORKDIR /build
-RUN git clone --recursive https://github.com/ArmchairDevelopers/maxima \
+RUN git clone --recursive https://github.com/sjp761/maxima -b belleza-rebase \
  && cd maxima \
- && git checkout cbde5f0002d6f16fb67dfa79ad96b705e1c591bf
+ && git checkout 8521e648d88ffe0fe8adeab2c7ffc001f13e24af
 
 WORKDIR /build/maxima
 RUN export PATH="/root/.cargo/bin:$PATH" \
