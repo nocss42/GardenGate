@@ -104,12 +104,12 @@ Patch the game by running;
 curl -L https://github.com/nocss42/GardenGate/releases/latest/download/GardenGate.zip \
      -o /opt/games/GardenGate.zip
 unzip /opt/games/GardenGate.zip -d /opt/games
-umu-run /opt/games/GardenGate_Launcher.exe --patch gw2 /opt/games/gw2/
+umu-run /opt/games/GardenGate_Launcher.exe -patch gw2 /opt/games/gw2/
 ```
 
 ### Server Configuration
 
-Edit server settings as you wish:
+Edit server settings as you wish (We still haven't implemented this) :
 
 ```sh
 vim /opt/games/gw2/ServerSettings.txt
