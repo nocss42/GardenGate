@@ -108,7 +108,7 @@ RUN export PATH="/root/.cargo/bin:$PATH" \
 WORKDIR /build
 RUN git clone --recursive https://github.com/sjp761/maxima -b belleza-rebase \
  && cd maxima \
- && git checkout 552a96002daccdd9985266a2879ed9646ba3b16c
+ && git checkout 4d515506799688f5754f5a427ca44f0dec465aa1
 
 WORKDIR /build/maxima
 RUN export PATH="/root/.cargo/bin:$PATH" \
