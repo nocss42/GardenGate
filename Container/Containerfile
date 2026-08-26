@@ -108,7 +108,7 @@ RUN export PATH="/root/.cargo/bin:$PATH" \
 WORKDIR /build
 RUN git clone --recursive https://github.com/sjp761/maxima -b belleza-rebase \
  && cd maxima \
- && git checkout 8521e648d88ffe0fe8adeab2c7ffc001f13e24af
+ && git checkout 552a96002daccdd9985266a2879ed9646ba3b16c
 
 WORKDIR /build/maxima
 RUN export PATH="/root/.cargo/bin:$PATH" \
@@ -126,6 +126,10 @@ RUN useradd -m -s /bin/bash maxima
 # Give maxima sudo without password
 RUN echo "maxima ALL=(ALL) NOPASSWD:ALL" > /etc/sudoers.d/maxima \
  && chmod 0440 /etc/sudoers.d/maxima
+
+# Add umu to the path it expects it to be (because it doesn't prioritize PATH)
+RUN mkdir -p "$HOME/.local/share/maxima/wine/umu" \
+ && ln -s /usr/bin/umu-run "$HOME/.local/share/maxima/wine/umu/umu-run"
 
 USER maxima
 
