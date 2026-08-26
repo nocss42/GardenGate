@@ -71,7 +71,7 @@ e.g.
 
 ```sh
 sudo chmod 777 /opt/games
-mkdir -p /opt/games/gw2
+mkdir -p /opt/games/gw2 /opt/games/gw2_pfx
 ```
 
 Install the game via maxima:
