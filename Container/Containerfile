@@ -79,8 +79,8 @@ RUN sudo locale-gen en_US.UTF-8 \
 
 # Wine from the upstream repo
 RUN mkdir -pm755 /etc/apt/keyrings && \
-    curl -fsSL https://dl.winehq.org/wine-builds/winehq.key \
-        -o /etc/apt/keyrings/winehq-archive.key && \
+    curl -fsSL https://dl.winehq.org/wine-builds/winehq.key | \
+        gpg --dearmor -o /etc/apt/keyrings/winehq-archive.key && \
     curl -fsSL https://dl.winehq.org/wine-builds/ubuntu/dists/resolute/winehq-resolute.sources \
         -o /etc/apt/sources.list.d/winehq-resolute.sources && \
     apt-get update && \
