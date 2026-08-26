@@ -31,7 +31,6 @@ On the machine that will host the dedicated server, execute the following comman
 
 ```sh
 mkdir -p $HOME/Games
-mkdir -p $HOME/.local/share/maxima/wine/proton
 git clone https://github.com/nocss42/GardenGate
 cd GardenGate/Container
 vim auth.toml   # Paste the contents from your main machine
@@ -47,6 +46,7 @@ Run the container with:
 podman run --replace -it \
   --name gardengate \
   -v $HOME/Games:/opt/games \
+  --device /dev/dri \
   -p 25200:25200/tcp \
   -p 25200:25200/udp \
   -p 27200:27200/tcp \
@@ -71,7 +71,7 @@ e.g.
 
 ```sh
 sudo chmod 777 /opt/games
-mkdir -p /opt/games/gw2
+mkdir -p /opt/games/gw2 /opt/games/gw2_pfx
 ```
 
 Install the game via maxima:
@@ -87,12 +87,12 @@ wlheadless-run -c cage -- $HOME/maxima.sh
 Import required registry files:
 
 ```sh
-umu-run $HOME/.local/share/maxima/wine/prefix/drive_c/windows/syswow64/regedit.exe \
+WINEPREFIX=/opt/games/gw2_pfx umu-run regedit.exe \
 $HOME/dll_overrides.reg
 ```
 
 ```sh
-umu-run $HOME/.local/share/maxima/wine/prefix/drive_c/windows/syswow64/regedit.exe \
+WINEPREFIX=/opt/games/gw2_pfx umu-run regedit.exe \
 $HOME/gw2.reg
 ```
 
@@ -103,16 +103,23 @@ Patch the game by running;
 ```sh
 curl -L https://github.com/nocss42/GardenGate/releases/latest/download/GardenGate.zip \
      -o /opt/games/GardenGate.zip
-unzip /opt/games/GardenGate.zip -d /opt/games
-umu-run /opt/games/GardenGate_Launcher.exe --patch gw2 /opt/games/gw2/
+unzip /opt/games/GardenGate.zip -d /opt/games/gg
+wlheadless-run -c cage -- umu-run /opt/games/gg/GardenGate_Launcher.exe -patch gw2 /opt/games/gw2
 ```
 
 ### Server Configuration
 
-Edit server settings as you wish:
+Edit server settings as you wish (We still haven't implemented this) :
 
 ```sh
 vim /opt/games/gw2/ServerSettings.txt
+```
+
+### Exe names
+```
+PVZ.Main_Win64_Retail.exe
+GW2.Main_Win64_Retail.exe
+PVZBattleforNeighborville.exe
 ```
 
 ### Maxima game slugs
@@ -163,10 +170,7 @@ Outside of podman, install umu and ge-proton for your distro like so (these comm
 
 ```sh
 export PROTON_ENABLE_WAYLAND=1 # If you're on a wayland session
-export PROTONPATH=$HOME/.local/share/maxima/wine/proton
-
-wget -O $HOME/ge-proton.tar.gz https://github.com/GloriousEggroll/proton-ge-custom/releases/download/GE-Proton10-32/GE-Proton10-32.tar.gz
-tar -xzf $HOME/ge-proton.tar.gz -C "$HOME/.local/share/maxima/wine/proton"
+export PROTONPATH=GE-Proton
 
 sudo dpkg --add-architecture i386 # needed for debian-based
 

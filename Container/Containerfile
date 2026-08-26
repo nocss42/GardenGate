@@ -22,7 +22,7 @@ ENV MAXIMA_DISABLE_QRC=1
 # Proton stuff
 ENV PROTON_ENABLE_WAYLAND=1
 ENV WINEPREFIX=/home/maxima/.local/share/maxima/wine/prefix
-ENV PROTONPATH=/home/maxima/.local/share/maxima/wine/proton
+ENV PROTONPATH=GE-Proton
 #ENV PROTON_USE_WINED3D=1
 #ENV PROTON_USE_NTSYNC=1
 #ENV PROTON_NO_ESYNC=1
@@ -106,9 +106,9 @@ RUN export PATH="/root/.cargo/bin:$PATH" \
 
 # Build maxima (gotta keep doing so till their first release)
 WORKDIR /build
-RUN git clone --recursive https://github.com/ArmchairDevelopers/maxima \
+RUN git clone --recursive https://github.com/sjp761/maxima -b belleza-rebase \
  && cd maxima \
- && git checkout cbde5f0002d6f16fb67dfa79ad96b705e1c591bf
+ && git checkout 552a96002daccdd9985266a2879ed9646ba3b16c
 
 WORKDIR /build/maxima
 RUN export PATH="/root/.cargo/bin:$PATH" \
@@ -127,14 +127,10 @@ RUN useradd -m -s /bin/bash maxima
 RUN echo "maxima ALL=(ALL) NOPASSWD:ALL" > /etc/sudoers.d/maxima \
  && chmod 0440 /etc/sudoers.d/maxima
 
-# Add umu to the path it expects it to be (because it doesn't prioritize PATH)
-RUN mkdir -p "$HOME/.local/share/maxima/wine/umu" \
- && ln -s /usr/bin/umu-run "$HOME/.local/share/maxima/wine/umu/umu-run"
-
 USER maxima
 
 # aliases
-RUN echo "alias btop='btop --utf-force'" >> $HOME/.bashrc
+RUN echo "alias btop='btop --force-utf'" >> $HOME/.bashrc
 RUN echo "alias kill_exe='sudo pkill -9 -f "\\.exe"'" >> $HOME/.bashrc
 
 # Create the required dirs
@@ -142,11 +138,15 @@ RUN mkdir -p \
     "$HOME/.cache" \
     "$HOME/.config/tmux" \
     "$HOME/.local/share/applications" \
-    "$HOME/.local/share/maxima/wine/prefix"
+    "$HOME/.local/share/maxima/wine/prefix" \
+    "$HOME/.local/share/maxima/wine/umu"
+
+# Add umu to the path it expects it to be (because it doesn't prioritize PATH)
+RUN ln -s /usr/bin/umu-run "$HOME/.local/share/maxima/wine/umu/umu-run"
 
 # games dir
-RUN sudo mkdir -p /opt/games/ \
- && sudo chmod 777 /opt/games
+RUN sudo mkdir -p /opt/games/ /opt/games/gg \
+ && sudo chmod 777 /opt/games /opt/games/gg
 
 # Script
 COPY --chown=maxima:maxima maxima.sh /home/maxima/maxima.sh
