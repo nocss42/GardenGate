@@ -2,6 +2,7 @@
 #include <cstdio>
 #include <cstdlib>
 #include <ctime>
+#include <cstring>
 #include <memory>
 #include <source_location>
 #include <string>
@@ -72,16 +73,75 @@ inline bool g_console_enabled = false;
     }
 }
 
+[[nodiscard]] inline const char* command_line_value(const char* arg) noexcept
+{
+    static char value[256];
+
+    const char* cmd = GetCommandLineA();
+    const size_t arg_len = std::strlen(arg);
+
+    while (*cmd)
+    {
+        while (*cmd == ' ' || *cmd == '\t')
+            ++cmd;
+
+        if (!*cmd)
+            break;
+
+        const char* start = cmd;
+        while (*cmd && *cmd != ' ' && *cmd != '\t')
+            ++cmd;
+
+        const size_t len = static_cast<size_t>(cmd - start);
+
+        if (len == arg_len && _strnicmp(start, arg, arg_len) == 0)
+        {
+            while (*cmd == ' ' || *cmd == '\t')
+                ++cmd;
+
+            start = cmd;
+            while (*cmd && *cmd != ' ' && *cmd != '\t')
+                ++cmd;
+
+            const size_t value_len = static_cast<size_t>(cmd - start);
+            if (!value_len || value_len >= sizeof(value))
+                return nullptr;
+
+            std::memcpy(value, start, value_len);
+            value[value_len] = '\0';
+            return value;
+        }
+    }
+
+    return nullptr;
+}
+
 [[nodiscard]] inline LogLevel effective_log_level() noexcept
 {
     static const LogLevel level = []() noexcept -> LogLevel {
+        if (const char* value = command_line_value("-gg_log_level"))
+        {
+            if (_stricmp(value, "DebugPlusPlus") == 0)
+                return LogLevel::DebugPlusPlus;
+            if (_stricmp(value, "Debug") == 0)
+                return LogLevel::Debug;
+            if (_stricmp(value, "Info") == 0)
+                return LogLevel::Info;
+            if (_stricmp(value, "Warning") == 0)
+                return LogLevel::Warning;
+            if (_stricmp(value, "Error") == 0)
+                return LogLevel::Error;
+            if (_stricmp(value, "Fatal") == 0)
+                return LogLevel::Fatal;
+        }
+
         char env[16]{};
         DWORD len = GetEnvironmentVariableA("GG_LOG_LEVEL", env, sizeof(env));
         if (!len)
             return LogLevel::Current;
         while (len > 0 && env[len - 1] == ' ')
             env[--len] = '\0';
-        if (_stricmp(env, "Debug++") == 0)
+        if (_stricmp(env, "DebugPlusPlus") == 0)
             return LogLevel::DebugPlusPlus;
         if (_stricmp(env, "Debug") == 0)
             return LogLevel::Debug;
@@ -109,7 +169,8 @@ inline bool g_console_enabled = false;
 
     if (!log_name.empty())
     {
-        auto file_sink = std::make_shared<spdlog::sinks::basic_file_sink_mt>(std::string(log_name), false);
+        // Truncate the previous log on startup.
+        auto file_sink = std::make_shared<spdlog::sinks::basic_file_sink_mt>(std::string(log_name), true);
         sinks.push_back(std::move(file_sink));
     }
 
@@ -171,24 +232,19 @@ inline void init()
         SetConsoleOutputCP(CP_UTF8);
     }
 
-    // Always create the console sink (on Wine/Linux stdout goes to terminal anyway)
-    detail::g_console_enabled = true;
-
+    // Default to GardenGate.log when GG_LOG is not set.
     char log_name[256]{};
     DWORD log_len = GetEnvironmentVariableA("GG_LOG", log_name, sizeof(log_name));
     while (log_len > 0 && log_name[log_len - 1] == ' ')
         log_name[--log_len] = '\0';
 
     std::string log_path;
-    if (log_len > 0)
-    {
-        std::time_t now = std::time(nullptr);
-        std::tm tm{};
-        localtime_s(&tm, &now);
-        char ts[32]{};
-        std::strftime(ts, sizeof(ts), "%Y%m%d_%H%M%S", &tm);
-        log_path = std::string(log_name) + "." + ts + ".log";
-    }
+
+    if (log_len == 0)
+        log_path = "GardenGate.log";
+    else
+        log_path = std::string(log_name) + ".log";
+
     detail::g_logger = detail::make_logger(log_path);
 }
 

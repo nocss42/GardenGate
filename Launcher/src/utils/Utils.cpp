@@ -225,6 +225,8 @@ std::string BuildArgs(const Config& cfg)
         argList.push_back("-Client.ServerIp " + cfg.server_ip);
     if (!cfg.password.empty())
         argList.push_back("-Server.ServerPassword " + cfg.password);
+    if (cfg.log_level_enabled)
+        argList.push_back("-gg_log_level " + cfg.log_level);
 
     std::string args;
     for (size_t i = 0; i < argList.size(); ++i)

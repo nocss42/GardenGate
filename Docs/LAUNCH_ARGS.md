@@ -54,10 +54,10 @@ You can enable the console window by setting `GG_CONSOLE` environment variable t
 
 ### Log level
 
-You can switch between log levels by settings `GG_LOG_LEVEL` environment variable.
+You can switch between log levels by settings `GG_LOG_LEVEL` environment variable. Also available via `-gg_log_level` launch arg
 
 ```
-Debug++
+DebugPlusPlus
 Debug
 Info
 Warning

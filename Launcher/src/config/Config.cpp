@@ -27,7 +27,7 @@ void to_json(ordered_json& j, const Config& config)
 {
     j = ordered_json{ { "username", config.username }, { "password", config.password }, { "server_ip", config.server_ip },
 
-        { "game_selected", config.game_selected }, { "launch_directly", config.launch_directly },
+        { "game_selected", config.game_selected }, { "patch_selected", config.patch_selected }, { "launch_directly", config.launch_directly }, { "log_level_enabled", config.log_level_enabled }, { "log_level", config.log_level },
 
         { "gw1", config.gw1 }, { "gw2", config.gw2 }, { "bfn", config.bfn },
 
@@ -49,6 +49,12 @@ void from_json(const json& j, Config& config)
         config.launch_directly = j["launch_directly"];
     if (j.contains("game_selected"))
         config.game_selected = j["game_selected"];
+    if (j.contains("patch_selected"))
+        config.patch_selected = j["patch_selected"];
+    if (j.contains("log_level_enabled"))
+        config.log_level_enabled = j["log_level_enabled"];
+    if (j.contains("log_level"))
+        config.log_level = j["log_level"];
 
     if (j.contains("gw1"))
         from_json(j["gw1"], config.gw1);

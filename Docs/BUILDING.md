@@ -29,7 +29,7 @@ git clone https://github.com/mstorsjo/msvc-wine
 ./msvc-wine/install.sh $WINDOWS_SDK_PATH
 export PATH=$WINDOWS_SDK_PATH/bin/x64:$PATH
 cmake -S . -B build -DCMAKE_BUILD_TYPE=Release -DWINDOWS_SDK_PATH=$WINDOWS_SDK_PATH -DCMAKE_TOOLCHAIN_FILE=./toolchain-linux-winsdk.cmake
-cmake --build build --config Release --parallel "$(nproc)"
+make -C build -j$(nproc)
 ```
 
 ### Launcher

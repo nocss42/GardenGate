@@ -278,6 +278,26 @@ static void drawLauncherTab(HWND hwnd, float dpiScale)
 
     Utils::UI::CenteredInput("Custom Arguments:", currentGame.custom_args, centerOffset, fieldWidth);
 
+    ImGui::SetCursorPosX(centerOffset);
+    if (ImGui::Checkbox("Debug Level", &g_config.log_level_enabled))
+    {
+        save_config(g_config, "config.json");
+    }
+
+    ImGui::SameLine(0.0f, 40 * dpiScale);
+
+    static const char* logLevelNames[] = { "DebugPlusPlus", "Debug", "Info", "Warning", "Error", "Fatal" };
+    static int currentLogLevel = 2;
+    currentLogLevel = g_config.get_log_level_int();
+
+    float logComboWidth = 200 * dpiScale;
+    ImGui::SetNextItemWidth(logComboWidth);
+    if (ImGui::Combo("##LogLevel", &currentLogLevel, logLevelNames, 6))
+    {
+        g_config.set_log_level_from_int(currentLogLevel);
+        save_config(g_config, "config.json");
+    }
+
     std::string args = Utils::Process::BuildArgs(g_config);
 
     ImGui::Dummy(ImVec2(0, 8 * dpiScale));
@@ -324,7 +344,14 @@ static void drawPatcherTab(HWND hwnd, float dpiScale)
     float fieldWidth = safeWidth * 0.85f;
     float centerOffset = (safeWidth - fieldWidth) / 2.0f;
 
-    int gameSelectedInt = g_config.get_game_selected_int();
+    int gameSelectedInt = g_config.get_patch_selected_int();
+
+    ImGui::SetCursorPosX(centerOffset);
+	if (ImGui::RadioButton("GW1", &gameSelectedInt, GAME_GW1)) { g_config.set_patch_selected_from_int(GAME_GW1); save_config(g_config, "config.json"); }
+	ImGui::SameLine(0.0f, 40 * dpiScale);
+	if (ImGui::RadioButton("GW2", &gameSelectedInt, GAME_GW2)) { g_config.set_patch_selected_from_int(GAME_GW2); save_config(g_config, "config.json"); }
+	ImGui::SameLine(0.0f, 40 * dpiScale);
+	if (ImGui::RadioButton("BFN", &gameSelectedInt, GAME_BFN)) { g_config.set_patch_selected_from_int(GAME_BFN); save_config(g_config, "config.json"); }
 
     fs::path launcherDir = fs::path([] {
         char path[MAX_PATH];
