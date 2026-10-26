@@ -9,7 +9,7 @@ struct GameConfig
 {
     std::string game_path;
     std::string custom_args;
-    bool moddata_enabled = true;
+    bool moddata_enabled = false; // Mods are no longer needed by default
     std::vector<std::string> moddata_items;
     std::string moddata_selected = "Default";
 
