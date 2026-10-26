@@ -1,22 +1,15 @@
 ### Running GardenGate on Linux
 
+### Apply the protonfix (Required for all games)
+
+Put [umu-gardengate.py](../Container/umu-gardengate.py) into `~/.config/protonfixes/localfixes` and set `GAMEID=umu-gardengate` in your launcher.
+
 # Garden warfare 1
 ### 1. Install the game
 * Install the game from ea app, launch it once
 
 ### 2. Download the latest release
 Download the archive from [the releases](https://github.com/nocss42/GardenGate/releases) tab, launch the .exe in the same prefix > go to patcher and press apply patch
-
-### 3. Configure dlloverrides
-```
-WINEDLLOVERRIDES="dinput8=n,b" %command%
-```
-
-Open up winetricks > select gw1's pfx > select winecfg > go to libraries > add the following
-
-```
-dinput8
-```
 
 - Launch via the launcher
 
@@ -36,20 +29,7 @@ Use [this frosty mod manager](https://www.nexusmods.com/masseffectandromeda/mods
 
 <img src="./Assets/load_order.webp" />
 
-### 4. Configure dlloverrides
-Add the following launch option in Steam:
-```
-WINEDLLOVERRIDES="dinput8=n,b;winmm=n,b" %command% -dataPath ModData/Default
-```
-
-Open up protontricks > select gw2/bfn > select winecfg > go to libraries > add the following
-
-```
-dinput8
-winmm
-```
-
-### 5. Launch the game
+### 4. Launch the game
 - Launch via the launcher if you own the game on EA App. If you own the game on steam just pass in the launch args yourself;
 
 ### Arguments
@@ -64,7 +44,7 @@ winmm
 ### Disclaimer about machines with low ram
 
 If your frosty crashes due to oom when installing large mods run this;
-```
+```sh
 systemctl disable --now systemd-oomd
 systemctl stop --now systemd-oomd
 systemctl mask systemd-oomd

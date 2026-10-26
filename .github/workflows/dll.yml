@@ -34,4 +34,4 @@ jobs:
         with:
           name: DLL
           path: |
-            DLL/Build/Release/dinput8.dll
+            DLL/build/Release/dinput8.dll

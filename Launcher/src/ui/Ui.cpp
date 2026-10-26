@@ -298,9 +298,9 @@ static void drawLauncherTab(HWND hwnd, float dpiScale)
             std::string modDataPath =
                 (currentGame.moddata_enabled && !currentGame.moddata_selected.empty()) ? "ModData/" + currentGame.moddata_selected : "";
 
-            Utils::Process::PatchEAArgs(args, gameSelectedInt);
-            auto lr =
-                Utils::Process::LaunchAndInject(currentGame.game_path, args, "level_loader.dll", modDataPath, gameSelectedInt, g_config);
+                Utils::Process::PatchEAArgs(args, gameSelectedInt);
+                auto lr =
+                    Utils::Process::LaunchAndInject(currentGame.game_path, args, modDataPath, gameSelectedInt, g_config);
 
             if (!lr.ok)
             {

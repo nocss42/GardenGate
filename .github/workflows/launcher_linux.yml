@@ -32,13 +32,8 @@ jobs:
           sudo -u builder sh <<'EOF'
           set -e
           cd Launcher
-          mkdir build-launcher
-          cd build-launcher
-          sh -c "
-          cmake .. \
-            -DCMAKE_TOOLCHAIN_FILE=../toolchain-mingw64.cmake
-          "
-          cmake --build .
+          cmake . -B build -DCMAKE_TOOLCHAIN_FILE=../toolchain-mingw64.cmake
+          cmake --build build
           EOF
 
       - name: Upload artifact/s
@@ -46,4 +41,4 @@ jobs:
         with:
           name: Launcher
           path: |
-            Launcher/build-launcher/GardenGate_Launcher.exe
+            Launcher/build/GardenGate_Launcher.exe

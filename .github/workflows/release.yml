@@ -1,0 +1,48 @@
+name: Release
+
+on:
+  workflow_dispatch:
+  push:
+    tags:
+      - "v*"
+
+permissions:
+  contents: write
+
+jobs:
+  dll-linux:
+    uses: ./.github/workflows/dll-linux.yml
+
+  dll-launcher:
+    uses: ./.github/workflows/dll-launcher.yml
+
+  release:
+    runs-on: ubuntu-latest
+    needs: [dll-linux, dll-launcher]
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+
+      - name: Download DLL artifacts
+        uses: actions/download-artifact@v8
+        with:
+          pattern: "*"
+          path: artifacts
+          merge-multiple: true
+
+      - name: Package patches
+        run: |
+          if [ -d Launcher/patches ]; then
+            cd Launcher
+            zip -r ../artifacts/patches.zip patches
+          fi
+
+      - name: Publish release
+        uses: softprops/action-gh-release@v3
+        with:
+          tag_name: ${{ github.ref_name }}
+          files: |
+            artifacts/**/*
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

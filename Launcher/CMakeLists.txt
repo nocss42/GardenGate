@@ -69,6 +69,7 @@ FetchContent_Declare(
     GIT_REPOSITORY https://github.com/marco-calautti/xdelta.git
     GIT_TAG ab959ecd9a471a0dec5babc3de9d1e27ca25ffa8
 )
+set(CMAKE_POLICY_VERSION_MINIMUM 3.10)
 FetchContent_MakeAvailable(xdelta3_src)
 
 # ============================================================

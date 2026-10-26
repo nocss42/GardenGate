@@ -459,7 +459,7 @@ void KillProcessByName(const std::string& processName)
     CloseHandle(snapshot);
 }
 
-LaunchResult LaunchAndInject(const std::string& exePath, const std::string& args, const std::string& dllName,
+LaunchResult LaunchAndInject(const std::string& exePath, const std::string& args,
     const std::string& modDataPath, int gameType, const Config& cfg)
 {
     KillProcessByName("EADesktop.exe");
@@ -545,48 +545,9 @@ LaunchResult LaunchAndInject(const std::string& exePath, const std::string& args
 
         if (gameType == 0)
         {
-            fs::path dllPath = gameDir / dllName;
-            if (!fs::exists(dllPath))
-            {
-                lr.error = dllName + " not found next to the game exe.";
-                lr.ok = false;
-                return lr;
-            }
-
-            const wchar_t* Gw1Title = L"PVZ Garden Warfare";
-            DWORD pid = 0;
-            int waited = 0;
-            while (waited < 30000)
-            {
-                HWND hwnd = FindWindowW(nullptr, Gw1Title);
-                if (hwnd)
-                {
-                    GetWindowThreadProcessId(hwnd, &pid);
-                    if (pid)
-                        break;
-                }
-                Sleep(500);
-                waited += 500;
-            }
-
-            if (!pid)
-            {
-                lr.error = "Timed out waiting for GW1 window.";
-                lr.ok = false;
-                return lr;
-            }
-
-            Sleep(4000);
-
-            if (!InjectDLL(pid, dllPath.string()))
-            {
-                lr.error = "DLL injection into GW1 failed.";
-                lr.ok = false;
-                return lr;
-            }
+            // DLL injection disabled - handled by dinput8 proxy in DLL/
+            return lr;
         }
-
-        return lr;
     }
 
     bool isSteamCopy = (gameType == 1 || gameType == 2) && hasSteamAppId;
@@ -716,45 +677,8 @@ LaunchResult LaunchAndInject(const std::string& exePath, const std::string& args
 
     if (gameType == 0)
     {
-        fs::path dllPath = fs::path(exePath).parent_path() / dllName;
-        if (!fs::exists(dllPath))
-        {
-            lr.error = dllName + " not found next to the game exe.";
-            lr.ok = false;
-            return lr;
-        }
-
-        const wchar_t* Gw1Title = L"PVZ Garden Warfare";
-        DWORD pid = 0;
-        int waited = 0;
-        while (waited < 30000)
-        {
-            HWND hwnd = FindWindowW(nullptr, Gw1Title);
-            if (hwnd)
-            {
-                GetWindowThreadProcessId(hwnd, &pid);
-                if (pid)
-                    break;
-            }
-            Sleep(500);
-            waited += 500;
-        }
-
-        if (!pid)
-        {
-            lr.error = "Timed out waiting for GW1 window.";
-            lr.ok = false;
-            return lr;
-        }
-
-        Sleep(4000);
-
-        if (!InjectDLL(pid, dllPath.string()))
-        {
-            lr.error = "DLL injection into GW1 failed.";
-            lr.ok = false;
-            return lr;
-        }
+        // DLL injection disabled - handled by dinput8 proxy in DLL/
+        return lr;
     }
 
     return lr;

@@ -69,8 +69,8 @@ void RestoreEAArgs();
 
 bool handleCLI();
 
-LaunchResult LaunchAndInject(const std::string& exePath, const std::string& args, const std::string& dllName,
-    const std::string& modDataPath, int gameType, const Config& cfg);
+LaunchResult LaunchAndInject(const std::string& exePath, const std::string& args, const std::string& modDataPath,
+    int gameType, const Config& cfg);
 } // namespace Process
 
 namespace FileUtil

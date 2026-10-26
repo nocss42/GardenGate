@@ -12,9 +12,11 @@ EXPOSE 27200/udp
 ENV DEBIAN_FRONTEND=noninteractive
 ENV RUSTFLAGS="-C target-feature=+crt-static"
 ENV CARGO_TERM_COLOR=always
+ENV GAMEID=umu-gardengate
 ENV GG_CONSOLE=1
 ENV GG_LOG=Dedicated
 ENV GG_LOG_LEVEL=Debug
+ENV MAXIMA_LOG_LEVEL=debug
 ENV MAXIMA_DISABLE_QRC=1
 #ENV MAXIMA_DISABLE_WINE_VERIFICATION=1
 #ENV MAXIMA_WINE_COMMAND="/usr/bin/wine"
@@ -71,7 +73,7 @@ RUN apt-get update && apt-get install -y \
     unzip \
     lib32gcc-s1 \
     lib32stdc++6 \
-    libc6-i386 
+    libc6-i386
 
 # Locale
 RUN sudo locale-gen en_US.UTF-8 \
@@ -108,7 +110,7 @@ RUN export PATH="/root/.cargo/bin:$PATH" \
 WORKDIR /build
 RUN git clone --recursive https://github.com/sjp761/maxima -b belleza-rebase \
  && cd maxima \
- && git checkout 0964d9ba8634f1e4775b53ec2092d8b4f489d426
+ && git checkout ba061971b40669879f52707ab6d22d0695f5b7fe
 
 WORKDIR /build/maxima
 RUN export PATH="/root/.cargo/bin:$PATH" \
@@ -137,6 +139,7 @@ RUN echo "alias kill_exe='sudo pkill -9 -f "\\.exe"'" >> $HOME/.bashrc
 RUN mkdir -p \
     "$HOME/.cache" \
     "$HOME/.config/tmux" \
+    "$HOME/.config/protonfixes/localfixes" \
     "$HOME/.local/share/applications" \
     "$HOME/.local/share/maxima/wine/prefix" \
     "$HOME/.local/share/maxima/wine/umu"
@@ -161,5 +164,8 @@ COPY --chown=maxima:maxima auth.toml /home/maxima/.local/share/maxima/auth.toml
 
 # regedit
 COPY --chown=maxima:maxima regs/*.reg /home/maxima/
+
+# protonfix
+COPY --chown=maxima:maxima umu-gardengate.py /home/maxima/.config/protonfixes/localfixes/
 
 WORKDIR /opt/games

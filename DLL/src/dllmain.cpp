@@ -143,6 +143,25 @@ bool hookDinput8()
     return g_originalDirectInput8Create != nullptr;
 }
 
+bool hookLevelLoader()
+{
+    char exePath[MAX_PATH];
+    if (!GetModuleFileNameA(nullptr, exePath, MAX_PATH))
+        return false;
+
+    std::string exeDir = exePath;
+    size_t lastSlash = exeDir.find_last_of("\\/");
+    if (lastSlash != std::string::npos)
+        exeDir = exeDir.substr(0, lastSlash);
+
+    std::string levelLoaderPath = exeDir + "\\level_loader.dll";
+    if (GetFileAttributesA(levelLoaderPath.c_str()) == INVALID_FILE_ATTRIBUTES)
+        return false;
+
+    HMODULE hMod = LoadLibraryA(levelLoaderPath.c_str());
+    return hMod != nullptr;
+}
+
 BOOL WINAPI DllMain(HINSTANCE hinstDLL, DWORD fdwReason, LPVOID lpvReserved [[maybe_unused]])
 {
     switch (fdwReason)
@@ -152,6 +171,8 @@ BOOL WINAPI DllMain(HINSTANCE hinstDLL, DWORD fdwReason, LPVOID lpvReserved [[ma
 
         if (!hookDinput8())
             std::cerr << "Failed to hook dinput8.dll" << std::endl;
+
+        hookLevelLoader();
 
         Initialize();
         wsaStartup();

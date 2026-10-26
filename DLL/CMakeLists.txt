@@ -45,6 +45,7 @@ FetchContent_Declare(
   GIT_TAG v1.15.1
 )
 
+set(CMAKE_POLICY_VERSION_MINIMUM 3.10)
 FetchContent_MakeAvailable(minhook spdlog)
 
 add_library(${PROJECT_NAME} SHARED)

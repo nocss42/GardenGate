@@ -34,4 +34,4 @@ jobs:
         with:
           name: Launcher
           path: |
-            Launcher/Build/Release
+            Launcher/build/Release
