@@ -16,23 +16,19 @@ on:
           - "false"
           - "true"
 
-  push:
-    tags:
-      - "v*"
-
 permissions:
   contents: write
 
 jobs:
   dll-linux:
-    uses: ./.github/workflows/dll-linux.yml
+    uses: ./.github/workflows/dll_linux.yml
 
   dll-launcher:
-    uses: ./.github/workflows/dll-launcher.yml
+    uses: ./.github/workflows/launcher_linux.yml
 
   release:
     runs-on: ubuntu-latest
-    needs: [dll-linux, dll-launcher]
+    needs: [dll_linux, launcher_linux]
 
     steps:
       - name: Checkout
