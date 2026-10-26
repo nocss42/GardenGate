@@ -34,26 +34,32 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v6
 
-      - name: Download DLL artifacts
+      - name: Download DLL and launcher artifacts
         uses: actions/download-artifact@v8
         with:
           pattern: "*"
           path: artifacts
           merge-multiple: true
 
-      - name: Package patches
+      - name: Package GardenGate
         run: |
+          mkdir -p package
+
+          find artifacts -type f -exec cp {} package/ \;
+
           if [ -d Launcher/patches ]; then
-            cd Launcher
-            zip -r ../artifacts/patches.zip patches
+            cp -r Launcher/patches package/
           fi
+
+          cd package
+          zip -r ../GardenGate.zip .
+          cd ..
 
       - name: Publish release
         uses: softprops/action-gh-release@v3
         with:
           tag_name: ${{ inputs.release_tag || github.ref_name }}
           prerelease: ${{ inputs.prerelease == 'true' }}
-          files: |
-            artifacts/**/*
+          files: GardenGate.zip
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
