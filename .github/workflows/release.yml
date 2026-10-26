@@ -20,10 +20,10 @@ permissions:
   contents: write
 
 jobs:
-  dll-linux:
+  dll_linux:
     uses: ./.github/workflows/dll_linux.yml
 
-  dll-launcher:
+  launcher_linux:
     uses: ./.github/workflows/launcher_linux.yml
 
   release:
