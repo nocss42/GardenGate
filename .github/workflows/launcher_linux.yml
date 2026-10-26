@@ -33,7 +33,7 @@ jobs:
           set -e
           cd Launcher
           cmake . -B build -DCMAKE_TOOLCHAIN_FILE=../toolchain-mingw64.cmake
-          cmake --build build
+          cmake --build build --config Release --parallel "$(nproc)"
           EOF
 
       - name: Upload artifact/s

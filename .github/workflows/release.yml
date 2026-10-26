@@ -2,6 +2,20 @@ name: Release
 
 on:
   workflow_dispatch:
+    inputs:
+      release_tag:
+        description: "Release tag (example: 1.0.0)"
+        required: false
+        type: string
+      prerelease:
+        description: "Mark as prerelease"
+        required: false
+        default: "false"
+        type: choice
+        options:
+          - "false"
+          - "true"
+
   push:
     tags:
       - "v*"
@@ -41,7 +55,8 @@ jobs:
       - name: Publish release
         uses: softprops/action-gh-release@v3
         with:
-          tag_name: ${{ github.ref_name }}
+          tag_name: ${{ inputs.release_tag || github.ref_name }}
+          prerelease: ${{ inputs.prerelease == 'true' }}
           files: |
             artifacts/**/*
         env:

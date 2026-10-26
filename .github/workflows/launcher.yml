@@ -25,7 +25,7 @@ jobs:
           call "%ProgramFiles(x86)%\Microsoft Visual Studio\2022\BuildTools\VC\Auxiliary\Build\vcvars64.bat"
           cd Launcher
           cmake . -B build -G "Visual Studio 18 2026"
-          cmake --build build --config Release
+          cmake --build build --config Release --parallel %NUMBER_OF_PROCESSORS%
 
       - name: Upload artifact/s
         uses: actions/upload-artifact@v6

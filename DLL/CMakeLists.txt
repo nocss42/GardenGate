@@ -83,8 +83,8 @@ target_compile_definitions(${PROJECT_NAME} PRIVATE
 
 target_compile_options(${PROJECT_NAME} PRIVATE
   $<$<CXX_COMPILER_ID:MSVC>:/W4 /WX>
-  $<$<CXX_COMPILER_ID:Clang>:-Wall -Wextra -Wpedantic>
-  $<$<CXX_COMPILER_ID:GNU>:-Wall -Wextra -Wpedantic>
+  $<$<CXX_COMPILER_ID:Clang>:-w>
+  $<$<CXX_COMPILER_ID:GNU>:-w>
 )
 
 # ============================================================

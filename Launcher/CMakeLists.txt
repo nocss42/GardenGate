@@ -129,8 +129,8 @@ target_compile_definitions(${PROJECT_NAME} PRIVATE
 
 target_compile_options(${PROJECT_NAME} PRIVATE
     $<$<CXX_COMPILER_ID:MSVC>:/W3 /Zc:preprocessor>
-    $<$<CXX_COMPILER_ID:Clang>:-Wall -Wextra>
-    $<$<CXX_COMPILER_ID:GNU>:-Wall -Wextra>
+    $<$<CXX_COMPILER_ID:Clang>:-w>
+    $<$<CXX_COMPILER_ID:GNU>:-w>
 )
 
 # ============================================================

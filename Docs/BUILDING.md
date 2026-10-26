@@ -1,5 +1,4 @@
 # Building
-
 ## Windows
 
 ### DLL
@@ -7,7 +6,7 @@
 ```sh
 cd DLL
 cmake . -B build -G "Visual Studio 18 2026"
-cmake --build build --config Release
+cmake --build build --config Release --parallel %NUMBER_OF_PROCESSORS%
 ```
 
 ### Launcher
@@ -15,7 +14,7 @@ cmake --build build --config Release
 ```sh
 cd Launcher
 cmake . -B build -G "Visual Studio 18 2026"
-cmake --build build --config Release
+cmake --build build --config Release --parallel %NUMBER_OF_PROCESSORS%
 ```
 
 ## Linux
@@ -30,7 +29,7 @@ git clone https://github.com/mstorsjo/msvc-wine
 ./msvc-wine/install.sh $WINDOWS_SDK_PATH
 export PATH=$WINDOWS_SDK_PATH/bin/x64:$PATH
 cmake -S . -B build -DCMAKE_BUILD_TYPE=Release -DWINDOWS_SDK_PATH=$WINDOWS_SDK_PATH -DCMAKE_TOOLCHAIN_FILE=./toolchain-linux-winsdk.cmake
-make -C build -j$(nproc)
+cmake --build build --config Release --parallel "$(nproc)"
 ```
 
 ### Launcher
@@ -38,7 +37,7 @@ make -C build -j$(nproc)
 ```sh
 cd Launcher
 cmake . -B build -DCMAKE_TOOLCHAIN_FILE=../toolchain-mingw64.cmake
-cmake --build build
+cmake --build build --config Release --parallel "$(nproc)"
 ```
 
 See [the workflows](../.github/workflows/)
