@@ -24,10 +24,8 @@ jobs:
         run: |
           call "%ProgramFiles(x86)%\Microsoft Visual Studio\18\BuildTools\VC\Auxiliary\Build\vcvars64.bat"
           cd DLL
-          mkdir build
-          cd build
-          cmake .. -G "Visual Studio 18 2026"
-          cmake --build . --config Release
+          cmake . -B build -G "Visual Studio 18 2026"
+          cmake --build build --config Release
 
       - name: Upload artifact/s
         uses: actions/upload-artifact@v6
