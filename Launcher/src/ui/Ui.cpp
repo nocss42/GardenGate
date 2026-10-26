@@ -543,8 +543,7 @@ static void drawMiscTab(HWND hwnd, float dpiScale)
     ImGui::PopStyleColor();
     ImGui::Dummy(ImVec2(0, 15 * dpiScale));
 
-    const std::vector<std::string> credits = { "RaT", "nocss", "twig", "blueballoon", "eshaydev", "gargos69junior", "werzdragon",
-        "megadwarf47" };
+    const std::vector<std::string> credits = { "RaT", "nocss", "twig", "blueballoon", "eshaydev", "gargos69junior", "megadwarf47" };
     float nameSpacing = 25.0f * dpiScale;
     float totalCreditsWidth = 0.0f;
 
