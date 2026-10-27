@@ -88,11 +88,6 @@ Import required registry files:
 
 ```sh
 WINEPREFIX=/opt/games/gw2_pfx umu-run regedit.exe \
-$HOME/dll_overrides.reg
-```
-
-```sh
-WINEPREFIX=/opt/games/gw2_pfx umu-run regedit.exe \
 $HOME/gw2.reg
 ```
 
@@ -112,7 +107,7 @@ wlheadless-run -c cage -- umu-run /opt/games/gg/GardenGate_Launcher.exe -patch g
 Edit server settings as you wish (We still haven't implemented this) :
 
 ```sh
-vim /opt/games/gw2/ServerSettings.txt
+vim /opt/games/gw2/Settings.txt
 ```
 
 ### Exe names

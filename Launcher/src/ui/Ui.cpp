@@ -575,19 +575,19 @@ static void drawMiscTab(HWND hwnd, float dpiScale)
     ImGui::SetWindowFontScale(1.0f);
     ImGui::Dummy(ImVec2(0, 15 * dpiScale));
 
-    static const char* presetNames[] = { "Default", "Purple", "Blue", "Red" };
-    static const char* displayNames[] = { "Default", "Purple", "Blue", "Red", "Custom" };
+    static const char* presetNames[] = { "Default", "Purple", "Blue", "Red", "Yellow", "Orange", "Aqua" };
+    static const char* displayNames[] = { "Default", "Purple", "Blue", "Red", "Yellow", "Orange", "Aqua", "Custom" };
     static int currentPreset = 0;
 
     float comboWidth = 200 * dpiScale;
     ImGui::SetCursorPosX((safeWidth - comboWidth) * 0.5f);
     ImGui::SetNextItemWidth(comboWidth);
 
-    const char* previewValue = (currentPreset >= 0 && currentPreset < 4) ? displayNames[currentPreset] : displayNames[4];
+    const char* previewValue = (currentPreset >= 0 && currentPreset < 7) ? displayNames[currentPreset] : displayNames[7];
 
     if (ImGui::BeginCombo("##Presets", previewValue))
     {
-        for (int i = 0; i < 4; i++)
+        for (int i = 0; i < 7; i++)
         {
             bool isSelected = (currentPreset == i);
             if (ImGui::Selectable(presetNames[i], isSelected))
@@ -614,6 +614,21 @@ static void drawMiscTab(HWND hwnd, float dpiScale)
                     g_config.baseColor = ImVec4(0.8f, 0.1f, 0.1f, 1.0f);
                     g_config.baseHover = ImVec4(0.7f, 0.1f, 0.1f, 1.0f);
                     g_config.baseActive = ImVec4(0.6f, 0.1f, 0.1f, 1.0f);
+                    break;
+                case 4:
+                    g_config.baseColor = ImVec4(1.0f, 0.8f, 0.0f, 1.0f);
+                    g_config.baseHover = ImVec4(0.9f, 0.7f, 0.0f, 1.0f);
+                    g_config.baseActive = ImVec4(0.8f, 0.6f, 0.0f, 1.0f);
+                    break;
+                case 5:
+                    g_config.baseColor = ImVec4(1.0f, 0.5f, 0.0f, 1.0f);
+                    g_config.baseHover = ImVec4(0.9f, 0.4f, 0.0f, 1.0f);
+                    g_config.baseActive = ImVec4(0.8f, 0.3f, 0.0f, 1.0f);
+                    break;
+                case 6:
+                    g_config.baseColor = ImVec4(0.0f, 0.75f, 0.8f, 1.0f);
+                    g_config.baseHover = ImVec4(0.0f, 0.65f, 0.7f, 1.0f);
+                    g_config.baseActive = ImVec4(0.0f, 0.55f, 0.6f, 1.0f);
                     break;
                 }
                 setupStyle(dpiScale);
