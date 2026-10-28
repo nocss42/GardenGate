@@ -23,11 +23,13 @@ ENV MAXIMA_DISABLE_QRC=1
 
 # Proton stuff
 ENV PROTON_ENABLE_WAYLAND=1
-ENV WINEPREFIX=/home/maxima/.local/share/maxima/wine/prefix
 ENV PROTONPATH=GE-Proton
+ENV MAXIMA_UMU_LOCATION=/home/maxima/.local/share/maxima/wine/umu/umu-custom.py
 #ENV PROTON_USE_WINED3D=1
 #ENV PROTON_USE_NTSYNC=1
 #ENV PROTON_NO_ESYNC=1
+
+# ENV WINEPREFIX=/home/maxima/.local/share/maxima/wine/prefix # No longer needs to be set as maxima now handles prefixes
 
 # Display server stuff
 #ENV WAYLAND_DISPLAY=wayland-1
@@ -108,7 +110,7 @@ RUN export PATH="/root/.cargo/bin:$PATH" \
 
 # Build maxima (gotta keep doing so till their first release)
 WORKDIR /build
-RUN git clone --recursive https://github.com/sjp761/maxima -b belleza-rebase \
+RUN git clone https://github.com/sjp761/maxima -b belleza-rebase \
  && cd maxima \
  && git checkout ba061971b40669879f52707ab6d22d0695f5b7fe
 
@@ -141,15 +143,18 @@ RUN mkdir -p \
     "$HOME/.config/tmux" \
     "$HOME/.config/protonfixes/localfixes" \
     "$HOME/.local/share/applications" \
-    "$HOME/.local/share/maxima/wine/prefix" \
-    "$HOME/.local/share/maxima/wine/umu"
+    "$HOME/.local/share/maxima/wine/umu" \
+    "$HOME/.local/share/Steam/compatibilitytools.d"
 
+# Simon said this is no longer needed
 # Add umu to the path it expects it to be (because it doesn't prioritize PATH)
-RUN ln -s /usr/bin/umu-run "$HOME/.local/share/maxima/wine/umu/umu-run"
+#RUN ln -s /usr/bin/umu-run "$HOME/.local/share/maxima/wine/umu/umu-run"
 
 # games dir
-RUN sudo mkdir -p /opt/games/ /opt/games/gg \
- && sudo chmod 777 /opt/games /opt/games/gg
+RUN mkdir -p /home/maxima/Games /home/maxima/Games/GardenGate
+
+# Not sure if needed
+# && sudo chmod 777 /home/maxima/Games /home/maxima/GardenGate
 
 # Script
 COPY --chown=maxima:maxima maxima.sh /home/maxima/maxima.sh
@@ -167,5 +172,11 @@ COPY --chown=maxima:maxima regs/*.reg /home/maxima/
 
 # protonfix
 COPY --chown=maxima:maxima umu-gardengate.py /home/maxima/.config/protonfixes/localfixes/
+
+# custom umu
+COPY --chown=maxima:maxima --chmod=755 umu-custom.py /home/maxima/.local/share/maxima/wine/umu/umu-custom.py
+
+# init proton/steamrt
+RUN umu-run wineserver -k
 
 WORKDIR /opt/games

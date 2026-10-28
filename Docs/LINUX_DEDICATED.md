@@ -45,7 +45,7 @@ Run the container with:
 ```sh
 podman run --replace -it \
   --name gardengate \
-  -v $HOME/Games:/opt/games \
+  -v $HOME/Games:/home/maxima/Games \
   --device /dev/dri \
   -p 25200:25200/tcp \
   -p 25200:25200/udp \
@@ -70,8 +70,7 @@ Create the dir for the game you're going to install:
 e.g.
 
 ```sh
-sudo chmod 777 /opt/games
-mkdir -p /opt/games/gw2 /opt/games/gw2_pfx
+mkdir -p /home/maxima/Games/gw2 /home/maxima/Games/gw2_pfx
 ```
 
 Install the game via maxima:
@@ -87,7 +86,7 @@ wlheadless-run -c cage -- $HOME/maxima.sh
 Import required registry files:
 
 ```sh
-WINEPREFIX=/opt/games/gw2_pfx umu-run regedit.exe \
+WINEPREFIX=/home/maxima/Games/gw2_pfx umu-run regedit \
 $HOME/gw2.reg
 ```
 
@@ -97,9 +96,9 @@ Patch the game by running;
 
 ```sh
 curl -L https://github.com/nocss42/GardenGate/releases/latest/download/GardenGate.zip \
-     -o /opt/games/GardenGate.zip
-unzip /opt/games/GardenGate.zip -d /opt/games/gg
-wlheadless-run -c cage -- umu-run /opt/games/gg/GardenGate_Launcher.exe -patch gw2 /opt/games/gw2
+     -o /home/maxima/Games/GardenGate.zip
+unzip /home/maxima/Games/GardenGate.zip -d /home/maxima/Games/GardenGate
+wlheadless-run -c cage -- umu-run /home/maxima/Games/GardenGate/GardenGate_Launcher.exe -patch gw2 /home/maxima/Games/gw2
 ```
 
 ### Server Configuration
@@ -107,10 +106,10 @@ wlheadless-run -c cage -- umu-run /opt/games/gg/GardenGate_Launcher.exe -patch g
 Edit server settings as you wish (We still haven't implemented this) :
 
 ```sh
-vim /opt/games/gw2/Settings.txt
+vim /home/maxima/Games/gw2/Settings.txt
 ```
 
-### Exe names
+### Executable names
 ```
 PVZ.Main_Win64_Retail.exe
 GW2.Main_Win64_Retail.exe
@@ -128,7 +127,7 @@ Launch the server;
 
 ```sh
 wlheadless-run -c cage -- maxima-cli launch \
-  --game-path /opt/games/gw2/GW2.Main_Win64_Retail.exe \
+  --game-path /home/maxima/Games/gw2/GW2.Main_Win64_Retail.exe \
   --game-args=-server plants-vs-zombies-garden-warfare-2
 ```
 
@@ -150,15 +149,18 @@ Download frosty inside the container like so
 
 ```sh
 # GW1
-wget -O /opt/games/GW1_FrostyModManager.zip https://github.com/Twig6943/FrostyToolsuiteGW1Linux/releases/latest/download/PVZGW_FrostyModManager.zip
-unzip /opt/games/GW1_FrostyModManager.zip -d /opt/games
+wget -O /home/maxima/Games/GW1_FrostyModManager.zip https://github.com/Twig6943/FrostyToolsuiteGW1Linux/releases/latest/download/PVZGW_FrostyModManager.zip
+mkdir -p /home/maxima/Games/GW1_FrostyModManager
+unzip /home/maxima/Games/GW1_FrostyModManager.zip -d /home/maxima/Games/GW1_FrostyModManager
+
 # GW2
-wget -O /opt/games/GW2_FrostyModManager.zip https://github.com/nocss42/GardenGate/releases/download/frosty.mirror/FrostyModManager-1190-1-0-6-3-s-1753719610.zip
-mkdir -p /opt/games/GW2_FrostyModManager
-unzip /opt/games/GW2_FrostyModManager.zip -d /opt/games/GW2_FrostyModManager
+wget -O /home/maxima/Games/GW2_FrostyModManager.zip https://github.com/nocss42/GardenGate/releases/download/frosty.mirror/FrostyModManager-1190-1-0-6-3-s-1753719610.zip
+mkdir -p /home/maxima/Games/GW2_FrostyModManager
+unzip /home/maxima/Games/GW2_FrostyModManager.zip -d /home/maxima/Games/GW2_FrostyModManager
 # BFN
-wget -O /opt/games/BFN_FrostyModManager.zip https://github.com/Twig6943/FrostyToolsuiteBFNLinux/releases/latest/download/FrostyModManager.zip
-unzip /opt/games/BFN_FrostyModManager.zip -d /opt/games
+wget -O /home/maxima/Games/BFN_FrostyModManager.zip https://github.com/Twig6943/FrostyToolsuiteBFNLinux/releases/latest/download/FrostyModManager.zip
+mkdir -p /home/maxima/Games/BFN_FrostyModManager
+unzip /home/maxima/Games/BFN_FrostyModManager.zip -d /home/maxima/Games/BFN_FrostyModManager
 ```
 
 Outside of podman, install umu and ge-proton for your distro like so (these commands are here as reference please go ahead and grab the latest version of everything);
@@ -184,7 +186,7 @@ To start modded server, inside the container run;
 ```sh
 wlheadless-run -c cage -- \
   maxima-cli launch \
-  --game-path "/opt/games/gw2/GW2.Main_Win64_Retail.exe" \
+  --game-path "/home/maxima/Games/gw2/GW2.Main_Win64_Retail.exe" \
   --game-args="-server" \
   --game-args="-dataPath" \
   --game-args="ModData/Default" \
