@@ -79,14 +79,15 @@ Install the game via maxima:
 wlheadless-run -c cage -- $HOME/maxima.sh
 ```
 
-(Press `Ctrl+C` once completed.)
+(Press `Ctrl+C` once completed. Should see `[maxima_cli] - Download took x.x`)
 
 ### Registry Configuration
 
 Import required registry files:
 
 ```sh
-WINEPREFIX=/home/maxima/Games/gw2_pfx umu-run regedit \
+WINEPREFIX=/home/maxima/Games/gw2_pfx \
+wlheadless-run -c cage -- umu-run regedit \
 $HOME/gw2.reg
 ```
 
@@ -116,7 +117,7 @@ GW2.Main_Win64_Retail.exe
 PVZBattleforNeighborville.exe
 ```
 
-### Maxima game slugs
+### Maxima slugs
 ```
 plants-vs-zombies-garden-warfare
 plants-vs-zombies-garden-warfare-2
@@ -174,7 +175,6 @@ sudo dpkg --add-architecture i386 # needed for debian-based
 wget -O $HOME/umu.deb https://github.com/Open-Wine-Components/umu-launcher/releases/download/1.3.0/python3-umu-launcher_1.3.0-1_amd64_debian-13.deb
 sudo dpkg -i $HOME/umu.deb
 
-sudo chmod -R 777 $HOME/Games
 umu-run $HOME/Games/GW2_FrostyModManager/FrostyModManager.exe
 ```
 

@@ -6,11 +6,11 @@
 #endif
 
 #ifndef GG_VERSION_MINOR
-    #define GG_VERSION_MINOR 0
+    #define GG_VERSION_MINOR 2
 #endif
 
 #ifndef GG_VERSION_PATCH
-    #define GG_VERSION_PATCH 0
+    #define GG_VERSION_PATCH 3
 #endif
 
 #define GG_STRINGIFY_IMPL(x) #x

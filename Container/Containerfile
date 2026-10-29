@@ -14,7 +14,7 @@ ENV RUSTFLAGS="-C target-feature=+crt-static"
 ENV CARGO_TERM_COLOR=always
 ENV GAMEID=umu-gardengate
 ENV GG_CONSOLE=1
-ENV GG_LOG=Dedicated
+#ENV GG_LOG=Dedicated
 ENV GG_LOG_LEVEL=Debug
 ENV MAXIMA_LOG_LEVEL=debug
 ENV MAXIMA_DISABLE_QRC=1
@@ -24,10 +24,15 @@ ENV MAXIMA_DISABLE_QRC=1
 # Proton stuff
 ENV PROTON_ENABLE_WAYLAND=1
 ENV PROTONPATH=GE-Proton
-ENV MAXIMA_UMU_LOCATION=/home/maxima/.local/share/maxima/wine/umu/umu-custom.py
+#ENV MAXIMA_UMU_LOCATION=/home/maxima/.local/share/maxima/wine/umu/umu-custom.py # get rid of this
 #ENV PROTON_USE_WINED3D=1
 #ENV PROTON_USE_NTSYNC=1
 #ENV PROTON_NO_ESYNC=1
+
+# These seem to be required to make the bundled DirectX installer not error out.
+ENV SteamAppId 0
+ENV STEAM_COMPAT_APP_ID 0
+ENV SteamGameId 0
 
 # ENV WINEPREFIX=/home/maxima/.local/share/maxima/wine/prefix # No longer needs to be set as maxima now handles prefixes
 
@@ -45,11 +50,13 @@ RUN apt-get update && apt-get install -y \
     sudo \
     nano \
     vim \
+    micro \
     git \
     strace \
     htop \
     btop \
     tmux \
+    screen \
     curl \
     wget \
     cargo \
@@ -136,6 +143,7 @@ USER maxima
 # aliases
 RUN echo "alias btop='btop --force-utf'" >> $HOME/.bashrc
 RUN echo "alias kill_exe='sudo pkill -9 -f "\\.exe"'" >> $HOME/.bashrc
+RUN echo "shell /bin/bash" >> $HOME/.screenrc
 
 # Create the required dirs
 RUN mkdir -p \
@@ -152,9 +160,6 @@ RUN mkdir -p \
 
 # games dir
 RUN mkdir -p /home/maxima/Games /home/maxima/Games/GardenGate
-
-# Not sure if needed
-# && sudo chmod 777 /home/maxima/Games /home/maxima/GardenGate
 
 # Script
 COPY --chown=maxima:maxima maxima.sh /home/maxima/maxima.sh
@@ -177,6 +182,6 @@ COPY --chown=maxima:maxima umu-gardengate.py /home/maxima/.config/protonfixes/lo
 COPY --chown=maxima:maxima --chmod=755 umu-custom.py /home/maxima/.local/share/maxima/wine/umu/umu-custom.py
 
 # init proton/steamrt
-RUN umu-run wineserver -k
+RUN umu-run wineboot -u
 
-WORKDIR /opt/games
+WORKDIR /home/maxima/Games
