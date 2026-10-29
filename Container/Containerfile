@@ -102,23 +102,6 @@ RUN set -eux; \
     apt-get install -y /tmp/umu-launcher.deb; \
     rm -f /tmp/umu-launcher.deb;
 
-# ProtonPlus & proton-CachyOS
-RUN set -eux; \
-    mkdir -p "$HOME/AppImages" \
-        "$HOME/.local/share/Steam/compatibilitytools.d/"; \
-    touch "$HOME/.local/share/Steam/steamclient.dll" \
-        "$HOME/.local/share/Steam/steamclient64.dll"; \
-    ver="$( \
-        curl -sIL https://github.com/Vysp3r/ProtonPlus/releases/latest \
-        | grep -i '^location:' \
-        | sed -E 's|.*/tag/||' \
-        | tr -d '\r' \
-    )"; \
-    curl -fL -o "$HOME/AppImages/ProtonPlus.AppImage" \
-        "https://github.com/Vysp3r/ProtonPlus/releases/download/${ver}/ProtonPlus-${ver#v}-anylinux-x86_64.AppImage"; \
-    chmod +x "$HOME/AppImages/ProtonPlus.AppImage"; \
-    "$HOME/AppImages/ProtonPlus.AppImage" install steam-system proton-cachyos latest
-
 RUN curl https://sh.rustup.rs -sSf | sh -s -- -y --default-toolchain nightly
 
 RUN export PATH="/root/.cargo/bin:$PATH" \
@@ -164,6 +147,24 @@ RUN mkdir -p \
     "$HOME/Games" \
     "$HOME/Games/GardenGate"
 
+# ProtonPlus & proton-CachyOS (steam dlls are generated bc protonplus checks for their existence)
+# ge-proton related issue https://github.com/GloriousEggroll/proton-ge-custom/issues/901
+RUN set -eux; \
+    mkdir -p "$HOME/AppImages" \
+        "$HOME/.local/share/Steam/compatibilitytools.d/"; \
+    touch "$HOME/.local/share/Steam/steamclient.dll" \
+        "$HOME/.local/share/Steam/steamclient64.dll"; \
+    ver="$( \
+        curl -sIL https://github.com/Vysp3r/ProtonPlus/releases/latest \
+        | grep -i '^location:' \
+        | sed -E 's|.*/tag/||' \
+        | tr -d '\r' \
+    )"; \
+    curl -fL -o "$HOME/AppImages/ProtonPlus.AppImage" \
+        "https://github.com/Vysp3r/ProtonPlus/releases/download/${ver}/ProtonPlus-${ver#v}-anylinux-x86_64.AppImage"; \
+    chmod +x "$HOME/AppImages/ProtonPlus.AppImage"; \
+    "$HOME/AppImages/ProtonPlus.AppImage" install steam-system proton-cachyos latest
+
 # Script
 COPY --chown=maxima:maxima --chmod=755 maxima.sh /home/maxima/maxima.sh
 
@@ -180,6 +181,6 @@ COPY --chown=maxima:maxima regs/*.reg /home/maxima/
 COPY --chown=maxima:maxima umu-gardengate.py /home/maxima/.config/protonfixes/localfixes/
 
 # init proton/steamrt
-RUN umu-run wineboot -u
+#RUN umu-run wineboot -u
 
 WORKDIR /home/maxima/Games
