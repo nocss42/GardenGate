@@ -113,6 +113,9 @@ void Initialize()
 
 DWORD WINAPI ggThread(LPVOID hInstance)
 {
+    Initialize();
+    wsaStartup();
+
     g_program->run();
     g_program->uninitialize();
 
@@ -173,9 +176,6 @@ BOOL WINAPI DllMain(HINSTANCE hinstDLL, DWORD fdwReason, LPVOID lpvReserved [[ma
             std::cerr << "Failed to hook dinput8.dll" << std::endl;
 
         hookLevelLoader();
-
-        Initialize();
-        wsaStartup();
 
         HANDLE threadHandle = CreateThread(nullptr, 0, ggThread, hinstDLL, 0, nullptr);
         if (threadHandle)

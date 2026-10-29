@@ -51,6 +51,7 @@ inline constexpr bool IsDebugBuild = false;
 
 inline std::shared_ptr<spdlog::logger> g_logger;
 inline bool g_console_enabled = false;
+inline bool g_console_allocated = false;
 
 [[nodiscard]] inline spdlog::level::level_enum to_spdlog(LogLevel lvl) noexcept
 {
@@ -223,14 +224,25 @@ inline void init()
 
     if (detail::g_console_enabled)
     {
-        AllocConsole();
+
+        detail::g_console_allocated = AllocConsole() != FALSE;
+
         SetConsoleTitleA(GG_CONSOLE_TITLE);
+        FILE* console_file = nullptr;
+        freopen_s(&console_file, "CONIN$", "r", stdin);
+        freopen_s(&console_file, "CONOUT$", "w", stdout);
+        freopen_s(&console_file, "CONOUT$", "w", stderr);
+
         HANDLE hOut = GetStdHandle(STD_OUTPUT_HANDLE);
         DWORD mode = 0;
         GetConsoleMode(hOut, &mode);
         SetConsoleMode(hOut, mode | ENABLE_VIRTUAL_TERMINAL_PROCESSING);
         SetConsoleOutputCP(CP_UTF8);
     }
+
+    // Always create the console sink (on Wine/Linux stdout goes to terminal anyway)
+    // Set WINEDEBUG=-all if you wanna see output this way
+    detail::g_console_enabled = true;
 
     // Default to GardenGate.log when GG_LOG is not set.
     char log_name[256]{};

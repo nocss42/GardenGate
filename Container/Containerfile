@@ -181,6 +181,6 @@ COPY --chown=maxima:maxima regs/*.reg /home/maxima/
 COPY --chown=maxima:maxima umu-gardengate.py /home/maxima/.config/protonfixes/localfixes/
 
 # init proton/steamrt
-#RUN umu-run wineboot -u
+RUN umu-run wineboot -u
 
 WORKDIR /home/maxima/Games

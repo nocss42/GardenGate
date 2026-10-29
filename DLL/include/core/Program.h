@@ -21,7 +21,7 @@ public:
     void uninitialize()
     {
         GG::Log::shutdown();
-        if (GG::Log::detail::g_console_enabled)
+        if (GG::Log::detail::g_console_allocated)
             FreeConsole();
     }
 
