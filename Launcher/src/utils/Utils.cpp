@@ -544,12 +544,6 @@ LaunchResult LaunchAndInject(const std::string& exePath, const std::string& args
 
         lr.ok = true;
         lr.pi = pi;
-
-        if (gameType == 0)
-        {
-            // DLL injection disabled - handled by dinput8 proxy in DLL/
-            return lr;
-        }
     }
 
     bool isSteamCopy = (gameType == 1 || gameType == 2) && hasSteamAppId;
@@ -676,12 +670,6 @@ LaunchResult LaunchAndInject(const std::string& exePath, const std::string& args
 
     lr.ok = true;
     lr.pi = pi;
-
-    if (gameType == 0)
-    {
-        // DLL injection disabled - handled by dinput8 proxy in DLL/
-        return lr;
-    }
 
     return lr;
 }

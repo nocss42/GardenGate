@@ -29,11 +29,6 @@ ENV PROTONPATH=GE-Proton
 #ENV PROTON_USE_NTSYNC=1
 #ENV PROTON_NO_ESYNC=1
 
-# These seem to be required to make the bundled DirectX installer not error out.
-ENV SteamAppId 0
-ENV STEAM_COMPAT_APP_ID 0
-ENV SteamGameId 0
-
 # ENV WINEPREFIX=/home/maxima/.local/share/maxima/wine/prefix # No longer needs to be set as maxima now handles prefixes
 
 # Display server stuff
@@ -119,7 +114,7 @@ RUN set -eux; \
         | tr -d '\r' \
     )"; \
     curl -fL -o "$HOME/AppImages/ProtonPlus.AppImage" \
-        "https://github.com/Vysp3r/ProtonPlus/releases/download/${ver}/ProtonPlus-_${ver}-.AppImage"; \
+        "https://github.com/Vysp3r/ProtonPlus/releases/download/${ver}/ProtonPlus-${ver#v}-anylinux-x86_64.AppImage"; \
     chmod +x "$HOME/AppImages/ProtonPlus.AppImage"; \
     "$HOME/AppImages/ProtonPlus.AppImage" install steam-system proton-cachyos latest
 
