@@ -45,7 +45,7 @@ Run the container with:
 ```sh
 podman run --replace -it \
   --name gardengate \
-  -v $HOME/Games:/home/maxima/Games \
+  -v "$HOME/Games:/home/maxima/Games:U" \
   --device /dev/dri \
   -p 25200:25200/tcp \
   -p 25200:25200/udp \

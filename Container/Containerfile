@@ -18,13 +18,13 @@ ENV GG_CONSOLE=1
 ENV GG_LOG_LEVEL=Debug
 ENV MAXIMA_LOG_LEVEL=debug
 ENV MAXIMA_DISABLE_QRC=1
+ENV MAXIMA_PROTON_PATH="/home/maxima/.local/share/Steam/compatibilitytools.d/Proton-CachyOS Latest/"
 #ENV MAXIMA_DISABLE_WINE_VERIFICATION=1
 #ENV MAXIMA_WINE_COMMAND="/usr/bin/wine"
 
 # Proton stuff
 ENV PROTON_ENABLE_WAYLAND=1
 ENV PROTONPATH=GE-Proton
-#ENV MAXIMA_UMU_LOCATION=/home/maxima/.local/share/maxima/wine/umu/umu-custom.py # get rid of this
 #ENV PROTON_USE_WINED3D=1
 #ENV PROTON_USE_NTSYNC=1
 #ENV PROTON_NO_ESYNC=1
@@ -56,7 +56,6 @@ RUN apt-get update && apt-get install -y \
     htop \
     btop \
     tmux \
-    screen \
     curl \
     wget \
     cargo \
@@ -110,6 +109,20 @@ RUN set -eux; \
     apt-get install -y /tmp/umu-launcher.deb; \
     rm -f /tmp/umu-launcher.deb;
 
+# ProtonPlus & proton-CachyOS
+RUN set -eux; \
+    mkdir -p "$HOME/AppImages"; \
+    ver="$( \
+        curl -sIL https://github.com/Vysp3r/ProtonPlus/releases/latest \
+        | grep -i '^location:' \
+        | sed -E 's|.*/tag/||' \
+        | tr -d '\r' \
+    )"; \
+    curl -fL -o "$HOME/AppImages/ProtonPlus.AppImage" \
+        "https://github.com/Vysp3r/ProtonPlus/releases/download/${ver}/ProtonPlus-_${ver}-.AppImage"; \
+    chmod +x "$HOME/AppImages/ProtonPlus.AppImage"; \
+    "$HOME/AppImages/ProtonPlus.AppImage" install steam-system proton-cachyos latest
+
 RUN curl https://sh.rustup.rs -sSf | sh -s -- -y --default-toolchain nightly
 
 RUN export PATH="/root/.cargo/bin:$PATH" \
@@ -143,7 +156,6 @@ USER maxima
 # aliases
 RUN echo "alias btop='btop --force-utf'" >> $HOME/.bashrc
 RUN echo "alias kill_exe='sudo pkill -9 -f "\\.exe"'" >> $HOME/.bashrc
-RUN echo "shell /bin/bash" >> $HOME/.screenrc
 
 # Create the required dirs
 RUN mkdir -p \
@@ -152,19 +164,12 @@ RUN mkdir -p \
     "$HOME/.config/protonfixes/localfixes" \
     "$HOME/.local/share/applications" \
     "$HOME/.local/share/maxima/wine/umu" \
-    "$HOME/.local/share/Steam/compatibilitytools.d"
-
-# Simon said this is no longer needed
-# Add umu to the path it expects it to be (because it doesn't prioritize PATH)
-#RUN ln -s /usr/bin/umu-run "$HOME/.local/share/maxima/wine/umu/umu-run"
-
-# games dir
-RUN mkdir -p /home/maxima/Games /home/maxima/Games/GardenGate
+    "$HOME/.local/share/Steam/compatibilitytools.d" \
+    "$HOME/Games" \
+    "$HOME/Games/GardenGate"
 
 # Script
-COPY --chown=maxima:maxima maxima.sh /home/maxima/maxima.sh
-RUN chmod +x /home/maxima/maxima.sh && \
-    sed -i -e 's/\r$//' /home/maxima/maxima.sh
+COPY --chown=maxima:maxima --chmod=755 maxima.sh /home/maxima/maxima.sh
 
 # auth.toml
 COPY --chown=maxima:maxima auth.toml /home/maxima/.local/share/maxima/auth.toml
@@ -177,9 +182,6 @@ COPY --chown=maxima:maxima regs/*.reg /home/maxima/
 
 # protonfix
 COPY --chown=maxima:maxima umu-gardengate.py /home/maxima/.config/protonfixes/localfixes/
-
-# custom umu
-COPY --chown=maxima:maxima --chmod=755 umu-custom.py /home/maxima/.local/share/maxima/wine/umu/umu-custom.py
 
 # init proton/steamrt
 RUN umu-run wineboot -u
