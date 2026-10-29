@@ -23,13 +23,11 @@ ENV MAXIMA_PROTON_PATH="/home/maxima/.local/share/Steam/compatibilitytools.d/Pro
 #ENV MAXIMA_WINE_COMMAND="/usr/bin/wine"
 
 # Proton stuff
+ENV PROTONPATH="/home/maxima/.local/share/Steam/compatibilitytools.d/Proton-CachyOS Latest/"
 ENV PROTON_ENABLE_WAYLAND=1
-ENV PROTONPATH=GE-Proton
 #ENV PROTON_USE_WINED3D=1
 #ENV PROTON_USE_NTSYNC=1
 #ENV PROTON_NO_ESYNC=1
-
-# ENV WINEPREFIX=/home/maxima/.local/share/maxima/wine/prefix # No longer needs to be set as maxima now handles prefixes
 
 # Display server stuff
 #ENV WAYLAND_DISPLAY=wayland-1
@@ -106,7 +104,10 @@ RUN set -eux; \
 
 # ProtonPlus & proton-CachyOS
 RUN set -eux; \
-    mkdir -p "$HOME/AppImages"; \
+    mkdir -p "$HOME/AppImages" \
+        "$HOME/.local/share/Steam/compatibilitytools.d/"; \
+    touch "$HOME/.local/share/Steam/steamclient.dll" \
+        "$HOME/.local/share/Steam/steamclient64.dll"; \
     ver="$( \
         curl -sIL https://github.com/Vysp3r/ProtonPlus/releases/latest \
         | grep -i '^location:' \
