@@ -20,7 +20,7 @@ ENV GG_LOG_LEVEL=Debug
 ENV MAXIMA_LOG_LEVEL=debug
 ENV MAXIMA_DISABLE_QRC=1
 ENV MAXIMA_FORCE_INSTALL=1
-ENV MAXIMA_PROTONPATH="/home/maxima/.local/share/Steam/compatibilitytools.d/Proton-CachyOS Latest/"
+ENV MAXIMA_UMU_PROTONPATH="/home/maxima/.local/share/Steam/compatibilitytools.d/Proton-CachyOS Latest/"
 #ENV MAXIMA_DISABLE_WINE_VERIFICATION=1
 #ENV MAXIMA_WINE_COMMAND="/usr/bin/wine"
 
