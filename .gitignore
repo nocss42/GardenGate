@@ -323,4 +323,5 @@ DLL/build-minhook/
 DLL/build-gg/
 Launcher/build-launcher/
 
+config.json
 auth.toml

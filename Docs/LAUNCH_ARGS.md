@@ -66,6 +66,8 @@ Fatal
 ```
 
 ### Naming
-You can edit the prefix of the .log file by setting `GG_LOG` environment variable. It'll appear like so when you do;
+You can edit the prefix name of the .log file by setting `GG_LOG` environment variable. It'll appear like so when you do;
 
-`GGLOGKEY.20380119_031407`
+`GGLOGKEY.log`
+
+`GGLOGKEY.20380119_031407.log` - only if using debug build

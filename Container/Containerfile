@@ -13,12 +13,14 @@ ENV DEBIAN_FRONTEND=noninteractive
 ENV RUSTFLAGS="-C target-feature=+crt-static"
 ENV CARGO_TERM_COLOR=always
 ENV GAMEID=umu-gardengate
+ENV MAXIMA_UMU_GAMEID=umu-gardengate
 ENV GG_CONSOLE=1
 #ENV GG_LOG=Dedicated
 ENV GG_LOG_LEVEL=Debug
 ENV MAXIMA_LOG_LEVEL=debug
 ENV MAXIMA_DISABLE_QRC=1
-ENV MAXIMA_PROTON_PATH="/home/maxima/.local/share/Steam/compatibilitytools.d/Proton-CachyOS Latest/"
+ENV MAXIMA_FORCE_INSTALL=1
+ENV MAXIMA_PROTONPATH="/home/maxima/.local/share/Steam/compatibilitytools.d/Proton-CachyOS Latest/"
 #ENV MAXIMA_DISABLE_WINE_VERIFICATION=1
 #ENV MAXIMA_WINE_COMMAND="/usr/bin/wine"
 
@@ -111,7 +113,7 @@ RUN export PATH="/root/.cargo/bin:$PATH" \
 WORKDIR /build
 RUN git clone https://github.com/sjp761/maxima -b belleza-rebase \
  && cd maxima \
- && git checkout ba061971b40669879f52707ab6d22d0695f5b7fe
+ && git checkout 17a6b3117290e204e2e9adb8091018bbb3693f87
 
 WORKDIR /build/maxima
 RUN export PATH="/root/.cargo/bin:$PATH" \
