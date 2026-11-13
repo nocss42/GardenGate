@@ -10,7 +10,7 @@ Ensure the following dependencies are installed on your host:
 * tmux
 * git
 * text editor (e.g. vim)
-* a linux machine with a desktop or a windows pc (needed to generate the token)
+* a windows pc or a linux machine with some sort of DE/WM (needed to generate the token)
 
 ### Generating `auth.toml`
 
