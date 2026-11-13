@@ -10,7 +10,6 @@ EXPOSE 27200/udp
 
 # Env vars
 ENV DEBIAN_FRONTEND=noninteractive
-ENV RUSTFLAGS="-C target-feature=+crt-static"
 ENV CARGO_TERM_COLOR=always
 ENV GAMEID=umu-gardengate
 ENV MAXIMA_UMU_GAMEID=umu-gardengate
@@ -44,25 +43,11 @@ RUN dpkg --add-architecture i386
 RUN apt-get update && apt-get install -y \
     sudo \
     nano \
-    vim \
-    micro \
     git \
-    strace \
-    htop \
     btop \
-    tmux \
     curl \
     wget \
-    cargo \
-    musl-tools \
     locales \
-    libx11-dev \
-    libxcursor-dev \
-    libxcb1-dev \
-    libxi-dev \
-    libxkbcommon-dev \
-    libxkbcommon-x11-dev \
-    protobuf-compiler \
     xdg-utils \
     zenity \
     gnupg2 \
@@ -78,19 +63,6 @@ RUN apt-get update && apt-get install -y \
     lib32stdc++6 \
     libc6-i386
 
-# Locale
-RUN sudo locale-gen en_US.UTF-8 \
- && sudo update-locale LANG=en_US.UTF-8
-
-# Wine from the upstream repo
-RUN mkdir -pm755 /etc/apt/keyrings && \
-    curl -fsSL https://dl.winehq.org/wine-builds/winehq.key | \
-        gpg --dearmor -o /etc/apt/keyrings/winehq-archive.key && \
-    curl -fsSL https://dl.winehq.org/wine-builds/ubuntu/dists/resolute/winehq-resolute.sources \
-        -o /etc/apt/sources.list.d/winehq-resolute.sources && \
-    apt-get update && \
-    apt-get install -y --install-recommends winehq-devel
-
 # umu
 RUN set -eux; \
     ver="$( \
@@ -104,26 +76,12 @@ RUN set -eux; \
     apt-get install -y /tmp/umu-launcher.deb; \
     rm -f /tmp/umu-launcher.deb;
 
-RUN curl https://sh.rustup.rs -sSf | sh -s -- -y --default-toolchain nightly
-
-RUN export PATH="/root/.cargo/bin:$PATH" \
- && rustup target add x86_64-unknown-linux-musl
-
-# Build maxima (gotta keep doing so till their first release)
-WORKDIR /build
-RUN git clone https://github.com/sjp761/maxima -b belleza-rebase \
- && cd maxima \
- && git checkout 17a6b3117290e204e2e9adb8091018bbb3693f87
-
-WORKDIR /build/maxima
-RUN export PATH="/root/.cargo/bin:$PATH" \
- && cargo build -p maxima-cli -p maxima-bootstrap --release --target x86_64-unknown-linux-musl
-
-# Install binaries
-RUN install -Dm755 \
-      target/x86_64-unknown-linux-musl/release/maxima-cli \
-      target/x86_64-unknown-linux-musl/release/maxima-bootstrap \
-      /usr/local/bin/
+# Install maxima
+RUN curl -L -o /tmp/maxima.zip \
+      https://github.com/sjp761/maxima/releases/latest/download/maxima.zip \
+    && unzip -j /tmp/maxima.zip maxima-cli maxima-bootstrap -d /tmp/ \
+    && install -Dm755 /tmp/maxima-cli /tmp/maxima-bootstrap -t /usr/local/bin/ \
+    && rm -f /tmp/maxima.zip /tmp/maxima-cli /tmp/maxima-bootstrap
 
 # Create user
 RUN useradd -m -s /bin/bash maxima
@@ -141,7 +99,6 @@ RUN echo "alias kill_exe='sudo pkill -9 -f "\\.exe"'" >> $HOME/.bashrc
 # Create the required dirs
 RUN mkdir -p \
     "$HOME/.cache" \
-    "$HOME/.config/tmux" \
     "$HOME/.config/protonfixes/localfixes" \
     "$HOME/.local/share/applications" \
     "$HOME/.local/share/maxima/wine/umu" \

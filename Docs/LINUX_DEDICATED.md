@@ -10,8 +10,14 @@ Ensure the following dependencies are installed on your host:
 * tmux
 * git
 * text editor (e.g. vim)
+* a linux machine with a desktop or a windows pc (needed to generate the token)
 
 ### Generating `auth.toml`
+
+> [!WARNING]
+Do this on a linux machine with a desktop environment or a windows pc due to the need to run a browser to login. ([See this issue](https://github.com/ArmchairDevelopers/Maxima/issues/53) )
+
+Note: If you have a browser that supports enhanced tracking protection (e.g. LibreWolf), you might need to turn that off for the login to work properly.
 
 Download the pre-release version of maxima from [here](https://github.com/silkker/MARNE/releases/tag/0.1)
 
@@ -23,7 +29,7 @@ After logging in, locate the generated `auth.toml` file:
 * Linux:
   `$HOME/.local/share/maxima`
 
-Copy the contents of `auth.toml` into the same `auth.toml` inside the repository.
+Copy `auth.toml` into `Container` folder inside the repository.
 
 ### Podman Setup
 
@@ -91,15 +97,15 @@ wlheadless-run -c cage -- umu-run regedit \
 $HOME/gw2.reg
 ```
 
-### Patch the game (required for gw2 & bfn)
+### Patch the game
 
 Patch the game by running;
 
 ```sh
 curl -L https://github.com/nocss42/GardenGate/releases/latest/download/GardenGate.zip \
-     -o /home/maxima/Games/GardenGate.zip
-unzip /home/maxima/Games/GardenGate.zip -d /home/maxima/Games/GardenGate
-wlheadless-run -c cage -- umu-run /home/maxima/Games/GardenGate/GardenGate_Launcher.exe -patch gw2 /home/maxima/Games/gw2
+     -o $HOME/Games/GardenGate.zip
+unzip $HOME/Games/GardenGate.zip -d $HOME/Games/GardenGate
+wlheadless-run -c cage -- umu-run $HOME/Games/GardenGate/GardenGate_Launcher.exe -patch gw2 /home/maxima/Games/gw2
 ```
 
 ### Server Configuration
@@ -158,6 +164,7 @@ unzip /home/maxima/Games/GW1_FrostyModManager.zip -d /home/maxima/Games/GW1_Fros
 wget -O /home/maxima/Games/GW2_FrostyModManager.zip https://github.com/nocss42/GardenGate/releases/download/frosty.mirror/FrostyModManager-1190-1-0-6-3-s-1753719610.zip
 mkdir -p /home/maxima/Games/GW2_FrostyModManager
 unzip /home/maxima/Games/GW2_FrostyModManager.zip -d /home/maxima/Games/GW2_FrostyModManager
+
 # BFN
 wget -O /home/maxima/Games/BFN_FrostyModManager.zip https://github.com/Twig6943/FrostyToolsuiteBFNLinux/releases/latest/download/FrostyModManager.zip
 mkdir -p /home/maxima/Games/BFN_FrostyModManager
