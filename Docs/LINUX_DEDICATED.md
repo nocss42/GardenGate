@@ -38,7 +38,7 @@ On the machine that will host the dedicated server, execute the following comman
 ```sh
 mkdir -p $HOME/Games/GardenGate
 git clone https://github.com/nocss42/GardenGate $HOME/Projects/GardenGate
-cd GardenGate/Container
+cd $HOME/Projects/GardenGate/Container
 vim auth.toml   # Paste the contents from your main machine
 vim tmux.conf   # Optional (uncomment from Containerfile if used)
 podman build --no-cache -t gardengate:latest .

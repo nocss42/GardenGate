@@ -77,11 +77,11 @@ RUN set -eux; \
     rm -f /tmp/umu-launcher.deb;
 
 # Install maxima
-RUN curl -L -o /tmp/maxima.zip \
-      https://github.com/sjp761/maxima/releases/latest/download/maxima.zip \
-    && unzip -j /tmp/maxima.zip maxima-cli maxima-bootstrap -d /tmp/ \
+RUN curl -L -o /tmp/linux.zip \
+      https://github.com/sjp761/maxima/releases/latest/download/linux.zip \
+    && unzip -j /tmp/linux.zip maxima-cli maxima-bootstrap -d /tmp/ \
     && install -Dm755 /tmp/maxima-cli /tmp/maxima-bootstrap -t /usr/local/bin/ \
-    && rm -f /tmp/maxima.zip /tmp/maxima-cli /tmp/maxima-bootstrap
+    && rm -f /tmp/linux.zip /tmp/maxima-cli /tmp/maxima-bootstrap
 
 # Create user
 RUN useradd -m -s /bin/bash maxima
