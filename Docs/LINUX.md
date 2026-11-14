@@ -2,7 +2,9 @@
 
 ### Apply the protonfix (Required for all games)
 
-Put [umu-gardengate.py](../Container/umu-gardengate.py) into `~/.config/protonfixes/localfixes` and set `GAMEID=umu-gardengate` in your launcher.
+Use CachyOS/GE-proton or some other proton fork otherwise the fix files won't work (You can do the same things the fix file does if you really want to use valve proton)
+
+Put all the [localfixes](../Container/localfixes) into `~/.config/protonfixes/localfixes` and set `GAMEID=umu-gardengate` in your launcher.
 
 # Garden warfare 1
 ### 1. Install the game
@@ -24,7 +26,7 @@ Download the archive from [the releases](https://github.com/nocss42/GardenGate/r
 ### 2. Downgrade your game
 Download the archive from [the releases](https://github.com/nocss42/GardenGate/releases) tab, launch it > go to patcher and press apply patch
 
-### 3. Install the mods in the right order
+### 3. Install the mods in the right order (Only needed if you want stars in gw2)
 Use [this frosty mod manager](https://www.nexusmods.com/masseffectandromeda/mods/1190?tab=files&file_id=6904) instead of the stock one as the stock one doesn't work with wine. Get the mods for gw2 [here](../Mods/gw2/GardenGate.fbpack)
 
 <img src="./Assets/load_order.webp" />

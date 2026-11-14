@@ -10,7 +10,7 @@ Ensure the following dependencies are installed on your host:
 * tmux
 * git
 * text editor (e.g. vim)
-* a windows pc or a linux machine with some sort of DE/WM (needed to generate the token)
+* a windows pc or a linux machine with some sort of DE/WM (needed to generate the token/install mods)
 
 ### Generating `auth.toml`
 
@@ -19,7 +19,7 @@ Do this on a linux machine with a desktop environment or a windows pc due to the
 
 Note: If you have a browser that supports enhanced tracking protection (e.g. LibreWolf), you might need to turn that off for the login to work properly.
 
-Download the pre-release version of maxima from [here](https://github.com/silkker/MARNE/releases/tag/0.1)
+Download the pre-release version of maxima from [here](https://github.com/sjp761/maxima/releases)
 
 After logging in, locate the generated `auth.toml` file:
 
@@ -36,8 +36,8 @@ Copy `auth.toml` into `Container` folder inside the repository.
 On the machine that will host the dedicated server, execute the following commands individually:
 
 ```sh
-mkdir -p $HOME/Games
-git clone https://github.com/nocss42/GardenGate
+mkdir -p $HOME/Games/GardenGate
+git clone https://github.com/nocss42/GardenGate $HOME/Projects/GardenGate
 cd GardenGate/Container
 vim auth.toml   # Paste the contents from your main machine
 vim tmux.conf   # Optional (uncomment from Containerfile if used)
@@ -51,7 +51,7 @@ Run the container with:
 ```sh
 podman run --replace -it \
   --name gardengate \
-  -v "$HOME/Games:/home/maxima/Games:U" \
+  -v "$HOME/Games/GardenGate:/home/maxima/Games:rw" \
   --device /dev/dri \
   -p 25200:25200/tcp \
   -p 25200:25200/udp \
@@ -76,7 +76,7 @@ Create the dir for the game you're going to install:
 e.g.
 
 ```sh
-mkdir -p /home/maxima/Games/gw2 /home/maxima/Games/gw2_pfx
+mkdir -p $HOME/Games/gw2 $HOME/Games/gw2_pfx
 ```
 
 Install the game via maxima:
@@ -85,17 +85,7 @@ Install the game via maxima:
 wlheadless-run -c cage -- $HOME/maxima.sh
 ```
 
-(Press `Ctrl+C` once completed. Should see `[maxima_cli] - Download took x.x`)
-
-### Registry Configuration
-
-Import required registry files:
-
-```sh
-WINEPREFIX=/home/maxima/Games/gw2_pfx \
-wlheadless-run -c cage -- umu-run regedit \
-$HOME/gw2.reg
-```
+(Press `Ctrl+C` once completed. Should see `[maxima_cli] - Installation finished!`)
 
 ### Patch the game
 
@@ -105,7 +95,7 @@ Patch the game by running;
 curl -L https://github.com/nocss42/GardenGate/releases/latest/download/GardenGate.zip \
      -o $HOME/Games/GardenGate.zip
 unzip $HOME/Games/GardenGate.zip -d $HOME/Games/GardenGate
-wlheadless-run -c cage -- umu-run $HOME/Games/GardenGate/GardenGate_Launcher.exe -patch gw2 /home/maxima/Games/gw2
+wlheadless-run -c cage -- umu-run $HOME/Games/GardenGate/GardenGate_Launcher.exe -patch gw2 $HOME/Games/gw2
 ```
 
 ### Server Configuration
@@ -134,7 +124,7 @@ Launch the server;
 
 ```sh
 wlheadless-run -c cage -- maxima-cli launch \
-  --game-path /home/maxima/Games/gw2/GW2.Main_Win64_Retail.exe \
+  --game-path "$HOME/Games/gw2/GW2.Main_Win64_Retail.exe" \
   --game-args=-server plants-vs-zombies-garden-warfare-2
 ```
 
@@ -152,37 +142,37 @@ sudo swapon /swapfile
 echo '/swapfile none swap defaults 0 0' | sudo tee -a /etc/fstab > /dev/null
 ```
 
-Download frosty inside the container like so
+Download frosty inside the container like so;
 
 ```sh
 # GW1
-wget -O /home/maxima/Games/GW1_FrostyModManager.zip https://github.com/Twig6943/FrostyToolsuiteGW1Linux/releases/latest/download/PVZGW_FrostyModManager.zip
-mkdir -p /home/maxima/Games/GW1_FrostyModManager
-unzip /home/maxima/Games/GW1_FrostyModManager.zip -d /home/maxima/Games/GW1_FrostyModManager
+wget -O $HOME/Games/GW1_FrostyModManager.zip https://github.com/Twig6943/FrostyToolsuiteGW1Linux/releases/latest/download/PVZGW_FrostyModManager.zip
+mkdir -p $HOME/Games/GW1_FrostyModManager
+unzip $HOME/Games/GW1_FrostyModManager.zip -d $HOME/Games/GW1_FrostyModManager
 
 # GW2
-wget -O /home/maxima/Games/GW2_FrostyModManager.zip https://github.com/nocss42/GardenGate/releases/download/frosty.mirror/FrostyModManager-1190-1-0-6-3-s-1753719610.zip
-mkdir -p /home/maxima/Games/GW2_FrostyModManager
-unzip /home/maxima/Games/GW2_FrostyModManager.zip -d /home/maxima/Games/GW2_FrostyModManager
+wget -O $HOME/Games/GW2_FrostyModManager.zip https://github.com/nocss42/GardenGate/releases/download/frosty.mirror/FrostyModManager-1190-1-0-6-3-s-1753719610.zip
+mkdir -p $HOME/Games/GW2_FrostyModManager
+unzip $HOME/Games/GW2_FrostyModManager.zip -d $HOME/Games/GW2_FrostyModManager
 
 # BFN
-wget -O /home/maxima/Games/BFN_FrostyModManager.zip https://github.com/Twig6943/FrostyToolsuiteBFNLinux/releases/latest/download/FrostyModManager.zip
-mkdir -p /home/maxima/Games/BFN_FrostyModManager
-unzip /home/maxima/Games/BFN_FrostyModManager.zip -d /home/maxima/Games/BFN_FrostyModManager
+wget -O $HOME/Games/BFN_FrostyModManager.zip https://github.com/Twig6943/FrostyToolsuiteBFNLinux/releases/latest/download/FrostyModManager.zip
+mkdir -p $HOME/Games/BFN_FrostyModManager
+unzip $HOME/Games/BFN_FrostyModManager.zip -d $HOME/Games/BFN_FrostyModManager
 ```
 
-Outside of podman, install umu and ge-proton for your distro like so (these commands are here as reference please go ahead and grab the latest version of everything);
+Outside of podman (if you're using waypipe do not use tmux in this part as waypipe seems to not work through tmux, see [this](https://gitlab.freedesktop.org/mstoeckl/waypipe/-/work_items/180) ), run frosty mod manager like so
+
+> [!WARNING]
+Get wine mono [here](https://dl.winehq.org/wine/wine-mono/) if it's not packaged for your distro (only needed if you're gonna use wine)
 
 ```sh
-export PROTON_ENABLE_WAYLAND=1 # If you're on a wayland session
+export DISPLAY="" # only set this if you're using wine
+wine taskmgr # run frosty through taskmgr as otherwise it'll not run with waypipe
+
+export PROTON_ENABLE_WAYLAND=1
 export PROTONPATH=GE-Proton
-
-sudo dpkg --add-architecture i386 # needed for debian-based
-
-wget -O $HOME/umu.deb https://github.com/Open-Wine-Components/umu-launcher/releases/download/1.3.0/python3-umu-launcher_1.3.0-1_amd64_debian-13.deb
-sudo dpkg -i $HOME/umu.deb
-
-umu-run $HOME/Games/GW2_FrostyModManager/FrostyModManager.exe
+umu-run taskmgr # run frosty through taskmgr as otherwise it'll not run with waypipe
 ```
 
 Don't forget to load the mods in this order;
@@ -193,7 +183,7 @@ To start modded server, inside the container run;
 ```sh
 wlheadless-run -c cage -- \
   maxima-cli launch \
-  --game-path "/home/maxima/Games/gw2/GW2.Main_Win64_Retail.exe" \
+  --game-path "$HOME/Games/gw2/GW2.Main_Win64_Retail.exe" \
   --game-args="-server" \
   --game-args="-dataPath" \
   --game-args="ModData/Default" \

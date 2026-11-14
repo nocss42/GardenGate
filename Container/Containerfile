@@ -137,7 +137,7 @@ COPY --chown=maxima:maxima auth.toml /home/maxima/.local/share/maxima/auth.toml
 COPY --chown=maxima:maxima regs/*.reg /home/maxima/
 
 # protonfix
-COPY --chown=maxima:maxima umu-gardengate.py /home/maxima/.config/protonfixes/localfixes/
+COPY --chown=maxima:maxima ./localfixes/umu-gardengate.py /home/maxima/.config/protonfixes/localfixes/
 
 # init proton/steamrt
 RUN umu-run wineboot -u
