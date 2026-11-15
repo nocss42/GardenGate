@@ -519,29 +519,14 @@ LaunchResult LaunchAndInject(const std::string& exePath, const std::string& args
 
         steamUrl += "?platform=steam&theme=" + theme;
 
-        std::string fullCmd = "cmd.exe /c start \"\" \"" + steamUrl + "\"";
-        if (!launchArgs.empty())
+        HINSTANCE result = ShellExecuteA(
+            nullptr, "open", steamUrl.c_str(), launchArgs.empty() ? nullptr : launchArgs.c_str(), nullptr, SW_SHOWNORMAL);
+
+        if ((INT_PTR)result <= 32)
         {
-            fullCmd += " " + launchArgs;
-        }
-
-        STARTUPINFOA si = { sizeof(si) };
-        si.dwFlags = STARTF_USESHOWWINDOW;
-        si.wShowWindow = SW_HIDE;
-        PROCESS_INFORMATION pi{};
-        std::vector<char> cmdLine(fullCmd.begin(), fullCmd.end());
-        cmdLine.push_back('\0');
-
-        BOOL ok = CreateProcessA(nullptr, cmdLine.data(), nullptr, nullptr, FALSE, CREATE_NO_WINDOW, nullptr, gameDir.string().c_str(), &si, &pi);
-
-        if (!ok)
-        {
-            lr.error = "Failed to launch via Steam2EA. Error code: " + std::to_string(GetLastError());
+            lr.error = "Failed to launch via Steam2EA. Error code: " + std::to_string((INT_PTR)result);
             return lr;
         }
-
-        CloseHandle(pi.hProcess);
-        CloseHandle(pi.hThread);
 
         lr.ok = true;
         return lr;
