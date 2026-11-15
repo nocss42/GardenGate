@@ -836,8 +836,10 @@ intptr_t CreateGameWindow()
 {
     const auto trampoline = GG::HookManager::getManager().Call(&CreateGameWindow);
 
+    // Hide window
     if (GetOptionParameter("server", nullptr, 0) != nullptr)
     {
+        GG_LOG(GG::LogLevel::Debug, "[Window] Dedicated server detected, disabling game window.");
         ApplyPatch(offsets::gw3::patch_NoWindow);
     }
 

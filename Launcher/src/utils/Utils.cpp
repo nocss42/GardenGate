@@ -640,7 +640,7 @@ bool handleCLI()
     if (args.size() < 3 || args[1] != "-patch")
         return false;
 
-    std::ofstream log("gg_launcher.log", std::ios::app);
+    std::ofstream log(Utils::GetLogPath(), std::ios::app);
     auto logMsg = [&](const std::string& msg) { log << msg << std::endl; };
 
     auto runPatchTask = [&](const std::string& id, const std::string& dir) -> bool {
@@ -781,5 +781,13 @@ std::string GetConfigPath()
     GetModuleFileNameA(NULL, path, MAX_PATH);
     fs::path exePath(path);
     return (exePath.parent_path() / "config.json").string();
+}
+
+std::string GetLogPath()
+{
+    char path[MAX_PATH];
+    GetModuleFileNameA(NULL, path, MAX_PATH);
+    fs::path exePath(path);
+    return (exePath.parent_path() / "GardenGate_Launcher.log").string();
 }
 } // namespace Utils

@@ -19,7 +19,7 @@ Do this on a linux machine with a desktop environment or a windows pc due to the
 
 Note: If you have a browser that supports enhanced tracking protection (e.g. LibreWolf), you might need to turn that off for the login to work properly.
 
-Download the pre-release version of maxima from [here](https://github.com/sjp761/maxima/releases)
+Download the latest release version of [the downstream fork](https://github.com/sjp761/maxima/releases)
 
 After logging in, locate the generated `auth.toml` file:
 
@@ -40,7 +40,6 @@ mkdir -p $HOME/Games/GardenGate
 git clone https://github.com/nocss42/GardenGate $HOME/Projects/GardenGate
 cd $HOME/Projects/GardenGate/Container
 vim auth.toml   # Paste the contents from your main machine
-vim tmux.conf   # Optional (uncomment from Containerfile if used)
 podman build --no-cache -t gardengate:latest .
 ```
 
@@ -105,7 +104,7 @@ wlheadless-run -c cage -- umu-run $HOME/Games/GardenGate/GardenGate_Launcher.exe
 Edit server settings as you wish (We still haven't implemented this) :
 
 ```sh
-vim /home/maxima/Games/gw2/Settings.txt
+vim $HOME/Games/gw2/Settings.txt
 ```
 
 ### Executable names
@@ -163,10 +162,10 @@ mkdir -p $HOME/Games/BFN_FrostyModManager
 unzip $HOME/Games/BFN_FrostyModManager.zip -d $HOME/Games/BFN_FrostyModManager
 ```
 
-Outside of container (if you're using waypipe do not use tmux in this part as waypipe seems to not work through tmux, see [this](https://gitlab.freedesktop.org/mstoeckl/waypipe/-/work_items/180) ), run frosty mod manager like so
+Outside of container (if you're using waypipe do not use tmux during this step as waypipe seems to not work through tmux, see [this](https://gitlab.freedesktop.org/mstoeckl/waypipe/-/work_items/180) ), run frosty mod manager like so;
 
 > [!WARNING]
-Get wine mono [here](https://dl.winehq.org/wine/wine-mono/) if it's not packaged for your distro (only needed if you're gonna use wine)
+Get wine mono [here](https://dl.winehq.org/wine/wine-mono/) if it's not packaged for your distro (needed if you're gonna use wine)
 
 ```sh
 export DISPLAY="" # only set this if you're using wine

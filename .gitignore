@@ -317,11 +317,9 @@ msvc-wine/
 _deps/
 cmake_install.cmake
 
-DLL/minhook/
 DLL/build/
-DLL/build-minhook/
-DLL/build-gg/
-Launcher/build-launcher/
 
-config.json
-auth.toml
+Launcher/build/
+Launcher/build/config.json
+
+Container/auth.toml

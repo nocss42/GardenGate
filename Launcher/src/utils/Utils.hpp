@@ -82,4 +82,5 @@ void remove(const std::string& path);
 } // namespace FileUtil
 
 std::string GetConfigPath();
+std::string GetLogPath();
 } // namespace Utils
