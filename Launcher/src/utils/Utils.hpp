@@ -80,4 +80,6 @@ bool move(const std::string& src, const std::string& dest, std::string& errorMes
 bool move_replace(const std::string& src, const std::string& dest, std::string& errorMessage);
 void remove(const std::string& path);
 } // namespace FileUtil
+
+std::string GetConfigPath();
 } // namespace Utils

@@ -99,15 +99,23 @@ static void drawTitleBar(HWND hwnd, float dpiScale)
     ImGui::BeginChild("TitleBar", ImVec2(0, h), false);
 
     ImGui::SetCursorPos(ImVec2(15 * dpiScale, (h - ImGui::GetFontSize() * 1.2f) * 0.5f));
-    ImGui::TextUnformatted("GARDENGATE LAUNCHER");
+    ImGui::TextUnformatted("GardenGate Launcher");
 
     float btnW = 40 * dpiScale, btnH = 26 * dpiScale, spacing = 12 * dpiScale, rightPad = 10 * dpiScale;
     float yOffset = (h - btnH) * 0.5f;
-    ImGui::SetCursorPos(ImVec2(ImGui::GetWindowWidth() - (btnW * 2) - spacing - rightPad, yOffset));
+    ImGui::SetCursorPos(ImVec2(ImGui::GetWindowWidth() - (btnW * 3) - spacing * 2 - rightPad, yOffset));
 
     ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.18f, 0.18f, 0.18f, 1));
     if (ImGui::Button("_", ImVec2(btnW, btnH)))
         ::ShowWindow(hwnd, SW_MINIMIZE);
+    ImGui::SameLine(0, spacing);
+    if (ImGui::Button(::IsZoomed(hwnd) ? "[ ]" : "[]", ImVec2(btnW, btnH)))
+    {
+        if (::IsZoomed(hwnd))
+            ::ShowWindow(hwnd, SW_RESTORE);
+        else
+            ::ShowWindow(hwnd, SW_MAXIMIZE);
+    }
     ImGui::SameLine(0, spacing);
     if (ImGui::Button("X", ImVec2(btnW, btnH)))
         ::PostMessage(hwnd, WM_CLOSE, 0, 0);
@@ -207,30 +215,53 @@ static void drawLauncherTab(HWND hwnd, float dpiScale)
     if (DrawGamePathInput(
             hwnd, "Game Path:", exeNames[gameSelectedInt], currentGame.game_path, gameSelectedInt, dpiScale, centerOffset, fieldWidth))
     {
-        save_config(g_config, "config.json");
+        save_config(g_config, Utils::GetConfigPath());
     }
 
-    ImGui::Dummy(ImVec2(0, 10 * dpiScale));
+    ImGui::Dummy(ImVec2(0, 15 * dpiScale));
     ImGui::SetCursorPosX(centerOffset);
 
     if (ImGui::Checkbox("Use ModData", &currentGame.moddata_enabled))
     {
-        save_config(g_config, "config.json");
+        save_config(g_config, Utils::GetConfigPath());
     }
 
     ImGui::SameLine(0.0f, 40 * dpiScale);
 
-    if (ImGui::Checkbox("Launch directly from EXE", &g_config.launch_directly))
+    if (ImGui::Checkbox("GG Console", &g_config.gg_console))
     {
-        save_config(g_config, "config.json");
+        save_config(g_config, Utils::GetConfigPath());
     }
 
-    ImGui::SameLine();
+    ImGui::SameLine(0.0f, 10 * dpiScale);
     ImGui::TextDisabled("(?)");
     if (ImGui::IsItemHovered())
+        ImGui::SetTooltip("Add the -console launch arg to enable the GardenGate console window");
+
+    ImGui::Dummy(ImVec2(0, 10 * dpiScale));
+    ImGui::SetCursorPosX(centerOffset);
+
+    if (ImGui::Checkbox("Launch directly from EXE", &g_config.launch_directly))
     {
-        ImGui::SetTooltip("Use direct EXE launch instead of Steam/EA Desktop");
+        save_config(g_config, Utils::GetConfigPath());
     }
+
+    ImGui::SameLine(0.0f, 10 * dpiScale);
+    ImGui::TextDisabled("(?)");
+    if (ImGui::IsItemHovered())
+        ImGui::SetTooltip("Use direct EXE launch instead of EA Desktop/Steam");
+
+    ImGui::SameLine(0.0f, 40 * dpiScale);
+
+    if (ImGui::Checkbox("Kill EA/Steam Processes on launch", &g_config.kill_ea_steam_processes))
+    {
+        save_config(g_config, Utils::GetConfigPath());
+    }
+
+    ImGui::SameLine(0.0f, 10 * dpiScale);
+    ImGui::TextDisabled("(?)");
+    if (ImGui::IsItemHovered())
+        ImGui::SetTooltip("Terminate EA Desktop/Origin and Steam before launching game");
 
     if (currentGame.moddata_enabled)
     {
@@ -271,7 +302,7 @@ static void drawLauncherTab(HWND hwnd, float dpiScale)
         if (ImGui::Combo("##ModDataPreset", &currentSelection, modCStrings.data(), (int)modCStrings.size()))
         {
             currentGame.moddata_selected = modFolders[currentSelection];
-            save_config(g_config, "config.json");
+            save_config(g_config, Utils::GetConfigPath());
             Utils::UI::Status::Show("ModData preset set to: " + currentGame.moddata_selected);
         }
     }
@@ -281,7 +312,7 @@ static void drawLauncherTab(HWND hwnd, float dpiScale)
     ImGui::SetCursorPosX(centerOffset);
     if (ImGui::Checkbox("Debug Level", &g_config.log_level_enabled))
     {
-        save_config(g_config, "config.json");
+        save_config(g_config, Utils::GetConfigPath());
     }
 
     ImGui::SameLine(0.0f, 40 * dpiScale);
@@ -295,7 +326,7 @@ static void drawLauncherTab(HWND hwnd, float dpiScale)
     if (ImGui::Combo("##LogLevel", &currentLogLevel, logLevelNames, 6))
     {
         g_config.set_log_level_from_int(currentLogLevel);
-        save_config(g_config, "config.json");
+        save_config(g_config, Utils::GetConfigPath());
     }
 
     std::string args = Utils::Process::BuildArgs(g_config);
@@ -305,9 +336,9 @@ static void drawLauncherTab(HWND hwnd, float dpiScale)
     ImGui::TextWrapped(("Args preview: " + args).c_str());
 
     ImGui::Dummy(ImVec2(0, 12 * dpiScale));
-    if (Utils::UI::CenteredButton("LAUNCH GAME", 180 * dpiScale, dpiScale))
+    if (Utils::UI::CenteredButton("Launch Game", 180 * dpiScale, dpiScale))
     {
-        save_config(g_config, "config.json");
+        save_config(g_config, Utils::GetConfigPath());
 
         if (currentGame.game_path.empty())
         {
@@ -318,9 +349,8 @@ static void drawLauncherTab(HWND hwnd, float dpiScale)
             std::string modDataPath =
                 (currentGame.moddata_enabled && !currentGame.moddata_selected.empty()) ? "ModData/" + currentGame.moddata_selected : "";
 
-                Utils::Process::PatchEAArgs(args, gameSelectedInt);
-                auto lr =
-                    Utils::Process::LaunchAndInject(currentGame.game_path, args, modDataPath, gameSelectedInt, g_config);
+            Utils::Process::PatchEAArgs(args, gameSelectedInt);
+            auto lr = Utils::Process::LaunchAndInject(currentGame.game_path, args, modDataPath, gameSelectedInt, g_config);
 
             if (!lr.ok)
             {
@@ -329,9 +359,32 @@ static void drawLauncherTab(HWND hwnd, float dpiScale)
             else
             {
                 Utils::UI::Status::Show("Launching game...\nArgs: " + args);
-                CloseHandle(lr.pi.hProcess);
-                CloseHandle(lr.pi.hThread);
+                if (lr.pi.hProcess)
+                    CloseHandle(lr.pi.hProcess);
+                if (lr.pi.hThread)
+                    CloseHandle(lr.pi.hThread);
             }
+        }
+    }
+
+    ImGui::Dummy(ImVec2(0, 8 * dpiScale));
+
+    if (Utils::UI::CenteredButton("Launch EA App", 180 * dpiScale, dpiScale))
+    {
+    	Utils::Process::PatchEAArgs(args, gameSelectedInt);
+
+        HINSTANCE result = ShellExecuteA(hwnd, "open", "ea://", NULL, NULL, SW_SHOWNORMAL);
+        if ((INT_PTR)result <= 32)
+        {
+            result = ShellExecuteA(hwnd, "open", "origin2://", NULL, NULL, SW_SHOWNORMAL);
+        }
+        if ((INT_PTR)result <= 32)
+        {
+            result = ShellExecuteA(hwnd, "open", "eaapp://", NULL, NULL, SW_SHOWNORMAL);
+        }
+        if ((INT_PTR)result <= 32)
+        {
+            Utils::UI::Status::Show("Failed to launch EA App", true);
         }
     }
 
@@ -347,11 +400,11 @@ static void drawPatcherTab(HWND hwnd, float dpiScale)
     int gameSelectedInt = g_config.get_patch_selected_int();
 
     ImGui::SetCursorPosX(centerOffset);
-	if (ImGui::RadioButton("GW1", &gameSelectedInt, GAME_GW1)) { g_config.set_patch_selected_from_int(GAME_GW1); save_config(g_config, "config.json"); }
+	if (ImGui::RadioButton("GW1", &gameSelectedInt, GAME_GW1)) { g_config.set_patch_selected_from_int(GAME_GW1); save_config(g_config, Utils::GetConfigPath()); }
 	ImGui::SameLine(0.0f, 40 * dpiScale);
-	if (ImGui::RadioButton("GW2", &gameSelectedInt, GAME_GW2)) { g_config.set_patch_selected_from_int(GAME_GW2); save_config(g_config, "config.json"); }
+	if (ImGui::RadioButton("GW2", &gameSelectedInt, GAME_GW2)) { g_config.set_patch_selected_from_int(GAME_GW2); save_config(g_config, Utils::GetConfigPath()); }
 	ImGui::SameLine(0.0f, 40 * dpiScale);
-	if (ImGui::RadioButton("BFN", &gameSelectedInt, GAME_BFN)) { g_config.set_patch_selected_from_int(GAME_BFN); save_config(g_config, "config.json"); }
+	if (ImGui::RadioButton("BFN", &gameSelectedInt, GAME_BFN)) { g_config.set_patch_selected_from_int(GAME_BFN); save_config(g_config, Utils::GetConfigPath()); }
 
     fs::path launcherDir = fs::path([] {
         char path[MAX_PATH];
@@ -369,7 +422,7 @@ static void drawPatcherTab(HWND hwnd, float dpiScale)
         if (DrawGamePathInput(
                 hwnd, "GW1 Executable:", "PVZ.Main_Win64_Retail.exe", gw1Config.game_path, GAME_GW1, dpiScale, centerOffset, fieldWidth))
         {
-            save_config(g_config, "config.json");
+            save_config(g_config, Utils::GetConfigPath());
         }
 
         ImGui::Dummy(ImVec2(0, 20 * dpiScale));
@@ -456,7 +509,7 @@ static void drawPatcherTab(HWND hwnd, float dpiScale)
 
         if (DrawGamePathInput(hwnd, label, exeName, gameConfig.game_path, gameSelectedInt, dpiScale, centerOffset, fieldWidth))
         {
-            save_config(g_config, "config.json");
+            save_config(g_config, Utils::GetConfigPath());
             isPatched = isGW2 ? Patcher::IsGW2Patched(gameConfig.game_path) : Patcher::IsBFNPatched(gameConfig.game_path);
         }
 
@@ -632,7 +685,7 @@ static void drawMiscTab(HWND hwnd, float dpiScale)
                     break;
                 }
                 setupStyle(dpiScale);
-                save_config(g_config, "config.json");
+                save_config(g_config, Utils::GetConfigPath());
             }
             if (isSelected)
                 ImGui::SetItemDefaultFocus();
@@ -655,7 +708,7 @@ static void drawMiscTab(HWND hwnd, float dpiScale)
         {
             currentPreset = -1;
             setupStyle(dpiScale);
-            save_config(g_config, "config.json");
+            save_config(g_config, Utils::GetConfigPath());
         }
 
         ImVec2 boxPos = ImGui::GetItemRectMin();

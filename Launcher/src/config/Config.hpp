@@ -26,6 +26,8 @@ struct Config
     std::string game_selected = "gw1";
     std::string patch_selected = "gw1";
     bool launch_directly = false;
+    bool kill_ea_steam_processes = true;
+    bool gg_console = false;
     bool log_level_enabled = false;
     std::string log_level = "Info";
 

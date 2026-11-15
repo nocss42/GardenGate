@@ -1,12 +1,8 @@
 """Garden Warfare 2"""
 
+import os
 from protonfixes import util
 
-def early() -> None:
-    util.set_environment(
-        'PROTON_REMOTE_DEBUG_CMD',
-        '/mnt/Games/SteamGames/steamapps/common/PVZGW2/GardenGate/GardenGate_Launcher.exe',
-    )
 
 def main() -> None:
     util.protontricks('vcrun2022')
@@ -24,4 +20,13 @@ def main() -> None:
                 'native,builtin',
             )
 
-    util.replace_command('steam2ea', 'placeholder') # causes game to not launch via steam2ea
+    # Replace the Steam launch command with the GardenGate launcher itself.
+    # WARNING
+    # DO NOT NOP AND LAUNCH THE LAUNCHER LIKE SO IT'LL CAUSE BREAKAGE (any sort of steam2ea connection causing crashes)
+    #util.set_environment('PROTON_REMOTE_DEBUG_CMD', os.path.abspath('GardenGate/GardenGate_Launcher.exe'), )
+    #util.replace_command('steam2ea', 'placeholder') # block steam
+
+    launcher = os.path.join(
+        util.get_game_install_path(), 'GardenGate', 'GardenGate_Launcher.exe'
+    )
+    util.replace_command(r'steam2ea://\S+', launcher)

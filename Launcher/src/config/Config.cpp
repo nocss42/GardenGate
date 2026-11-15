@@ -27,7 +27,7 @@ void to_json(ordered_json& j, const Config& config)
 {
     j = ordered_json{ { "username", config.username }, { "password", config.password }, { "server_ip", config.server_ip },
 
-        { "game_selected", config.game_selected }, { "patch_selected", config.patch_selected }, { "launch_directly", config.launch_directly }, { "log_level_enabled", config.log_level_enabled }, { "log_level", config.log_level },
+        { "game_selected", config.game_selected }, { "patch_selected", config.patch_selected }, { "launch_directly", config.launch_directly }, { "kill_ea_steam_processes", config.kill_ea_steam_processes }, { "gg_console", config.gg_console }, { "log_level_enabled", config.log_level_enabled }, { "log_level", config.log_level },
 
         { "gw1", config.gw1 }, { "gw2", config.gw2 }, { "bfn", config.bfn },
 
@@ -47,6 +47,10 @@ void from_json(const json& j, Config& config)
 
     if (j.contains("launch_directly"))
         config.launch_directly = j["launch_directly"];
+    if (j.contains("kill_ea_steam_processes"))
+        config.kill_ea_steam_processes = j["kill_ea_steam_processes"];
+    if (j.contains("gg_console"))
+        config.gg_console = j["gg_console"];
     if (j.contains("game_selected"))
         config.game_selected = j["game_selected"];
     if (j.contains("patch_selected"))

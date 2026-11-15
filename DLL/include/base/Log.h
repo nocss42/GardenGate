@@ -117,6 +117,31 @@ inline bool g_console_allocated = false;
     return nullptr;
 }
 
+[[nodiscard]] inline bool command_line_has_flag(const char* flag) noexcept
+{
+    const char* cmd = GetCommandLineA();
+    const size_t flag_len = std::strlen(flag);
+
+    while (*cmd)
+    {
+        while (*cmd == ' ' || *cmd == '\t')
+            ++cmd;
+
+        if (!*cmd)
+            break;
+
+        const char* start = cmd;
+        while (*cmd && *cmd != ' ' && *cmd != '\t')
+            ++cmd;
+
+        const size_t len = static_cast<size_t>(cmd - start);
+        if (len == flag_len && _strnicmp(start, flag, flag_len) == 0)
+            return true;
+    }
+
+    return false;
+}
+
 [[nodiscard]] inline LogLevel effective_log_level() noexcept
 {
     static const LogLevel level = []() noexcept -> LogLevel {
@@ -219,7 +244,9 @@ inline void init()
 {
     {
         char env[2]{};
-        detail::g_console_enabled = GetEnvironmentVariableA("GG_CONSOLE", env, sizeof(env)) > 0;
+        const bool env_enabled = GetEnvironmentVariableA("GG_CONSOLE", env, sizeof(env)) > 0;
+        const bool flag_enabled = detail::command_line_has_flag("-console");
+        detail::g_console_enabled = env_enabled || flag_enabled;
     }
 
     if (detail::g_console_enabled)

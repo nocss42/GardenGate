@@ -7,3 +7,5 @@
 2. Open up the launcher go to patcher and press auto detect > patch 
 
 3. Enter the ip/port, press launch
+
+### Put in a placeholder launch arg via the ea app and press save if a game you own on ea app fails to detect launch args. This triggers something like `user.gamecommandline.gameid:gameid=placeholder` to get generated in `%LOCALAPPDATA%\Electronic Arts\EA Desktop\user_*.ini` which is what the launcher uses to pass arguments.

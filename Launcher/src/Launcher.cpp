@@ -18,7 +18,7 @@ int Launcher::Run()
         return 0;
     }
 
-    g_config = load_config("config.json");
+    g_config = load_config(Utils::GetConfigPath());
 
     Renderer::Run();
     return 0;

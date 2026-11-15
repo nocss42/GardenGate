@@ -13,8 +13,6 @@
 #include <map>
 #include <algorithm>
 #include <cctype>
-#include <iomanip>
-#include <sstream>
 #include <string>
 #include <vector>
 #include <cstring>
@@ -34,12 +32,6 @@ bool IsSteamCopy(const std::string& exePath)
     std::transform(lowerPath.begin(), lowerPath.end(), lowerPath.begin(), ::tolower);
 
     if (lowerPath.find("steamapps") != std::string::npos)
-    {
-        return true;
-    }
-
-    fs::path gameDir = fs::path(exePath).parent_path();
-    if (fs::exists(gameDir / "steam_appid.txt"))
     {
         return true;
     }
@@ -186,24 +178,6 @@ const StatusMessage& GetCurrent()
 
 namespace Process
 {
-static std::string UrlEncode(const std::string& input)
-{
-    std::ostringstream out;
-    out << std::uppercase << std::hex;
-    for (unsigned char c : input)
-    {
-        if ((c >= 'A' && c <= 'Z') || (c >= 'a' && c <= 'z') || (c >= '0' && c <= '9') || c == '-' || c == '_' || c == '.' || c == '~')
-        {
-            out << c;
-        }
-        else
-        {
-            out << '%' << std::setw(2) << std::setfill('0') << (int)c;
-        }
-    }
-    return out.str();
-}
-
 static std::string NormalizeDataPath(const std::string& dataPath)
 {
     if (dataPath.empty())
@@ -227,6 +201,8 @@ std::string BuildArgs(const Config& cfg)
         argList.push_back("-Server.ServerPassword " + cfg.password);
     if (cfg.log_level_enabled)
         argList.push_back("-gg_log_level " + cfg.log_level);
+    if (cfg.gg_console)
+        argList.push_back("-console");
 
     std::string args;
     for (size_t i = 0; i < argList.size(); ++i)
@@ -250,7 +226,7 @@ void PatchEAArgs(const std::string& args, int gameType)
     {
         return;
     }
-
+    // Only already existing one will be modified per game. If non existent keys are added via the launcher ea app will prompt a relogin everytime.
     const std::vector<std::string> gw1Keys = { "user.gamecommandline.ofb-east:109551084", "user.gamecommandline.ofb-east:109550787",
         "user.gamecommandline.ofb-east:109552442" };
     const std::vector<std::string> gw2Keys = { "user.gamecommandline.origin.ofr.50.0001051", "user.gamecommandline.origin.ofr.50.0000786" };
@@ -275,19 +251,12 @@ void PatchEAArgs(const std::string& args, int gameType)
 
             std::string line, output;
             bool modified = false;
-            std::map<std::string, bool> foundKeys;
-            for (const auto& key : keys)
-            {
-                foundKeys[key] = false;
-            }
-
             while (std::getline(in, line))
             {
                 for (const auto& key : keys)
                 {
                     if (line.rfind(key + "=", 0) == 0)
                     {
-                        foundKeys[key] = true;
                         auto pos = line.find('=');
                         if (pos != std::string::npos)
                         {
@@ -305,20 +274,6 @@ void PatchEAArgs(const std::string& args, int gameType)
                 output += line + "\n";
             }
             in.close();
-
-            for (const auto& key : keys)
-            {
-                if (!foundKeys[key])
-                {
-                    std::string mapKey = entry.path().string() + "|" + key;
-                    if (originalArgs.find(mapKey) == originalArgs.end())
-                    {
-                        originalArgs[mapKey] = kMissingMarker;
-                    }
-                    output += key + "=" + cleanedArgs + "\n";
-                    modified = true;
-                }
-            }
 
             if (modified)
             {
@@ -464,8 +419,11 @@ void KillProcessByName(const std::string& processName)
 LaunchResult LaunchAndInject(const std::string& exePath, const std::string& args,
     const std::string& modDataPath, int gameType, const Config& cfg)
 {
-    KillProcessByName("EADesktop.exe");
-    KillProcessByName("Origin.exe");
+    if (cfg.kill_ea_steam_processes)
+    {
+        KillProcessByName("EADesktop.exe");
+        KillProcessByName("Origin.exe");
+    }
     LaunchResult lr;
     const std::string normalizedModDataPath = NormalizeDataPath(modDataPath);
     auto appendDataPathArg = [&](std::string& argStr) {
@@ -478,11 +436,13 @@ LaunchResult LaunchAndInject(const std::string& exePath, const std::string& args
 
     fs::path gameDir = fs::path(exePath).parent_path();
 
-    bool hasSteamAppId = fs::exists(gameDir / "steam_appid.txt");
+    bool isSteam = Utils::Registry::IsSteamCopy(exePath);
     bool hasInstaller = fs::exists(gameDir / "__Installer");
     bool launchDirectly = cfg.launch_directly;
 
-    if (launchDirectly || (!hasSteamAppId && !hasInstaller))
+    bool isOriginCopy = (gameType >= 1) && hasInstaller && !isSteam;
+
+    if (launchDirectly || (!isSteam && !hasInstaller))
     {
         STARTUPINFOA si = { sizeof(si) };
         PROCESS_INFORMATION pi{};
@@ -497,89 +457,96 @@ LaunchResult LaunchAndInject(const std::string& exePath, const std::string& args
         std::vector<char> cmdLine(cmdLineStr.begin(), cmdLineStr.end());
         cmdLine.push_back('\0');
 
-        LPVOID envBlock = nullptr;
+        std::string envStr;
+
+        LPCH envStrings = GetEnvironmentStringsA();
+        if (envStrings)
+        {
+            LPCH p = envStrings;
+            while (*p)
+            {
+                envStr += p;
+                envStr += '\0';
+                p += strlen(p) + 1;
+            }
+            FreeEnvironmentStringsA(envStrings);
+        }
+
         if (!normalizedModDataPath.empty() && gameType == 0)
         {
-            std::string envVarDir = "GAME_DATA_DIR=" + normalizedModDataPath;
-            std::string envStr;
-
-            LPCH envStrings = GetEnvironmentStringsA();
-            if (envStrings)
-            {
-                LPCH p = envStrings;
-                while (*p)
-                {
-                    envStr += p;
-                    envStr += '\0';
-                    p += strlen(p) + 1;
-                }
-                FreeEnvironmentStringsA(envStrings);
-            }
-
-            envStr += envVarDir;
+            envStr += "GAME_DATA_DIR=" + normalizedModDataPath;
             envStr += '\0';
-            envStr += '\0';
-
-            std::vector<char> envBuffer(envStr.begin(), envStr.end());
-            envBlock = envBuffer.data();
-
-            BOOL ok = CreateProcessA(nullptr, cmdLine.data(), nullptr, nullptr, FALSE, 0, envBlock, gameDir.string().c_str(), &si, &pi);
-
-            if (!ok)
-            {
-                lr.error = "CreateProcess failed. Error: " + std::to_string(GetLastError());
-                return lr;
-            }
         }
-        else
-        {
-            BOOL ok = CreateProcessA(nullptr, cmdLine.data(), nullptr, nullptr, FALSE, 0, nullptr, gameDir.string().c_str(), &si, &pi);
 
-            if (!ok)
-            {
-                lr.error = "CreateProcess failed. Error: " + std::to_string(GetLastError());
-                return lr;
-            }
+        envStr += '\0';
+
+        std::vector<char> envBuffer(envStr.begin(), envStr.end());
+        LPVOID envBlock = envBuffer.empty() ? nullptr : envBuffer.data();
+
+        BOOL ok = CreateProcessA(nullptr, cmdLine.data(), nullptr, nullptr, FALSE, 0, envBlock, gameDir.string().c_str(), &si, &pi);
+
+        if (!ok)
+        {
+            lr.error = "CreateProcess failed. Error: " + std::to_string(GetLastError());
+            return lr;
         }
 
         lr.ok = true;
         lr.pi = pi;
     }
 
-    bool isSteamCopy = (gameType == 1 || gameType == 2) && hasSteamAppId;
+    bool isSteamCopy = (gameType == 1 || gameType == 2) && isSteam;
     if (isSteamCopy)
     {
-        KillProcessByName("steam.exe");
+
+        if (cfg.kill_ea_steam_processes)
+            KillProcessByName("steam.exe");
         std::string launchArgs = args;
         appendDataPathArg(launchArgs);
 
         std::string steamUrl;
+        std::string theme;
         if (gameType == 2)
         {
-            steamUrl = "steam://rungameid/1262240";
+            steamUrl = "steam2ea://launchgame/1262240";
+            theme = "pvzbn";
         }
         else
         {
-            steamUrl = "steam://rungameid/1922560";
+            steamUrl = "steam2ea://launchgame/1922560";
+            theme = "pvzgw2";
         }
 
+        steamUrl += "?platform=steam&theme=" + theme;
+
+        std::string fullCmd = "cmd.exe /c start \"\" \"" + steamUrl + "\"";
         if (!launchArgs.empty())
         {
-            steamUrl += "//" + UrlEncode(launchArgs);
+            fullCmd += " " + launchArgs;
         }
 
-        HINSTANCE result = ShellExecuteA(nullptr, "open", steamUrl.c_str(), nullptr, nullptr, SW_SHOWNORMAL);
-        if ((INT_PTR)result <= 32)
+        STARTUPINFOA si = { sizeof(si) };
+        si.dwFlags = STARTF_USESHOWWINDOW;
+        si.wShowWindow = SW_HIDE;
+        PROCESS_INFORMATION pi{};
+        std::vector<char> cmdLine(fullCmd.begin(), fullCmd.end());
+        cmdLine.push_back('\0');
+
+        BOOL ok = CreateProcessA(nullptr, cmdLine.data(), nullptr, nullptr, FALSE, CREATE_NO_WINDOW, nullptr, gameDir.string().c_str(), &si, &pi);
+
+        if (!ok)
         {
-            lr.error = "Failed to launch via Steam. Error code: " + std::to_string((INT_PTR)result);
+            lr.error = "Failed to launch via Steam2EA. Error code: " + std::to_string(GetLastError());
             return lr;
         }
+
+        CloseHandle(pi.hProcess);
+        CloseHandle(pi.hThread);
 
         lr.ok = true;
         return lr;
     }
 
-    bool isOriginCopy = (gameType >= 1) && hasInstaller && !hasSteamAppId;
     if (isOriginCopy)
     {
         std::string launchArgs = args;
@@ -621,51 +588,39 @@ LaunchResult LaunchAndInject(const std::string& exePath, const std::string& args
     std::vector<char> cmdLine(cmdLineStr.begin(), cmdLineStr.end());
     cmdLine.push_back('\0');
 
-    LPVOID envBlock = nullptr;
+    std::string envStr;
+
+    LPCH envStrings = GetEnvironmentStringsA();
+    if (envStrings)
+    {
+        LPCH p = envStrings;
+        while (*p)
+        {
+            envStr += p;
+            envStr += '\0';
+            p += strlen(p) + 1;
+        }
+        FreeEnvironmentStringsA(envStrings);
+    }
+
     if (!normalizedModDataPath.empty() && gameType == 0)
     {
-        std::string envVarDir = "GAME_DATA_DIR=" + normalizedModDataPath;
-        std::string envStr;
-
-        LPCH envStrings = GetEnvironmentStringsA();
-        if (envStrings)
-        {
-            LPCH p = envStrings;
-            while (*p)
-            {
-                envStr += p;
-                envStr += '\0';
-                p += strlen(p) + 1;
-            }
-            FreeEnvironmentStringsA(envStrings);
-        }
-
-        envStr += envVarDir;
+        envStr += "GAME_DATA_DIR=" + normalizedModDataPath;
         envStr += '\0';
-        envStr += '\0';
-
-        std::vector<char> envBuffer(envStr.begin(), envStr.end());
-        envBlock = envBuffer.data();
-
-        BOOL ok = CreateProcessA(
-            nullptr, cmdLine.data(), nullptr, nullptr, FALSE, 0, envBlock, fs::path(exePath).parent_path().string().c_str(), &si, &pi);
-
-        if (!ok)
-        {
-            lr.error = "CreateProcess failed. Error: " + std::to_string(GetLastError());
-            return lr;
-        }
     }
-    else
-    {
-        BOOL ok = CreateProcessA(
-            nullptr, cmdLine.data(), nullptr, nullptr, FALSE, 0, nullptr, fs::path(exePath).parent_path().string().c_str(), &si, &pi);
 
-        if (!ok)
-        {
-            lr.error = "CreateProcess failed. Error: " + std::to_string(GetLastError());
-            return lr;
-        }
+    envStr += '\0';
+
+    std::vector<char> envBuffer(envStr.begin(), envStr.end());
+    LPVOID envBlock = envBuffer.empty() ? nullptr : envBuffer.data();
+
+    BOOL ok = CreateProcessA(
+        nullptr, cmdLine.data(), nullptr, nullptr, FALSE, 0, envBlock, fs::path(exePath).parent_path().string().c_str(), &si, &pi);
+
+    if (!ok)
+    {
+        lr.error = "CreateProcess failed. Error: " + std::to_string(GetLastError());
+        return lr;
     }
 
     lr.ok = true;
@@ -751,7 +706,7 @@ bool handleCLI()
         return ok;
     };
 
-    Config cfg = load_config("config.json");
+    Config cfg = load_config(GetConfigPath());
     bool overallSuccess = true;
 
     for (size_t i = 2; i < args.size(); ++i)
@@ -834,4 +789,12 @@ void remove(const std::string& path)
     ::DeleteFileA(path.c_str());
 }
 } // namespace FileUtil
+
+std::string GetConfigPath()
+{
+    char path[MAX_PATH];
+    GetModuleFileNameA(NULL, path, MAX_PATH);
+    fs::path exePath(path);
+    return (exePath.parent_path() / "config.json").string();
+}
 } // namespace Utils

@@ -1,4 +1,4 @@
-"""Garden Warfare/2/BFN for EA App"""
+"""Garden Warfare/Garden Warfare 2/Battle for Neighborville for EA App"""
 
 from protonfixes import util
 
@@ -17,5 +17,3 @@ def main() -> None:
                 'REG_SZ',
                 'native,builtin',
             )
-
-    util.replace_command('steam2ea', 'placeholder') # causes game to not launch via steam2ea

@@ -4,14 +4,19 @@
 
 Use CachyOS/GE-proton or some other proton fork otherwise the fix files won't work (You can do the same things the fix file does if you really want to use valve proton)
 
-Put all the [localfixes](../Container/localfixes) into `~/.config/protonfixes/localfixes` and set `GAMEID=umu-gardengate` in your launcher.
+Put all the [localfixes](../Container/localfixes) into `~/.config/protonfixes/localfixes` and set `GAMEID=umu-gardengate` in your launcher if you're using any launcher other than steam. Set `PROTONFIXES_DISABLE=1` if you'd like to disable the fix. 
+
+If you're using the official epic games launcher set `GAMEID=1922560` globally as it doesn't support gamefixes or per-game environment variables yet. I've asked the team at epic to implement that, and they said they will so stay tuned perhaps. EGS Launcher support is very much work in progress due to there being no testers for it (please contact me on discord/fluxer if you own one of the games on epic games launcher)
+
+### Extract relative to the game folder
+Extract GardenGate.zip from releases to <GameDir>/GardenGate . This is required if you own the game on anything other than the EA Launcher.
 
 # Garden warfare 1
 ### 1. Install the game
 * Install the game from ea app, launch it once
 
 ### 2. Download the latest release
-Download the archive from [the releases](https://github.com/nocss42/GardenGate/releases) tab, launch the .exe in the same prefix > go to patcher and press apply patch
+Run the launcher > go to patcher and press apply patch
 
 - Launch via the launcher
 
@@ -24,24 +29,14 @@ Download the archive from [the releases](https://github.com/nocss42/GardenGate/r
 <img src="./Assets/wine_not_supported.webp" />
 
 ### 2. Downgrade your game
-Download the archive from [the releases](https://github.com/nocss42/GardenGate/releases) tab, launch it > go to patcher and press apply patch
+Run the launcher > go to patcher and press apply patch
 
 ### 3. Install the mods in the right order (Only needed if you want stars in gw2)
 Use [this frosty mod manager](https://www.nexusmods.com/masseffectandromeda/mods/1190?tab=files&file_id=6904) instead of the stock one as the stock one doesn't work with wine. Get the mods for gw2 [here](../Mods/gw2/GardenGate.fbpack)
 
 <img src="./Assets/load_order.webp" />
 
-### 4. Launch the game
-- Launch via the launcher if you own the game on EA App. If you own the game on steam just pass in the launch args yourself;
-
-### Arguments
-`-name`
-
-`-dataPath`
-
-`-Client.ServerIp`
-
-`-Server.ServerPassword`
+### 4. Launch the game through the launcher
 
 ### Disclaimer about machines with low ram
 

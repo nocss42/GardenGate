@@ -130,11 +130,8 @@ COPY --chown=maxima:maxima --chmod=755 maxima.sh /home/maxima/maxima.sh
 # auth.toml
 COPY --chown=maxima:maxima auth.toml /home/maxima/.local/share/maxima/auth.toml
 
-# tmux.conf
-#COPY --chown=maxima:maxima tmux.conf /home/maxima/.config/tmux/tmux.conf
-
 # regedit
-COPY --chown=maxima:maxima regs/*.reg /home/maxima/
+#COPY --chown=maxima:maxima regs/*.reg /home/maxima/
 
 # protonfix
 COPY --chown=maxima:maxima ./localfixes/umu-gardengate.py /home/maxima/.config/protonfixes/localfixes/

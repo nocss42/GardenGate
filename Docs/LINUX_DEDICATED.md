@@ -51,6 +51,7 @@ Run the container with:
 ```sh
 podman run --replace -it \
   --name gardengate \
+  --userns=keep-id \
   -v "$HOME/Games/GardenGate:/home/maxima/Games:rw" \
   --device /dev/dri \
   -p 25200:25200/tcp \
@@ -92,6 +93,7 @@ wlheadless-run -c cage -- $HOME/maxima.sh
 Patch the game by running;
 
 ```sh
+rm ~/.local/share/maxima/download_queue.json # this file doesn't get deleted sometimes so gotta make sure it is
 curl -L https://github.com/nocss42/GardenGate/releases/latest/download/GardenGate.zip \
      -o $HOME/Games/GardenGate.zip
 unzip $HOME/Games/GardenGate.zip -d $HOME/Games/GardenGate
@@ -142,7 +144,7 @@ sudo swapon /swapfile
 echo '/swapfile none swap defaults 0 0' | sudo tee -a /etc/fstab > /dev/null
 ```
 
-Download frosty inside the container like so;
+Download frosty while inside the container like so;
 
 ```sh
 # GW1
@@ -161,7 +163,7 @@ mkdir -p $HOME/Games/BFN_FrostyModManager
 unzip $HOME/Games/BFN_FrostyModManager.zip -d $HOME/Games/BFN_FrostyModManager
 ```
 
-Outside of podman (if you're using waypipe do not use tmux in this part as waypipe seems to not work through tmux, see [this](https://gitlab.freedesktop.org/mstoeckl/waypipe/-/work_items/180) ), run frosty mod manager like so
+Outside of container (if you're using waypipe do not use tmux in this part as waypipe seems to not work through tmux, see [this](https://gitlab.freedesktop.org/mstoeckl/waypipe/-/work_items/180) ), run frosty mod manager like so
 
 > [!WARNING]
 Get wine mono [here](https://dl.winehq.org/wine/wine-mono/) if it's not packaged for your distro (only needed if you're gonna use wine)
@@ -171,7 +173,7 @@ export DISPLAY="" # only set this if you're using wine
 wine taskmgr # run frosty through taskmgr as otherwise it'll not run with waypipe
 
 export PROTON_ENABLE_WAYLAND=1
-export PROTONPATH=GE-Proton
+export PROTONPATH=/path/to/cachyosproton or GE-Proton
 umu-run taskmgr # run frosty through taskmgr as otherwise it'll not run with waypipe
 ```
 
