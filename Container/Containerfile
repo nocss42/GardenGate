@@ -104,7 +104,12 @@ RUN mkdir -p \
     "$HOME/.local/share/maxima/wine/umu" \
     "$HOME/.local/share/Steam/compatibilitytools.d" \
     "$HOME/Games" \
-    "$HOME/Games/GardenGate"
+    "$HOME/Games/gw1" \
+    "$HOME/Games/gw1_pfx" \
+    "$HOME/Games/gw2" \
+    "$HOME/Games/gw2_pfx" \
+    "$HOME/Games/bfn" \
+    "$HOME/Games/bfn_pfx"
 
 # ProtonPlus & proton-CachyOS (steam dlls are generated bc protonplus checks for their existence)
 # ge-proton related issue https://github.com/GloriousEggroll/proton-ge-custom/issues/901

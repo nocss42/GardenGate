@@ -67,16 +67,17 @@ Start the container by running
 
 ```sh
 podman start -ai gardengate
+# or if you already started it
+podman attach gardengate
 ```
 
-### Game Directory Setup
+### Game Directory
 
-Create the dir for the game you're going to install:
+Use these 2 directories when maxima asks you for them
 
-e.g.
-
-```sh
-mkdir -p $HOME/Games/gw2 $HOME/Games/gw2_pfx
+```
+Game: /home/maxima/Games/gw2
+Wineprefix: /home/maxima/Games/gw2_pfx
 ```
 
 Install the game via maxima:

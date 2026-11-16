@@ -493,6 +493,7 @@ LaunchResult LaunchAndInject(const std::string& exePath, const std::string& args
 
         lr.ok = true;
         lr.pi = pi;
+        return lr;
     }
 
     bool isSteamCopy = (gameType == 1 || gameType == 2) && isSteam;
